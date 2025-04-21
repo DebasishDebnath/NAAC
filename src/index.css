@@ -1,11 +1,9 @@
-/* Remove these problematic imports */
 @import "tailwindcss";
-@import "tw-animate-css";  /* Remove this line */
+@import "tw-animate-css";
+@custom-variant dark (&:is(.dark *));
 
-/* Replace custom variant with standard Tailwind dark mode */
-/* Remove: @custom-variant dark (&:is(.dark *)); */
 
-/* Keep your CSS variables */
+/* CSS Variables */
 :root {
   --sidebar: hsl(0 0% 98%);
   --sidebar-foreground: hsl(240 5.3% 26.1%);
@@ -15,8 +13,7 @@
   --sidebar-accent-foreground: hsl(240 5.9% 10%);
   --sidebar-border: hsl(220 13% 91%);
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
-  
-  /* Add standard Tailwind variables that you're using */
+
   --border: hsl(220 13% 91%);
   --ring: hsl(217.2 91.2% 59.8%);
   --background: hsl(0 0% 100%);
@@ -32,16 +29,15 @@
   --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
   --sidebar-border: hsl(240 3.7% 15.9%);
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
-  
-  /* Add dark mode versions of standard variables */
+
   --border: hsl(240 3.7% 15.9%);
   --ring: hsl(217.2 91.2% 59.8%);
   --background: hsl(240 5.9% 10%);
   --foreground: hsl(240 4.8% 95.9%);
 }
 
-/* Remove this non-standard Tailwind syntax */
-/* @theme inline {
+/* Optional: Theme-based CSS vars using Tailwind classes */
+/* :root {
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -52,15 +48,79 @@
   --color-sidebar-ring: var(--sidebar-ring);
 } */
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @layer base {
   * {
-    @apply border-gray-200 outline-none; /* Replace border-border with a standard color */
+    @apply border-gray-200 outline-none;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
   }
+  html {
+    @apply overflow-x-hidden;
+  }
+
   body {
-    /* @apply bg-background text-foreground; */
+    @apply bg-white text-black dark:bg-black dark:text-white;
+  }
+}
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+
+  /* Prevent focus zoom on mobile devices */
+  @media screen and (max-width: 767px) {
+    input,
+    select,
+    textarea {
+      font-size: 16px !important;
+    }
+  }
+
+
+@utility container {
+  margin-inline: auto;
+  padding-inline: 2rem;
+}
+
+@utility no-scrollbar {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+@utility faded-bottom {
+  @apply after:pointer-events-none after:absolute after:bottom-0 after:left-0 after:hidden after:h-32 after:w-full after:bg-[linear-gradient(180deg,_transparent_10%,_white_70%)] md:after:block dark:after:bg-[linear-gradient(180deg,_transparent_10%,_black_70%)];
+}
+
+/* styles.css */
+.CollapsibleContent {
+  overflow: hidden;
+}
+.CollapsibleContent[data-state='open'] {
+  animation: slideDown 300ms ease-out;
+}
+.CollapsibleContent[data-state='closed'] {
+  animation: slideUp 300ms ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-collapsible-content-height);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    height: var(--radix-collapsible-content-height);
+  }
+  to {
+    height: 0;
   }
 }
