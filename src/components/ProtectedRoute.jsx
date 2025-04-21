@@ -1,14 +1,20 @@
-import { Navigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { Navigate, useParams } from "react-router-dom";
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
-  const { user } = useAuth();
+  const { role: routeRole } = useParams();
 
-  if (!user) {
+  const token = sessionStorage.getItem("token");
+  const storedRole = sessionStorage.getItem("role");
+
+  // If no token or no role, redirect to login
+  if (!token || !storedRole) {
     return <Navigate to="/login/user" />;
   }
 
-  if (!allowedRoles.includes(user.role)) {
+  
+
+  // If user role doesn't match the role in the URL, redirect
+  if (routeRole && user.role !== routeRole) {
     return <Navigate to="/unauthorized" />;
   }
 

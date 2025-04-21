@@ -14,6 +14,10 @@ export const useSuperadminApi = () => {
     
     const response = await postReq("api/superadmin/signin", "", data);
     console.log("Signin response:", response);
+
+    if(response){
+        sessionStorage.setItem('token', response.token);
+    }
     
     return response;
   };
