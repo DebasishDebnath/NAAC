@@ -1,53 +1,60 @@
-import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import React, { useState } from 'react';
+import { useSuperadminApi } from '../Apis/Authentication/SigninSuperadmin';
+import { useNotification } from '../hooks/useHttp';
+// import { useSuperadminApi } from '../../path/to/your/api';
+// import { useNotification } from '../../hooks/useHttp';
 
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const { loginUser } = useAuth();
-  const { role = "user" } = useParams();
-  const navigate = useNavigate();
+function LoginPage() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const { signinSuperadmin } = useSuperadminApi();
+  const { showError } = useNotification();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setIsLoading(true);
+    
     try {
-      const res = await login(email, password);
-      const userData = res.data;
-
-      if (userData.role !== role) {
-        alert(
-          `Unauthorized: You tried to login as ${role}, but your account role is ${userData.role}`
-        );
-        return;
+      const response = await signinSuperadmin(email, password);
+      console.log("Login response in component:", response);
+      
+      // If no notifications are showing, manually show one based on the response
+      if (response && response.success) {
+        // Handle successful login (usually done in the hook)
+        // You shouldn't need this if the notifications are working properly
+      } else if (response === null) {
+        showError("Login failed. Please check your credentials.");
       }
-
-      loginUser(userData);
-      navigate("/dashboard"); // Redirect after login
-    } catch (err) {
-      console.error("Login failed:", err);
-      alert("Invalid credentials");
+    } catch (error) {
+      console.error("Login error:", error);
+      showError("An unexpected error occurred during login.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <h2>{role.toUpperCase()} Login</h2>
-      <input
+      <input 
+        type="email" 
+        value={email} 
+        onChange={(e) => setEmail(e.target.value)} 
         placeholder="Email"
-        onChange={(e) => setEmail(e.target.value)}
-        value={email}
+        required
       />
-      <input
+      <input 
+        type="password" 
+        value={password} 
+        onChange={(e) => setPassword(e.target.value)} 
         placeholder="Password"
-        type="password"
-        onChange={(e) => setPassword(e.target.value)}
-        value={password}
+        required
       />
-      <button type="submit">Login</button>
+      <button type="submit" disabled={isLoading}>
+        {isLoading ? 'Signing in...' : 'Sign In'}
+      </button>
     </form>
   );
-};
+}
 
-export default Login;
+export default LoginPage;
