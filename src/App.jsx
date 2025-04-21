@@ -7,6 +7,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { NotificationProvider } from "./hooks/useHttp.jsx";
 import LoginPage from "./pages/Login.jsx";
 import { SnackbarProvider } from "notistack";
+import './index.css'
 
 function App() {
   return (
