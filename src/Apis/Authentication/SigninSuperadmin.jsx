@@ -12,7 +12,7 @@ export const useSuperadminApi = () => {
     const data = { email, password };
     console.log("Sending signin request:", data);
     
-    const response = await postReq("api/superadmin/signin", "", data);
+    const response = await postReq("api/v2/superadmin/signin", "", data);
     console.log("Signin response:", response);
 
     if(response){

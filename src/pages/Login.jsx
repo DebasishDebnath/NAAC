@@ -28,17 +28,17 @@ export default function LoginPage() {
       if (params.role === "superadmin")
         response = await signinSuperadmin(email, password);
       else {
-        showError("An unexpected error occurred during login.");
+        // showError("An unexpected error occurred during login.");
       }
 
       if (!response || !response.success) {
         showError("Login failed. Please check your credentials.");
       }
 
-      if(response.success){
-        sessionStorage.setItem('role', response.user.role)
-        console.log(`/dashboard/${response.user.role}`)
-        navigate(`/dashboard/${response.user.role}`)
+      if(response?.success){
+        sessionStorage.setItem('role', response?.data?.role)
+        console.log(`/dashboard/${response?.data?.role}`)
+        navigate(`/dashboard/${response?.data?.role}`)
       }
     } catch (error) {
       console.error("Login error:", error);
