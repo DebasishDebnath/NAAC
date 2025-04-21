@@ -1,3 +1,5 @@
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useState } from "react";
 
 const Signup = () => {
@@ -17,9 +19,10 @@ const Signup = () => {
   return (
     <form onSubmit={handleSubmit}>
       <h2>User Signup</h2>
-      <input placeholder="Email" onChange={(e) => setForm({ ...form, email: e.target.value })} />
-      <input placeholder="Password" type="password" onChange={(e) => setForm({ ...form, password: e.target.value })} />
-      <button type="submit">Signup</button>
+      <Input placeholder="Name" type="text" onChange={(e) => setForm({ ...form, name: e.target.value })} />
+      <Input placeholder="Email" type="email" onChange={(e) => setForm({ ...form, email: e.target.value })} />
+      <Input placeholder="Password" type="password" onChange={(e) => setForm({ ...form, password: e.target.value })} />
+      <Button type="submit" className="bg-blue-600">Signup</Button>
     </form>
   );
 };
