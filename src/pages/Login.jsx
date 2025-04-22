@@ -37,8 +37,8 @@ export default function LoginPage() {
 
       if(response?.success){
         sessionStorage.setItem('role', response?.data?.role)
-        console.log(`/dashboard/${response?.data?.role}`)
-        navigate(`/dashboard/${response?.data?.role}`)
+        console.log(`/${response?.data?.role}/dashboard`)
+        navigate(`/${response?.data?.role}/dashboard`)
       }
     } catch (error) {
       console.error("Login error:", error);

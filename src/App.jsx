@@ -50,11 +50,11 @@ const RedirectDashboard = () => {
 
   switch (role) {
     case "user":
-      return <Navigate to="/dashboard/user" replace />;
+      return <Navigate to="/user/dashboard" replace />;
     case "superadmin":
-      return <Navigate to="/dashboard/superadmin" replace />;
+      return <Navigate to="/superadmin/dashboard" replace />;
     case "psudosuperadmin":
-      return <Navigate to="/dashboard/psudo" replace />;
+      return <Navigate to="/psudo/dashboard" replace />;
     default:
       return <Navigate to="/unauthorized" replace />;
   }
@@ -110,7 +110,7 @@ function App() {
                 />
 
                 <Route
-                  path="/dashboard/user"
+                  path="/user/dashboard"
                   element={
                     <TokenWrapper>
                       <ProtectedRoute allowedRoles={["user"]}>
@@ -165,7 +165,7 @@ function App() {
                 />
 
                 <Route
-                  path="/dashboard/psudo"
+                  path="/psudo/dashboard"
                   element={
                     <TokenWrapper>
                       <ProtectedRoute allowedRoles={["psudosuperadmin"]}>
