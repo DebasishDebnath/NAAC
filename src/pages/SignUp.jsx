@@ -167,6 +167,7 @@ export default function SignUpPage() {
                         return showError("Enter an email address");
                       setIsLoading(true);
                       const res = await sendOtp(formData.emailId);
+                      console.log(res)
                       if (res.success) {
                         setOtpSent(true);
                         showSuccess("OTP sent to your email!");

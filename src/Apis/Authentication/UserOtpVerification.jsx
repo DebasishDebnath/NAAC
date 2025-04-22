@@ -17,7 +17,9 @@ export const useOtpCheck = () => {
 
       const data = response;
 
-      if (response.ok) {
+      console.log(data)
+
+      if (response.success) {
         showInfo("OTP sent to email.");
         return { success: true, ...data };
       } else {
