@@ -7,12 +7,14 @@ import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { User } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useUserApi } from "../Apis/Authentication/SigninUser";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { signinSuperadmin } = useSuperadminApi();
+  const {signinUser}= useUserApi()
   const { showError } = useNotification();
   const params = useParams();
   const navigate= useNavigate()
@@ -27,8 +29,9 @@ export default function LoginPage() {
     try {
       if (params.role === "superadmin")
         response = await signinSuperadmin(email, password);
-      else {
-        // showError("An unexpected error occurred during login.");
+      
+      else if(params.role === "user") {
+        response = await signinUser(email, password);
       }
 
       if (!response || !response.success) {

@@ -1,18 +1,18 @@
 import { useHttp } from "../../hooks/useHttp";
 import { useNotification } from "../../hooks/useHttp"; // Import this directly
 
-export const useSuperadminApi = () => {
+export const useUserApi = () => {
   const { postReq } = useHttp();
   const { showInfo } = useNotification(); // Get direct access to notification functions
   
-  const signinSuperadmin = async (email, password) => {
+  const signinUser = async (email, password) => {
     // Add manual notification to check if notistack is working
     // showInfo("Attempting to sign in..."); 
     
-    const data = { email, password };
+    const data = { emailId: email, password };
     console.log("Sending signin request:", data);
     
-    const response = await postReq("api/v2/superadmin/signin", "", data);
+    const response = await postReq("api/v2/user/signin", "", data);
     console.log("Signin response:", response);
 
     if(response){
@@ -22,5 +22,5 @@ export const useSuperadminApi = () => {
     return response;
   };
   
-  return { signinSuperadmin };
+  return { signinUser };
 };
