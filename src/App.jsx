@@ -17,6 +17,7 @@ import { SnackbarProvider } from "notistack";
 import "./index.css";
 
 import SuperadminDashboard from "./pages/Superadmin/Dashboard";
+import { ThemeProvider } from "./components/theme/ThemeProvider.jsx";
 // import UserDashboard from "./pages/User/Dashboard";
 // import PsudoSuperadminDashboard from "./pages/PsudoSuperadmin/Dashboard";
 
@@ -63,6 +64,7 @@ const LoginRouteWrapper = () => {
 function App() {
   return (
     <AuthProvider>
+    <ThemeProvider>
       <SnackbarProvider maxSnack={3}>
         <NotificationProvider>
           <Router>
@@ -128,6 +130,7 @@ function App() {
           </Router>
         </NotificationProvider>
       </SnackbarProvider>
+    </ThemeProvider>
     </AuthProvider>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
-import { UserPlus } from "lucide-react";
+import { UserPlus, CheckCircle, Edit, Mail } from "lucide-react";
 import { useNotification } from "../hooks/useHttp";
 import { useNavigate, useParams } from "react-router-dom";
 import CustomDropdown from "../components/manual/CustomDropdown";
@@ -40,28 +40,8 @@ export default function SignUpPage() {
   const [otpSent, setOtpSent] = useState(false);
   const [otpVerified, setOtpVerified] = useState(false);
   const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
-  const {
-    sendOtp,
-    verifyOtp,
-  }= useOtpCheck();
-
-  // // Mock API hook functions
-  // const sendOtp = async (email) => {
-  //   // Replace with your actual API call
-  //   return await fetch(`http://192.168.90.24:8000/api/v2/user/verifyemail?email=${email}`, {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({ email }),
-  //   }).then((res) => res.json());
-  // };
-
-  // const verifyOtp = async (email, otp) => {
-  //   return await fetch(`http://192.168.90.24:8000/api/v2/user/verifyemail?email=${email}&otp=${otp}`, {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({ email, otp }),
-  //   }).then((res) => res.json());
-  // };
+  const [editingEmail, setEditingEmail] = useState(false);
+  const { sendOtp, verifyOtp } = useOtpCheck();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -69,6 +49,12 @@ export default function SignUpPage() {
 
   const handleDropdownChange = (field, value) => {
     setFormData({ ...formData, [field]: value });
+  };
+
+  const handleEditEmail = () => {
+    setEditingEmail(true);
+    setOtpVerified(false);
+    setOtpSent(false);
   };
 
   const handleSubmit = async (e) => {
@@ -80,16 +66,8 @@ export default function SignUpPage() {
 
     try {
       setIsLoading(true);
-      let response;
-
-      // if (params.role === "superadmin") {
       const { confirmPassword, ...submitData } = formData;
-      response = await signupUser(submitData);
-      // }
-      //  else {
-      //   showError("Signup failed. Please check your role.");
-      //   return;
-      // }
+      const response = await signupUser(submitData);
 
       if (!response?.success) {
         showError("Signup failed. Please try again.");
@@ -105,28 +83,23 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-100 to-indigo-200 p-4">
       <div className="w-full max-w-2xl">
-        <div className="bg-white rounded-lg shadow-xl overflow-hidden">
-          {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-8 text-center">
-            <div className="mb-4 inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm">
-              <UserPlus className="text-white" />
+        <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+          <div className="bg-gradient-to-r from-blue-600 to-indigo-800 p-10 text-center">
+            <div className="mb-6 inline-flex items-center justify-center w-20 h-20 rounded-full bg-white/30 backdrop-blur-md shadow-lg">
+              <UserPlus className="text-white h-10 w-10" />
             </div>
-            <h2 className="text-2xl font-bold text-white mb-1 capitalize">
+            <h2 className="text-3xl font-bold text-white mb-2 capitalize">
               {params.role} Signup
             </h2>
-            <p className="text-blue-100">Create your account to continue</p>
+            <p className="text-blue-100 text-lg">Join our community today</p>
           </div>
 
-          {/* Form */}
-          <div className="p-8">
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div className="space-y-2">
-                <label
-                  htmlFor="name"
-                  className="text-sm font-medium text-gray-700"
-                >
+          <div className="p-10">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label htmlFor="name" className="text-sm font-semibold text-gray-700 block mb-1.5">
                   Full Name
                 </label>
                 <Input
@@ -135,68 +108,82 @@ export default function SignUpPage() {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full outline-none"
+                  placeholder="Enter your full name"
+                  className="border-gray-200 focus:border-blue-500"
                 />
               </div>
 
-              <div className="space-y-2">
-                <label
-                  htmlFor="emailId"
-                  className="text-sm font-medium text-gray-700"
-                >
+              <div>
+                <label htmlFor="emailId" className="text-sm font-semibold text-gray-700 block mb-1.5">
                   Email Address
                 </label>
-                <div className="flex gap-2">
-                  <Input
-                    id="emailId"
-                    type="email"
-                    name="emailId"
-                    value={formData.emailId}
-                    onChange={(e) => {
-                      handleChange(e);
-                      setOtpSent(false);
-                      setOtpVerified(false);
-                    }}
-                    required
-                    className="w-full"
-                  />
-                  <Button
-                    type="button"
-                    onClick={async () => {
-                      if (!formData.emailId)
-                        return showError("Enter an email address");
-                      setIsLoading(true);
-                      const res = await sendOtp(formData.emailId);
-                      console.log(res)
-                      if (res.success) {
-                        setOtpSent(true);
-                        showSuccess("OTP sent to your email!");
-                      } else {
-                        showError(res.message || "Failed to send OTP.");
-                      }
-                      setIsLoading(false);
-                    }}
-                    className="bg-blue-600 hover:bg-blue-700"
-                  >
-                    {otpSent ? "Resend OTP" : "Verify Email"}
-                  </Button>
+                <div className="flex gap-3 items-center">
+                  {otpVerified && !editingEmail ? (
+                    <div className="flex-1 flex items-center border-2 border-gray-200 rounded-md px-4 py-2 bg-gray-50">
+                      <Mail className="text-green-600 mr-2 h-5 w-5" />
+                      <span className="flex-1 text-gray-700 font-medium">{formData.emailId}</span>
+                      <button 
+                        type="button" 
+                        onClick={handleEditEmail}
+                        className="text-blue-600 hover:text-blue-800"
+                      >
+                        <Edit className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ) : (
+                    <Input
+                      id="emailId"
+                      type="email"
+                      name="emailId"
+                      value={formData.emailId}
+                      onChange={(e) => {
+                        handleChange(e);
+                        setOtpSent(false);
+                        setOtpVerified(false);
+                      }}
+                      required
+                      placeholder="your.email@example.com"
+                      className="border-gray-200 focus:border-blue-500"
+                    />
+                  )}
+                  {!otpVerified && (
+                    <Button
+                      type="button"
+                      onClick={async () => {
+                        if (!formData.emailId)
+                          return showError("Enter an email address");
+                        setIsLoading(true);
+                        const res = await sendOtp(formData.emailId);
+                        if (res.success) {
+                          setOtpSent(true);
+                          showSuccess("OTP sent to your email!");
+                        } else {
+                          showError(res.message || "Failed to send OTP.");
+                        }
+                        setIsLoading(false);
+                      }}
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-6"
+                    >
+                      {otpSent ? "Resend" : "Verify"}
+                    </Button>
+                  )}
                 </div>
               </div>
 
               {otpSent && !otpVerified && (
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">
-                    Enter OTP
+                <div className="bg-blue-50 p-6 rounded-xl border border-blue-100">
+                  <label className="text-sm font-semibold text-gray-700 block mb-3">
+                    Enter OTP sent to your email
                   </label>
                   <InputOTP
                     maxLength={6}
                     value={otp}
                     onChange={setOtp}
-                    containerClassName="justify-center"
+                    containerClassName="justify-center mb-4"
                   >
                     <InputOTPGroup>
                       {[...Array(6)].map((_, i) => (
-                        <InputOTPSlot key={i} index={i} />
+                        <InputOTPSlot key={i} index={i} className="border-blue-200 h-12 w-12 text-lg font-bold" />
                       ))}
                     </InputOTPGroup>
                   </InputOTP>
@@ -206,13 +193,14 @@ export default function SignUpPage() {
                       const res = await verifyOtp(formData.emailId, otp);
                       if (res.success) {
                         setOtpVerified(true);
+                        setEditingEmail(false);
                         showSuccess("Email verified successfully!");
                       } else {
                         showError("Invalid OTP. Please try again.");
                       }
                       setIsVerifyingOtp(false);
                     }}
-                    className="mt-2 bg-green-600 hover:bg-green-700"
+                    className="w-full bg-green-600 hover:bg-green-700"
                     disabled={otp.length !== 6 || isVerifyingOtp}
                   >
                     {isVerifyingOtp ? "Verifying..." : "Verify OTP"}
@@ -220,101 +208,107 @@ export default function SignUpPage() {
                 </div>
               )}
 
-              <div className="space-y-2">
-                <label
-                  htmlFor="mobileNo"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Mobile Number
-                </label>
-                <Input
-                  id="mobileNo"
-                  name="mobileNo"
-                  value={formData.mobileNo}
-                  onChange={handleChange}
-                  required
-                  className="w-full outline-none"
+              {otpVerified && !editingEmail && (
+                <div className="flex items-center gap-2 text-green-600 bg-green-50 p-3 rounded-lg">
+                  <CheckCircle className="h-5 w-5" />
+                  <span className="font-medium">Email verification successful</span>
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label htmlFor="mobileNo" className="text-sm font-semibold text-gray-700 block mb-1.5">
+                    Mobile Number
+                  </label>
+                  <Input
+                    id="mobileNo"
+                    name="mobileNo"
+                    value={formData.mobileNo}
+                    onChange={handleChange}
+                    required
+                    placeholder="Your mobile number"
+                    className="border-gray-200 focus:border-blue-500"
+                  />
+                </div>
+                
+                <CustomDropdown
+                  label="Department"
+                  options={departmentOptions}
+                  value={formData.department}
+                  onChange={(val) => handleDropdownChange("department", val)}
                 />
               </div>
 
-              <div className="space-y-2">
-                <label
-                  htmlFor="password"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Password
-                </label>
-                <Input
-                  id="password"
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                  className="w-full outline-none"
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label htmlFor="password" className="text-sm font-semibold text-gray-700 block mb-1.5">
+                    Password
+                  </label>
+                  <Input
+                    id="password"
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                    placeholder="Create a strong password"
+                    className="border-gray-200 focus:border-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="confirmPassword" className="text-sm font-semibold text-gray-700 block mb-1.5">
+                    Confirm Password
+                  </label>
+                  <Input
+                    id="confirmPassword"
+                    type="password"
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    required
+                    placeholder="Confirm your password"
+                    className="border-gray-200 focus:border-blue-500"
+                  />
+                </div>
               </div>
 
-              <div className="space-y-2">
-                <label
-                  htmlFor="confirmPassword"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Confirm Password
-                </label>
-                <Input
-                  id="confirmPassword"
-                  type="password"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  required
-                  className="w-full outline-none"
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <CustomDropdown
+                  label="Designation"
+                  options={designationOptions}
+                  value={formData.designation}
+                  onChange={(val) => handleDropdownChange("designation", val)}
+                />
+
+                <CustomDropdown
+                  label="Campus"
+                  options={campusOptions}
+                  value={formData.campus}
+                  onChange={(val) => handleDropdownChange("campus", val)}
                 />
               </div>
-
-              <CustomDropdown
-                label="Department"
-                options={departmentOptions}
-                value={formData.department}
-                onChange={(val) => handleDropdownChange("department", val)}
-              />
-
-              <CustomDropdown
-                label="Designation"
-                options={designationOptions}
-                value={formData.designation}
-                onChange={(val) => handleDropdownChange("designation", val)}
-              />
-
-              <CustomDropdown
-                label="Campus"
-                options={campusOptions}
-                value={formData.campus}
-                onChange={(val) => handleDropdownChange("campus", val)}
-              />
 
               <Button
                 type="submit"
                 disabled={isLoading || !otpVerified}
-                className={`w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 transition-all duration-300 ${
+                className={`w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-lg font-medium transition-all duration-300 mt-2 ${
                   !otpVerified ? "opacity-50 cursor-not-allowed" : ""
                 }`}
               >
-                {isLoading ? "Signing up..." : "Sign Up"}
+                {isLoading ? "Creating Account..." : "Create Account"}
               </Button>
             </form>
           </div>
 
-          {/* Footer */}
-          <div className="px-8 py-4 bg-gray-50 border-t border-gray-100 text-center">
-            <p className="text-sm text-gray-600">
+          <div className="px-10 py-6 bg-gray-50 border-t border-gray-100 text-center">
+            <p className="text-gray-600">
               Already have an account?{" "}
               <a
                 href={`/login/${params.role}`}
-                className="font-medium text-blue-600 hover:text-blue-500"
+                className="font-semibold text-blue-600 hover:text-blue-500 transition-colors"
               >
-                Sign in
+                Sign in instead
               </a>
             </p>
           </div>
