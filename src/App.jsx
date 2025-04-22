@@ -134,7 +134,9 @@ function App() {
                   }
                 >
                   <Route path="dashboard" element={<SuperadminDashboard />} />
-                  <Route path="panel" element={<div>SuperAdmin Panel</div>} />
+                  <Route path="emailrequest" element={<div>SuperAdmin Email Request</div>} />
+                  <Route path="pseudosuperadmin-add" element={<div>SuperAdmin PseudoSuperadmin Add</div>} />
+                  <Route path="reports" element={<div>SuperAdmin Reports</div>} />
                   <Route path="*" element={<NotFound />} />
                 </Route>
 
