@@ -19,6 +19,7 @@ import SuperadminDashboard from "./pages/Superadmin/Dashboard";
 // import UserDashboard from "./pages/User/Dashboard";
 // import PsudoSuperadminDashboard from "./pages/PsudoSuperadmin/Dashboard";
 import { ThemeProvider } from "./components/theme/ThemeProvider.jsx";
+import Home from "./pages/User/Home.jsx";
 
 // Allowed login roles
 const allowedRoles = ["user", "superadmin", "psudosuperadmin"];
@@ -89,14 +90,14 @@ function App() {
                   }
                 />
 
-                {/* User Routes - Using both old and new paths for compatibility */}
+                {/* User Routes */}
                 <Route
-                  path="/user/*"
+                  path="/user"
                   element={
                     <TokenWrapper>
                       <ProtectedRoute allowedRoles={["user"]}>
-                        <Layout menus={["File", "Edit", "View", "Help"]}>
-                          <Routes>
+                        <Layout menus={["Home", "Forms", "Reports"]} >
+                        <Routes>
                             <Route
                               path="dashboard"
                               element={<div>User Dashboard</div>}
@@ -107,22 +108,15 @@ function App() {
                       </ProtectedRoute>
                     </TokenWrapper>
                   }
-                />
+                >
+                  <Route path="dashboard" element={<Home />} />
+                  <Route path="forms" element={<div>User Forms</div>} />
+                  <Route path="reports" element={<div>User Reports</div>} />
+                  <Route path="*" element={<NotFound />} />
+                  <Route index element={<Navigate to="dashboard" replace />} />
+                </Route>
 
-                <Route
-                  path="/user/dashboard"
-                  element={
-                    <TokenWrapper>
-                      <ProtectedRoute allowedRoles={["user"]}>
-                        <Layout menus={["File", "Edit", "View", "Help"]}>
-                          <div>User Dashboard</div>
-                        </Layout>
-                      </ProtectedRoute>
-                    </TokenWrapper>
-                  }
-                />
-
-                {/* Superadmin Routes - Using both old and new paths for compatibility */}
+                {/* Superadmin Routes */}
                 <Route
                   path="/superadmin"
                   element={
@@ -138,46 +132,26 @@ function App() {
                   <Route path="pseudosuperadmin-add" element={<div>SuperAdmin PseudoSuperadmin Add</div>} />
                   <Route path="reports" element={<div>SuperAdmin Reports</div>} />
                   <Route path="*" element={<NotFound />} />
+                  <Route index element={<Navigate to="dashboard" replace />} />
                 </Route>
 
-                
-
-                {/* Psudo-Superadmin Routes - Using both old and new paths for compatibility */}
+                {/* Psudo-Superadmin Routes */}
                 <Route
-                  path="/psudo/*"
+                  path="/psudo"
                   element={
                     <TokenWrapper>
                       <ProtectedRoute allowedRoles={["psudosuperadmin"]}>
-                        <Layout menus={["Psudo", "Manage", "Settings"]}>
-                          <Routes>
-                            <Route
-                              path="dashboard"
-                              element={<div>Psudo Superadmin Dashboard</div>}
-                            />
-                            <Route
-                              path="panel"
-                              element={<div>PsudoSuperAdmin Panel</div>}
-                            />
-                            <Route path="*" element={<NotFound />} />
-                          </Routes>
-                        </Layout>
+                        <Layout menus={["Psudo", "Manage", "Settings"]} />
+                        
                       </ProtectedRoute>
                     </TokenWrapper>
                   }
-                />
-
-                <Route
-                  path="/psudo/dashboard"
-                  element={
-                    <TokenWrapper>
-                      <ProtectedRoute allowedRoles={["psudosuperadmin"]}>
-                        <Layout menus={["Psudo", "Manage", "Settings"]}>
-                          <div>Psudo Superadmin Dashboard</div>
-                        </Layout>
-                      </ProtectedRoute>
-                    </TokenWrapper>
-                  }
-                />
+                >
+                  <Route path="dashboard" element={<div>Psudo Superadmin Dashboard</div>} />
+                  <Route path="panel" element={<div>PsudoSuperAdmin Panel</div>} />
+                  <Route path="*" element={<NotFound />} />
+                  <Route index element={<Navigate to="dashboard" replace />} />
+                </Route>
 
                 {/* Catch-all route */}
                 <Route path="*" element={<NotFound />} />

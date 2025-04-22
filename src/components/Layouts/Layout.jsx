@@ -88,15 +88,15 @@ function Layout({ menus = [] }) {
       'Reports': `${basePath}/reports`,
       
       // Psudo routes
-      'Psudo': `${basePath}/dashboard`,
-      'Manage': `${basePath}/panel`,
-      'Settings': `${basePath}/panel`,
-      
-      // User routes
       'File': `${basePath}/dashboard`,
       'Edit': `${basePath}/dashboard`,
       'View': `${basePath}/dashboard`,
-      'Help': `${basePath}/dashboard`
+      'Help': `${basePath}/dashboard`,
+      
+      // User routes
+      'Home': `${basePath}/dashboard`,
+      'Forms': `${basePath}/forms`,
+      'Reports': `${basePath}/reports`,
     }
     
     const route = routeMap[menu] || `${basePath}/dashboard`
