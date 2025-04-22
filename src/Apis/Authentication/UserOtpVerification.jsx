@@ -7,13 +7,15 @@ export const useOtpCheck = () => {
 
   const sendOtp = async (email) => {
     try {
-      const response = await fetch(`http://192.168.90.24:8000/api/v2/user/verifyemail?email=${email}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
+      // const response = await fetch(`http://192.168.90.24:8000/api/v2/user/verifyemail?email=${email}`, {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({ email }),
+      // });
 
-      const data = await response.json();
+      const response=await postReq(`api/v2/user/verifyemail?email=${email}`, "", {email})
+
+      const data = response;
 
       if (response.ok) {
         showInfo("OTP sent to email.");
@@ -30,13 +32,15 @@ export const useOtpCheck = () => {
 
   const verifyOtp = async (email, otp) => {
     try {
-      const response = await fetch(`http://192.168.90.24:8000/api/v2/user/verifyemail?email=${email}&otp=${otp}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, otp }),
-      });
+      // const response = await fetch(`http://192.168.90.24:8000/api/v2/user/verifyemail?email=${email}&otp=${otp}`, {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({ email, otp }),
+      // });
 
-      const data = await response.json();
+      const response= await postReq(`api/v2/user/verifyemail?email=${email}&otp=${otp}`, "", { email, otp })
+
+      const data =  response;
 
       if (response.ok) {
         showInfo("OTP verified.");

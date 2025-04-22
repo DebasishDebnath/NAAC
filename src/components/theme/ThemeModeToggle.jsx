@@ -16,13 +16,13 @@ export default function ThemeModeToggle() {
       onClick={() => {
         const colors = [
           'zinc',
-          'rose',
-          'blue',
-          'green',
-          'orange',
-          'red',
-          'yellow',
-          'violet'
+          // 'rose',
+          // 'blue',
+          // 'green',
+          // 'orange',
+          // 'red',
+          // 'yellow',
+          // 'violet'
         ];
         const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
