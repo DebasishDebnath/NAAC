@@ -7,11 +7,7 @@ export const useOtpCheck = () => {
 
   const sendOtp = async (email) => {
     try {
-      // const response = await fetch(`http://192.168.90.24:8000/api/v2/user/verifyemail?email=${email}`, {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({ email }),
-      // });
+
 
       const response=await postReq(`api/v2/user/verifyemail?email=${email}`, "", {email})
 
@@ -44,7 +40,7 @@ export const useOtpCheck = () => {
 
       const data =  response;
 
-      if (response.ok) {
+      if (response.success) {
         showInfo("OTP verified.");
         return { success: true, ...data };
       } else {
