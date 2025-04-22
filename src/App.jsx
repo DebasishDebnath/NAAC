@@ -128,13 +128,15 @@ function App() {
                   element={
                     <TokenWrapper>
                       <ProtectedRoute allowedRoles={["superadmin"]}>
-                        <Layout menus={["File", "Edit", "View", "Help"]} />
+                        <Layout menus={["Home", "Email Request", "Pseudo Superadmin Add", "Reports"]} />
                       </ProtectedRoute>
                     </TokenWrapper>
                   }
                 >
                   <Route path="dashboard" element={<SuperadminDashboard />} />
-                  <Route path="panel" element={<div>SuperAdmin Panel</div>} />
+                  <Route path="emailrequest" element={<div>SuperAdmin Email Request</div>} />
+                  <Route path="pseudosuperadmin-add" element={<div>SuperAdmin PseudoSuperadmin Add</div>} />
+                  <Route path="reports" element={<div>SuperAdmin Reports</div>} />
                   <Route path="*" element={<NotFound />} />
                 </Route>
 
