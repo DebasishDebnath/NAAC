@@ -128,7 +128,7 @@ function App() {
                   element={
                     <TokenWrapper>
                       <ProtectedRoute allowedRoles={["superadmin"]}>
-                        <Layout menus={["File", "Edit", "View", "Help"]} />
+                        <Layout menus={["Home", "Email Request", "Pseudo Superadmin Add", "Reports"]} />
                       </ProtectedRoute>
                     </TokenWrapper>
                   }
