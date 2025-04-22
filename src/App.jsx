@@ -3,7 +3,6 @@ import {
   Routes,
   Route,
   Navigate,
-  useLocation,
   useParams,
 } from "react-router-dom";
 import Signup from "./pages/SignUp.jsx";
@@ -15,11 +14,11 @@ import { NotificationProvider } from "./hooks/useHttp.jsx";
 import LoginPage from "./pages/Login.jsx";
 import { SnackbarProvider } from "notistack";
 import "./index.css";
-
+import Layout from "./components/Layouts/Layout.jsx";
 import SuperadminDashboard from "./pages/Superadmin/Dashboard";
-import { ThemeProvider } from "./components/theme/ThemeProvider.jsx";
 // import UserDashboard from "./pages/User/Dashboard";
 // import PsudoSuperadminDashboard from "./pages/PsudoSuperadmin/Dashboard";
+import { ThemeProvider } from "./components/theme/ThemeProvider.jsx";
 
 // Allowed login roles
 const allowedRoles = ["user", "superadmin", "psudosuperadmin"];
@@ -36,7 +35,16 @@ const TokenWrapper = ({ children }) => {
   return children;
 };
 
-// RedirectDashboard: handles route /dashboard and redirects based on role
+// LoginRouteWrapper: restricts login route to only valid roles
+const LoginRouteWrapper = () => {
+  const { role } = useParams();
+  if (!allowedRoles.includes(role)) {
+    return <NotFound />;
+  }
+  return <LoginPage />;
+};
+
+// Redirect to appropriate dashboard based on role
 const RedirectDashboard = () => {
   const role = sessionStorage.getItem("role");
 
@@ -52,85 +60,130 @@ const RedirectDashboard = () => {
   }
 };
 
-// LoginRouteWrapper: restricts login route to only valid roles
-const LoginRouteWrapper = () => {
-  const { role } = useParams();
-  if (!allowedRoles.includes(role)) {
-    return <NotFound />;
-  }
-  return <LoginPage />;
-};
-
 function App() {
   return (
     <AuthProvider>
-    <ThemeProvider>
-      <SnackbarProvider maxSnack={3}>
-        <NotificationProvider>
-          <Router>
-            <Routes>
-              {/* Public Routes */}
-              <Route path="/login/:role" element={<LoginRouteWrapper />} />
-              <Route path="/signup" element={<Signup />} />
+      <ThemeProvider>
+        <SnackbarProvider maxSnack={3}>
+          <NotificationProvider>
+            <Router>
+              <Routes>
+                {/* Public Routes */}
+                <Route path="/login/:role" element={<LoginRouteWrapper />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/unauthorized" element={<Unauthorized />} />
 
-              {/* Protected Routes */}
-              <Route
-                path="*"
-                element={
-                  <TokenWrapper>
-                    <Routes>
-                      <Route path="/unauthorized" element={<Unauthorized />} />
-                      <Route path="/dashboard" element={<RedirectDashboard />} />
-                      <Route
-                        path="/dashboard/user"
-                        element={
-                          <ProtectedRoute allowedRoles={["user"]}>
-                            {/* <UserDashboard /> */}
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/dashboard/superadmin"
-                        element={
-                          <ProtectedRoute allowedRoles={["superadmin"]}>
-                            <SuperadminDashboard />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/dashboard/psudo"
-                        element={
-                          <ProtectedRoute allowedRoles={["psudosuperadmin"]}>
-                            {/* <PsudoSuperadminDashboard /> */}
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/admin"
-                        element={
-                          <ProtectedRoute allowedRoles={["superadmin"]}>
-                            <div>SuperAdmin Panel</div>
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/psudo-admin"
-                        element={
-                          <ProtectedRoute allowedRoles={["psudosuperadmin"]}>
-                            <div>PsudoSuperAdmin Panel</div>
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route path="*" element={<NotFound />} />
-                    </Routes>
-                  </TokenWrapper>
-                }
-              />
-            </Routes>
-          </Router>
-        </NotificationProvider>
-      </SnackbarProvider>
-    </ThemeProvider>
+                {/* Root redirect */}
+                <Route
+                  path="/"
+                  element={<Navigate to="/login/user" replace />}
+                />
+
+                {/* Dashboard redirect */}
+                <Route
+                  path="/dashboard"
+                  element={
+                    <TokenWrapper>
+                      <RedirectDashboard />
+                    </TokenWrapper>
+                  }
+                />
+
+                {/* User Routes - Using both old and new paths for compatibility */}
+                <Route
+                  path="/user/*"
+                  element={
+                    <TokenWrapper>
+                      <ProtectedRoute allowedRoles={["user"]}>
+                        <Layout menus={["File", "Edit", "View", "Help"]}>
+                          <Routes>
+                            <Route
+                              path="dashboard"
+                              element={<div>User Dashboard</div>}
+                            />
+                            <Route path="*" element={<NotFound />} />
+                          </Routes>
+                        </Layout>
+                      </ProtectedRoute>
+                    </TokenWrapper>
+                  }
+                />
+
+                <Route
+                  path="/dashboard/user"
+                  element={
+                    <TokenWrapper>
+                      <ProtectedRoute allowedRoles={["user"]}>
+                        <Layout menus={["File", "Edit", "View", "Help"]}>
+                          <div>User Dashboard</div>
+                        </Layout>
+                      </ProtectedRoute>
+                    </TokenWrapper>
+                  }
+                />
+
+                {/* Superadmin Routes - Using both old and new paths for compatibility */}
+                <Route
+                  path="/superadmin"
+                  element={
+                    <TokenWrapper>
+                      <ProtectedRoute allowedRoles={["superadmin"]}>
+                        <Layout menus={["File", "Edit", "View", "Help"]} />
+                      </ProtectedRoute>
+                    </TokenWrapper>
+                  }
+                >
+                  <Route path="dashboard" element={<SuperadminDashboard />} />
+                  <Route path="panel" element={<div>SuperAdmin Panel</div>} />
+                  <Route path="*" element={<NotFound />} />
+                </Route>
+
+                
+
+                {/* Psudo-Superadmin Routes - Using both old and new paths for compatibility */}
+                <Route
+                  path="/psudo/*"
+                  element={
+                    <TokenWrapper>
+                      <ProtectedRoute allowedRoles={["psudosuperadmin"]}>
+                        <Layout menus={["Psudo", "Manage", "Settings"]}>
+                          <Routes>
+                            <Route
+                              path="dashboard"
+                              element={<div>Psudo Superadmin Dashboard</div>}
+                            />
+                            <Route
+                              path="panel"
+                              element={<div>PsudoSuperAdmin Panel</div>}
+                            />
+                            <Route path="*" element={<NotFound />} />
+                          </Routes>
+                        </Layout>
+                      </ProtectedRoute>
+                    </TokenWrapper>
+                  }
+                />
+
+                <Route
+                  path="/dashboard/psudo"
+                  element={
+                    <TokenWrapper>
+                      <ProtectedRoute allowedRoles={["psudosuperadmin"]}>
+                        <Layout menus={["Psudo", "Manage", "Settings"]}>
+                          <div>Psudo Superadmin Dashboard</div>
+                        </Layout>
+                      </ProtectedRoute>
+                    </TokenWrapper>
+                  }
+                />
+
+                {/* Catch-all route */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Router>
+          </NotificationProvider>
+        </SnackbarProvider>
+      </ThemeProvider>
     </AuthProvider>
   );
 }

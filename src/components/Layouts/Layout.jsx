@@ -2,79 +2,54 @@ import React, { useState } from 'react'
 import { 
   Menubar, 
   MenubarMenu, 
-  MenubarTrigger, 
-  MenubarContent, 
-  MenubarItem 
+  MenubarTrigger 
 } from '../ui/menubar'
+import { Outlet } from 'react-router-dom'
 
 function Layout({ menus = [] }) {
-  // Default example menus if none provided
-  const defaultMenus = ['File', 'Edit', 'View', 'Help'];
-  const menuItems = menus.length > 0 ? menus : defaultMenus;
-  
-  // Generate some example submenu items for each menu
-  const getSubmenuItems = (menuName) => {
-    switch(menuName) {
-      case 'File':
-        return ['New', 'Open', 'Save', 'Export'];
-      case 'Edit':
-        return ['Undo', 'Redo', 'Cut', 'Copy', 'Paste'];
-      case 'View':
-        return ['Zoom In', 'Zoom Out', 'Full Screen', 'Split View'];
-      case 'Help':
-        return ['Documentation', 'About', 'Support'];
-      default:
-        return ['Option 1', 'Option 2', 'Option 3'];
-    }
-  };
+  const defaultMenus = ['File', 'Edit', 'View', 'Help']
+  const menuItems = menus.length > 0 ? menus : defaultMenus
+  const role = sessionStorage.getItem('role')
 
-  const [activeItem, setActiveItem] = useState(null);
+  const [activeItem, setActiveItem] = useState(null)
 
   return (
-    <div className="w-full">
-      {/* Header with menubar */}
-      <header className="flex items-center bg-slate-800 text-white p-2">
-        <div className="font-bold text-xl mr-4">AppName</div>
-        
-        {/* Dynamic Menubar */}
-        <Menubar className="bg-slate-800 border-0">
-          {menuItems.map((menu, index) => (
-            <MenubarMenu key={index}>
-              <MenubarTrigger 
-                className="text-white hover:bg-slate-700 rounded px-3 py-1.5 text-sm font-medium transition-colors"
-                onClick={() => setActiveItem(menu)}
-              >
-                {menu}
-              </MenubarTrigger>
-              <MenubarContent className="bg-slate-700 border-slate-600 text-white rounded-md min-w-40 p-1">
-                {getSubmenuItems(menu).map((item, idx) => (
-                  <MenubarItem 
-                    key={idx}
-                    className="flex items-center px-3 py-2 text-sm rounded hover:bg-slate-600 focus:bg-slate-600 cursor-pointer"
-                  >
-                    {item}
-                  </MenubarItem>
-                ))}
-              </MenubarContent>
-            </MenubarMenu>
-          ))}
-        </Menubar>
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-100 via-slate-200 to-slate-300 text-slate-800">
+      
+      {/* Header */}
+      <header className="sticky top-0 z-20 backdrop-blur-md bg-white/30 shadow-md border-b border-slate-200">
+        <div className="flex items-center justify-between px-6 py-4">
+          
+          {/* Menubar */}
+          <Menubar className="bg-[#fff] h-[16%]">
+            {menuItems.map((menu, index) => (
+              <MenubarMenu key={index}>
+                <MenubarTrigger
+                  className="text-sm font-medium hover:bg-slate-700 hover:text-white transition duration-150 px-4 py-2"
+                  onClick={() => setActiveItem(menu)}
+                >
+                  {menu}
+                </MenubarTrigger>
+              </MenubarMenu>
+            ))}
+          </Menubar>
+
+          {/* Role badge */}
+          <span className="bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full uppercase shadow-sm">
+            {role}
+          </span>
+        </div>
       </header>
 
-      {/* Main content area */}
-      <main className="p-6">
-        <div className="bg-white rounded-lg shadow-lg p-6 min-h-64">
-          <h2 className="text-2xl font-bold mb-4">Content Area</h2>
-          <p className="mb-2">This is where your main content would go.</p>
-          {activeItem && (
-            <div className="mt-4 p-4 bg-blue-50 rounded-md">
-              <p className="text-blue-800">
-                You clicked on the <strong>{activeItem}</strong> menu.
-              </p>
-            </div>
-          )}
-        </div>
+      {/* Main Content */}
+      <main className="flex-1 px-6 py-4">
+        <Outlet />
       </main>
+
+      {/* Footer */}
+      <footer className="border-t border-slate-300 bg-white/60 backdrop-blur-md py-3 text-center text-sm text-slate-600 shadow-inner">
+        © {new Date().getFullYear()} Built with IEM-UEM GROUP
+      </footer>
     </div>
   )
 }
