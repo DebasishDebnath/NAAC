@@ -23,6 +23,8 @@ import Home from "./pages/User/Home.jsx";
 import Reports from "./pages/User/Reports.jsx";
 import Forms from "./pages/User/Forms.jsx";
 import SuperadminReports from "../src/pages/Superadmin/Reports/index.jsx";
+import User from "./pages/Superadmin/Users/User.jsx";
+import AddEmails from "./pages/Superadmin/Users/AddEmails.jsx";
 // Allowed login roles
 const allowedRoles = ["user", "superadmin", "psudosuperadmin"];
 
@@ -127,7 +129,7 @@ function App() {
                         <Layout
                           menus={["Home", "Users", "Reports"]}
                           submenu={{
-                            Users: ["Add User", "Pseudo User", "Add Email"],
+                            Users: ["User", "Pseudo User", "Add Email"],
                           }}
                         />
                       </ProtectedRoute>
@@ -136,6 +138,8 @@ function App() {
                 >
                   <Route path="dashboard" element={<SuperadminDashboard />} />
                   <Route path="emails" element={<div>SuperAdmin Emails</div>} />
+                  <Route path="users/user" element={<User/>} />
+                  <Route path="users/add-email" element={<AddEmails/>} />
                   <Route
                     path="pseudosuperadmin"
                     element={<div>SuperAdmin PseudoSuperadmin Add</div>}
