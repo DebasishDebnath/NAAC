@@ -93,7 +93,7 @@ function Layout({ menus = [] }) {
     const routeMap = {
       "Home": `${basePath}/dashboard`,
       "Emails": `${basePath}/emails`,
-      "Pseudo Superadmin Add": `${basePath}/pseudosuperadmin-add`,
+      "Pseudo Superadmin": `${basePath}/pseudosuperadmin`,
       "Forms": `${basePath}/forms`,
       "Reports": `${basePath}/reports`,
       "Psudo": `${basePath}/dashboard`,
@@ -105,7 +105,7 @@ function Layout({ menus = [] }) {
   }
 
   return (
-    <div className="flex min-h-screen bg-[#f1f1f1] text-slate-800">
+    <div className="flex min-h-screen bg-[#f5f5f5] text-slate-800">
       {/* Sidebar with transitions */}
       <div className={`fixed transition-all duration-300 ease-in-out ${
         isSidebarOpen 
