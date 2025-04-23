@@ -1,7 +1,7 @@
 {
   "form": [
     {
-      "type": "categoryI",
+      "type": "CategoryI",
       "forms": [
         {
           "tableName": "Teaching and Duties",

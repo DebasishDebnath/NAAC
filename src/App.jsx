@@ -25,11 +25,22 @@ import Forms from "./pages/User/Forms.jsx";
 import SuperadminReports from "../src/pages/Superadmin/Reports/index.jsx";
 import User from "./pages/Superadmin/Users/User.jsx";
 import AddEmails from "./pages/Superadmin/Users/AddEmails.jsx";
+
+// Flag to control route protection
+// When set to true: Protected routes are enforced (normal security behavior)
+// When set to false: All routes are accessible without authentication/authorization
+const ENFORCE_ROUTE_PROTECTION = false;
+
 // Allowed login roles
 const allowedRoles = ["user", "superadmin", "psudosuperadmin"];
 
 // TokenWrapper: wraps protected routes
 const TokenWrapper = ({ children }) => {
+  // If we're not enforcing protection, skip the token check
+  if (!ENFORCE_ROUTE_PROTECTION) {
+    return children;
+  }
+  
   const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
 
@@ -38,6 +49,17 @@ const TokenWrapper = ({ children }) => {
   }
 
   return children;
+};
+
+// Modified ProtectedRouteWrapper to honor the flag
+const ProtectedRouteWrapper = ({ allowedRoles, children }) => {
+  // If we're not enforcing protection, render the children directly
+  if (!ENFORCE_ROUTE_PROTECTION) {
+    return children;
+  }
+  
+  // Otherwise use the original ProtectedRoute component
+  return <ProtectedRoute allowedRoles={allowedRoles}>{children}</ProtectedRoute>;
 };
 
 // LoginRouteWrapper: restricts login route to only valid roles
@@ -51,6 +73,11 @@ const LoginRouteWrapper = () => {
 
 // Redirect to appropriate dashboard based on role
 const RedirectDashboard = () => {
+  // If protection is disabled, default to user dashboard
+  if (!ENFORCE_ROUTE_PROTECTION) {
+    return <Navigate to="/user/dashboard" replace />;
+  }
+  
   const role = sessionStorage.getItem("role");
 
   switch (role) {
@@ -99,7 +126,7 @@ function App() {
                   path="/user"
                   element={
                     <TokenWrapper>
-                      <ProtectedRoute allowedRoles={["user"]}>
+                      <ProtectedRouteWrapper allowedRoles={["user"]}>
                         <Layout menus={["Home", "Forms", "Reports"]}>
                           <Routes>
                             <Route
@@ -109,7 +136,7 @@ function App() {
                             <Route path="*" element={<NotFound />} />
                           </Routes>
                         </Layout>
-                      </ProtectedRoute>
+                      </ProtectedRouteWrapper>
                     </TokenWrapper>
                   }
                 >
@@ -125,14 +152,14 @@ function App() {
                   path="/superadmin"
                   element={
                     <TokenWrapper>
-                      <ProtectedRoute allowedRoles={["superadmin"]}>
+                      <ProtectedRouteWrapper allowedRoles={["superadmin"]}>
                         <Layout
                           menus={["Home", "Users", "Reports"]}
                           submenu={{
                             Users: ["User", "Pseudo User", "Add Email"],
                           }}
                         />
-                      </ProtectedRoute>
+                      </ProtectedRouteWrapper>
                     </TokenWrapper>
                   }
                 >
@@ -161,9 +188,9 @@ function App() {
                   path="/psudo"
                   element={
                     <TokenWrapper>
-                      <ProtectedRoute allowedRoles={["psudosuperadmin"]}>
+                      <ProtectedRouteWrapper allowedRoles={["psudosuperadmin"]}>
                         <Layout menus={["Psudo", "Manage", "Settings"]} />
-                      </ProtectedRoute>
+                      </ProtectedRouteWrapper>
                     </TokenWrapper>
                   }
                 >
