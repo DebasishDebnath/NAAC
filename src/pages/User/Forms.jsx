@@ -3,6 +3,7 @@ import data from '../../constant/test.json';
 import { useSnackbar } from 'notistack';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/ResizablePanels';
 
 
 function Forms() {
@@ -142,6 +143,9 @@ function Forms() {
   return (
     <div className="h-screen flex">
       {/* Sidebar */}
+      <ResizablePanelGroup direction="horizontal" className="w-full rounded-lg border ">
+ 
+       <ResizablePanel className=' ' defaultSize={20}>
       <div className="w-64 border-r border-gray-200 overflow-y-auto p-4">
         <nav className="space-y-1">
           {categories.map((category, catIndex) => {
@@ -189,14 +193,22 @@ function Forms() {
           })}
         </nav>
       </div>
-
+      </ResizablePanel>
+      <ResizableHandle />
       {/* Main content */}
+      <ResizablePanel defaultSize={50}>
       <div className="flex-1 overflow-y-auto p-6">
         <h1 className="text-2xl font-bold mb-1">Academic Performance Indicators</h1>
         <p className="text-gray-500 mb-8">Manage your academic activities and achievements.</p>
         <div className="border-t border-gray-200 mb-6"></div>
         {renderFormFields()}
       </div>
+      </ResizablePanel>
+      <ResizableHandle />
+      <ResizablePanel defaultSize={60}>
+      Table
+        </ResizablePanel>
+      </ResizablePanelGroup>
     </div>
   );
 }
