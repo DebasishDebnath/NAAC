@@ -99,7 +99,7 @@ function App() {
                     <TokenWrapper>
                       <ProtectedRoute allowedRoles={["user"]}>
                         <Layout menus={["Home", "Forms", "Reports"]} >
-                        <Routes>
+                          <Routes>
                             <Route
                               path="dashboard"
                               element={<div>User Dashboard</div>}
@@ -112,8 +112,8 @@ function App() {
                   }
                 >
                   <Route path="dashboard" element={<Home />} />
-                  <Route path="forms" element={<Forms/>} />
-                  <Route path="reports" element={<Reports/>} />
+                  <Route path="forms" element={<Forms />} />
+                  <Route path="reports" element={<Reports />} />
                   <Route path="*" element={<NotFound />} />
                   <Route index element={<Navigate to="dashboard" replace />} />
                 </Route>
@@ -124,7 +124,12 @@ function App() {
                   element={
                     <TokenWrapper>
                       <ProtectedRoute allowedRoles={["superadmin"]}>
-                        <Layout menus={["Home", "Users", "Reports"]} subMenus={{"Users":["Add Users", "Add Pseudo", "Add email"]}}/>
+                        <Layout
+                          menus={["Home", "Users", "Reports"]}
+                          submenu={{
+                            Users: ["Add User", "Pseudo User", "Add Email"],
+                          }}
+                        />
                       </ProtectedRoute>
                     </TokenWrapper>
                   }
@@ -144,7 +149,7 @@ function App() {
                     <TokenWrapper>
                       <ProtectedRoute allowedRoles={["psudosuperadmin"]}>
                         <Layout menus={["Psudo", "Manage", "Settings"]} />
-                        
+
                       </ProtectedRoute>
                     </TokenWrapper>
                   }
