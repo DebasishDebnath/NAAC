@@ -4,6 +4,18 @@ import { useSnackbar } from 'notistack';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/ResizablePanels';
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow
+} from '../../components/ui/DataTable';
+
+import facultyData from "../../constant/invoices.json"
 
 
 function Forms() {
@@ -144,69 +156,96 @@ function Forms() {
     <div className="h-screen flex">
       {/* Sidebar */}
       <ResizablePanelGroup direction="horizontal" className="w-full rounded-lg border ">
- 
-       <ResizablePanel className=' ' defaultSize={20}>
-      <div className="w-64 border-r border-gray-200 overflow-y-auto p-4">
-        <nav className="space-y-1">
-          {categories.map((category, catIndex) => {
-            const isActiveCategory = selectedCategory === catIndex;
-            const isSingleForm = category.subItems.length === 1;
 
-            return (
-              <div key={catIndex}>
-                {/* Category Header */}
-                <div
-                  className={`flex items-center px-3 py-2 transition-all duration-200 ${isSingleForm && isActiveCategory
-                    ? 'bg-blue-100 text-blue-600'
-                    : isActiveCategory
-                      ? 'bg-gray-100'
-                      : 'hover:bg-gray-200'
-                    } rounded-md cursor-pointer mb-1`}
-                  onClick={() => handleCategorySelect(catIndex)}
-                >
-                  <span className="font-medium">{category.name}</span>
-                </div>
+        <ResizablePanel className=' ' defaultSize={20}>
+          <div className="w-64 border-r border-gray-200 overflow-y-auto p-4">
+            <nav className="space-y-1">
+              {categories.map((category, catIndex) => {
+                const isActiveCategory = selectedCategory === catIndex;
+                const isSingleForm = category.subItems.length === 1;
 
-                {/* Subcategories: Show only if more than one */}
-                {isActiveCategory && category.subItems.length > 1 && category.subItems.map((subItem, subIndex) => (
-                  <div className='flex items-center'>
-
-                    {selectedSubcategory !== subIndex &&
-                      <div className='h-full min-w-[10px] border-gray-400 border-[1px] '></div>
-                    }
-
+                return (
+                  <div key={catIndex}>
+                    {/* Category Header */}
                     <div
-                      key={subIndex}
-                      className={`flex items-center px-3 py-2 ml-4 text-sm transition-colors duration-150 ${selectedSubcategory === subIndex
+                      className={`flex items-center px-3 py-2 transition-all duration-200 ${isSingleForm && isActiveCategory
                         ? 'bg-blue-100 text-blue-600'
-                        : 'text-gray-700 hover:bg-gray-50'
-                        } rounded-md cursor-pointer`}
-                      onClick={() => handleSubcategorySelect(subIndex)}
+                        : isActiveCategory
+                          ? 'bg-gray-100'
+                          : 'hover:bg-gray-200'
+                        } rounded-md cursor-pointer mb-1`}
+                      onClick={() => handleCategorySelect(catIndex)}
                     >
-                      <span>{subItem}</span>
+                      <span className="font-medium">{category.name}</span>
                     </div>
 
+                    {/* Subcategories: Show only if more than one */}
+                    {isActiveCategory && category.subItems.length > 1 && category.subItems.map((subItem, subIndex) => (
+                      <div className='flex items-center'>
+
+                        {selectedSubcategory !== subIndex &&
+                          <div className='h-full min-w-[10px] border-gray-400 border-[1px] '></div>
+                        }
+
+                        <div
+                          key={subIndex}
+                          className={`flex items-center px-3 py-2 ml-4 text-sm transition-colors duration-150 ${selectedSubcategory === subIndex
+                            ? 'bg-blue-100 text-blue-600'
+                            : 'text-gray-700 hover:bg-gray-50'
+                            } rounded-md cursor-pointer`}
+                          onClick={() => handleSubcategorySelect(subIndex)}
+                        >
+                          <span>{subItem}</span>
+                        </div>
+
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            );
-          })}
-        </nav>
-      </div>
-      </ResizablePanel>
-      <ResizableHandle />
-      {/* Main content */}
-      <ResizablePanel defaultSize={50}>
-      <div className="flex-1 overflow-y-auto p-6">
-        <h1 className="text-2xl font-bold mb-1">Academic Performance Indicators</h1>
-        <p className="text-gray-500 mb-8">Manage your academic activities and achievements.</p>
-        <div className="border-t border-gray-200 mb-6"></div>
-        {renderFormFields()}
-      </div>
-      </ResizablePanel>
-      <ResizableHandle />
-      <ResizablePanel defaultSize={60}>
-      Table
+                );
+              })}
+            </nav>
+          </div>
+        </ResizablePanel>
+        <ResizableHandle />
+        {/* Main content */}
+        <ResizablePanel defaultSize={50}>
+          <div className="flex-1 overflow-y-auto p-6">
+            <h1 className="text-2xl font-bold mb-1">Academic Performance Indicators</h1>
+            <p className="text-gray-500 mb-8">Manage your academic activities and achievements.</p>
+            <div className="border-t border-gray-200 mb-6"></div>
+            {renderFormFields()}
+          </div>
+        </ResizablePanel>
+        <ResizableHandle />
+        <ResizablePanel defaultSize={60}>
+
+
+
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[120px]">Faculty ID</TableHead>
+                <TableHead>Name</TableHead>
+                <TableHead>Department</TableHead>
+                <TableHead>Designation</TableHead>
+                <TableHead className="text-right">Submitted On</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {facultyData.map((faculty) => (
+                <TableRow key={faculty.facultyId}>
+                  <TableCell className="font-medium">{faculty.facultyId}</TableCell>
+                  <TableCell>{faculty.name}</TableCell>
+                  <TableCell>{faculty.department}</TableCell>
+                  <TableCell>{faculty.designation}</TableCell>
+                  <TableCell className="text-right">{faculty.submittedOn}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+
+
+
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>
