@@ -20,7 +20,7 @@ import {
 function Layout({ menus = [] }) {
   const defaultMenus = [
     "Home",
-    "Email Request",
+    "Emails",
     "Pseudo Superadmin Add",
     "Reports",
     "Psudo",
@@ -31,7 +31,7 @@ function Layout({ menus = [] }) {
 
   const iconMap = {
     "Home": <Grid size={20} />,
-    "Email Request": <Download size={20} />,
+    "Emails": <Download size={20} />,
     "Pseudo Superadmin Add": <Users size={20} />,
     "Reports": <MessageSquare size={20} />,
     "Psudo": <Users size={20} />,
@@ -92,7 +92,7 @@ function Layout({ menus = [] }) {
     const basePath = getBasePath()
     const routeMap = {
       "Home": `${basePath}/dashboard`,
-      "Email Request": `${basePath}/emailrequest`,
+      "Emails": `${basePath}/emails`,
       "Pseudo Superadmin Add": `${basePath}/pseudosuperadmin-add`,
       "Forms": `${basePath}/forms`,
       "Reports": `${basePath}/reports`,
@@ -105,7 +105,7 @@ function Layout({ menus = [] }) {
   }
 
   return (
-    <div className="flex min-h-screen bg-slate-100 text-slate-800">
+    <div className="flex min-h-screen bg-[#f1f1f1] text-slate-800">
       {/* Sidebar with transitions */}
       <div className={`fixed transition-all duration-300 ease-in-out ${
         isSidebarOpen 
@@ -117,7 +117,7 @@ function Layout({ menus = [] }) {
           <div className="h-full flex flex-col justify-between">
             <div className="p-4">
               <div className="flex items-center gap-3 mb-6">
-                <div className="bg-slate-800 text-white px-2 py-1 mx-2 rounded-lg">⌘</div>
+                <div className="bg-blue-600 text-white px-2 py-1 mx-2 rounded-lg">⌘</div>
                 <div>
                   <h1 className="text-lg font-semibold">Shadcn Admin</h1>
                   <p className="text-xs text-muted-foreground">React Router</p>
@@ -129,8 +129,8 @@ function Layout({ menus = [] }) {
                     key={index}
                     className={`flex items-center gap-3 w-full text-left py-2 rounded-md text-sm font-medium transition ${
                       activeItem === menu
-                        ? "bg-slate-300 text-white"
-                        : "hover:bg-slate-100"
+                        ? "bg-blue-600 text-white"
+                        : "hover:bg-blue-100"
                     }`}
                     onClick={() => handleMenuClick(menu)}
                   >
@@ -156,7 +156,7 @@ function Layout({ menus = [] }) {
           <div className="w-full h-full flex flex-col items-center py-4 justify-between">
             <div className="w-full flex flex-col items-center space-y-3">
               {/* Logo */}
-              <div className="w-8 h-8 bg-slate-800 text-white rounded-lg flex items-center justify-center mb-4">
+              <div className="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center mb-4">
                 ⌘
               </div>
               
@@ -167,7 +167,7 @@ function Layout({ menus = [] }) {
                   onClick={() => handleMenuClick(menu)}
                   className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
                     activeItem === menu 
-                    ? 'bg-slate-800 text-white' 
+                    ? 'bg-blue-600 text-white' 
                     : 'text-slate-700 hover:bg-slate-100'
                   }`}
                   title={menu}
