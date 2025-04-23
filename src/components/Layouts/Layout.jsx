@@ -101,10 +101,10 @@ function Layout({ menus = [] }) {
     <div className="flex min-h-screen bg-slate-100 text-slate-800">
 
       {/* Sidebar */}
-      <div className={`transition-all duration-300 ${isSidebarOpen ? 'w-64' : 'w-12'} bg-white border-r border-slate-200 flex flex-col justify-between items-center ml-4 mt-4 mb-4 rounded-lg shadow-2xl`}>
+      <div className={`transition-all duration-300 ${isSidebarOpen ? 'w-64' : 'w-12 items-center ml-4 mt-4 mb-4 rounded-lg shadow-2xl'} bg-white border-r border-slate-200 flex flex-col justify-between px-0`}>
         <div className="p-4">
           <div className="flex items-center gap-3 mb-6">
-            <div className="bg-slate-800 text-white px-2 py-1 mx-2 rounded-lg w-[70%]">⌘</div>
+            <div className={`bg-slate-800 text-white px-2 py-1 mx-2 rounded-lg ${isSidebarOpen?'':'w-[70%]'}`}>⌘</div>
             {isSidebarOpen && (
               <div>
                 <h1 className="text-lg font-semibold">Shadcn Admin</h1>
@@ -116,14 +116,14 @@ function Layout({ menus = [] }) {
             {menuItems.map((menu, index) => (
               <button
               key={index}
-              className={`flex items-center gap-3 w-[70%] h-[35px] text-left mx-2 py-2 rounded-md text-sm font-medium transition ${
+              className={`flex items-center gap-3 ${isSidebarOpen? 'w-full':'w-[70%] h-[35px] mx-2'} text-left  py-2 rounded-md text-sm font-medium transition ${
                 activeItem === menu
                   ? "bg-slate-300 text-white w-4"
                   : "hover:bg-slate-100"
               } ${!isSidebarOpen ? "justify-center" : ""}`}
               onClick={() => handleMenuClick(menu)}
             >
-              <div className="w-6 h-6 flex items-center justify-center text-slate-700">
+              <div className={`w-6 ${isSidebarOpen?'ml-2': ''} h-6 flex items-center justify-center ${activeItem === menu? 'text-white':'text-slate-700'}`}>
                 {iconMap[menu]}
               </div>
               {isSidebarOpen && <span>{menu}</span>}
