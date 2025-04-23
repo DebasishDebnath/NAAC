@@ -22,7 +22,7 @@ import { ThemeProvider } from "./components/theme/ThemeProvider.jsx";
 import Home from "./pages/User/Home.jsx";
 import Reports from "./pages/User/Reports.jsx";
 import Forms from "./pages/User/Forms.jsx";
-import ReportSuperadmin from "../src/pages/Superadmin/Reports/index.jsx";
+
 // Allowed login roles
 const allowedRoles = ["user", "superadmin", "psudosuperadmin"];
 
@@ -98,7 +98,7 @@ function App() {
                   element={
                     <TokenWrapper>
                       <ProtectedRoute allowedRoles={["user"]}>
-                        <Layout menus={["Home", "Forms", "Reports"]}>
+                        <Layout menus={["Home", "Forms", "Reports"]} >
                           <Routes>
                             <Route
                               path="dashboard"
@@ -125,12 +125,10 @@ function App() {
                     <TokenWrapper>
                       <ProtectedRoute allowedRoles={["superadmin"]}>
                         <Layout
-                          menus={[
-                            "Home",
-                            "Emails",
-                            "Pseudo Superadmin Add",
-                            "Reports",
-                          ]}
+                          menus={["Home", "Users", "Reports"]}
+                          submenu={{
+                            Users: ["Add User", "Pseudo User", "Add Email"],
+                          }}
                         />
                       </ProtectedRoute>
                     </TokenWrapper>
@@ -138,18 +136,8 @@ function App() {
                 >
                   <Route path="dashboard" element={<SuperadminDashboard />} />
                   <Route path="emails" element={<div>SuperAdmin Emails</div>} />
-                  <Route
-                    path="pseudosuperadmin"
-                    element={<div>SuperAdmin PseudoSuperadmin Add</div>}
-                  />
-                  <Route
-                    path="reports"
-                    element={
-                      <div>
-                        <ReportSuperadmin />
-                      </div>
-                    }
-                  />
+                  <Route path="pseudosuperadmin" element={<div>SuperAdmin PseudoSuperadmin Add</div>} />
+                  <Route path="reports" element={<div>SuperAdmin Reports</div>} />
                   <Route path="*" element={<NotFound />} />
                   <Route index element={<Navigate to="dashboard" replace />} />
                 </Route>
@@ -161,18 +149,13 @@ function App() {
                     <TokenWrapper>
                       <ProtectedRoute allowedRoles={["psudosuperadmin"]}>
                         <Layout menus={["Psudo", "Manage", "Settings"]} />
+
                       </ProtectedRoute>
                     </TokenWrapper>
                   }
                 >
-                  <Route
-                    path="dashboard"
-                    element={<div>Psudo Superadmin Dashboard</div>}
-                  />
-                  <Route
-                    path="panel"
-                    element={<div>PsudoSuperAdmin Panel</div>}
-                  />
+                  <Route path="dashboard" element={<div>Psudo Superadmin Dashboard</div>} />
+                  <Route path="panel" element={<div>PsudoSuperAdmin Panel</div>} />
                   <Route path="*" element={<NotFound />} />
                   <Route index element={<Navigate to="dashboard" replace />} />
                 </Route>

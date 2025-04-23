@@ -1,23 +1,20 @@
-import React, { useState, useEffect, useRef } from "react"
-import { Outlet, useNavigate, useLocation } from "react-router-dom"
+import React, { useState, useEffect, useRef } from "react";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import {
-  Home,
-  Mail,
-  FileText,
-  BarChart,
-  Settings,
-  UserPlus,
-  Users,
-  Menu,
-  LayoutDashboard,
-  HelpCircle,
-  Bug,
   Grid,
   Download,
+  Users,
   MessageSquare,
-} from "lucide-react"
+  Bug,
+  Settings,
+  HelpCircle,
+  Menu,
+  House,
+  UsersRound,
+  BookType,
+} from "lucide-react";
 
-function Layout({ menus = [] }) {
+function Layout({ menus = [], submenu = {} }) {
   const defaultMenus = [
     "Home",
     "Emails",
@@ -26,70 +23,80 @@ function Layout({ menus = [] }) {
     "Psudo",
     "Manage",
     "Settings",
-  ]
-  const menuItems = menus.length > 0 ? menus : defaultMenus
+  ];
+  const menuItems = menus.length > 0 ? menus : defaultMenus;
 
   const iconMap = {
-    "Home": <Grid size={20} />,
+    "Home": <House size={20} />,
     "Emails": <Download size={20} />,
+    "Forms": <BookType size={20} />,
     "Pseudo Superadmin Add": <Users size={20} />,
     "Reports": <MessageSquare size={20} />,
     "Psudo": <Users size={20} />,
     "Manage": <Bug size={20} />,
     "Settings": <Settings size={20} />,
     "Help": <HelpCircle size={20} />,
+    "Users": <UsersRound size={20} />
   }
 
-  const role = sessionStorage.getItem("role") || "User"
-  const navigate = useNavigate()
-  const location = useLocation()
+  const role = sessionStorage.getItem("role") || "User";
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const [activeItem, setActiveItem] = useState("Home")
-  const [showDropdown, setShowDropdown] = useState(false)
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
-  const dropdownRef = useRef(null)
+  const [activeItem, setActiveItem] = useState("Home");
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [openSubmenus, setOpenSubmenus] = useState({});
+  const dropdownRef = useRef(null);
 
   const getBasePath = () => {
-    const parts = location.pathname.split("/")
-    return parts.length >= 2 ? `/${parts[1]}` : "/"
-  }
+    const parts = location.pathname.split("/");
+    return parts.length >= 2 ? `/${parts[1]}` : "/";
+  };
 
   useEffect(() => {
-    const pathParts = location.pathname.split("/")
+    const pathParts = location.pathname.split("/");
     if (pathParts.length >= 3) {
-      const currentPage = pathParts[2]
+      const currentPage = pathParts[2];
       const match = menuItems.find(
         (menu) =>
           menu.toLowerCase().replace(/\s+/g, "") === currentPage.toLowerCase()
-      )
-      setActiveItem(match || menuItems[0])
+      );
+      setActiveItem(match || menuItems[0]);
     } else {
-      setActiveItem(menuItems[0])
+      setActiveItem(menuItems[0]);
     }
-  }, [location.pathname, menuItems])
+  }, [location.pathname, menuItems]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setShowDropdown(false)
+        setShowDropdown(false);
       }
-    }
+    };
     if (showDropdown) {
-      document.addEventListener("mousedown", handleClickOutside)
+      document.addEventListener("mousedown", handleClickOutside);
     }
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [showDropdown])
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showDropdown]);
 
   const handleLogout = () => {
-    sessionStorage.clear()
-    navigate(`/login/${role.toLowerCase()}`)
-  }
+    sessionStorage.clear();
+    navigate(`/login/${role.toLowerCase()}`);
+  };
+
+  const toggleSubmenu = (menu) => {
+    setOpenSubmenus((prev) => ({
+      ...prev,
+      [menu]: !prev[menu],
+    }));
+  };
 
   const handleMenuClick = (menu) => {
-    setActiveItem(menu)
-    const basePath = getBasePath()
+    setActiveItem(menu);
+    const basePath = getBasePath();
     const routeMap = {
       "Home": `${basePath}/dashboard`,
       "Emails": `${basePath}/emails`,
@@ -99,20 +106,21 @@ function Layout({ menus = [] }) {
       "Psudo": `${basePath}/dashboard`,
       "Manage": `${basePath}/panel`,
       "Settings": `${basePath}/panel`,
-    }
-    const route = routeMap[menu] || `${basePath}/dashboard`
-    navigate(route)
-  }
+    };
+    const route = routeMap[menu] || `${basePath}/dashboard`;
+    navigate(route);
+  };
 
   return (
     <div className="flex min-h-screen bg-[#f5f5f5] text-slate-800">
-      {/* Sidebar with transitions */}
-      <div className={`fixed transition-all duration-300 ease-in-out ${
-        isSidebarOpen 
-          ? 'w-64 h-screen' 
-          : 'w-16 h-[calc(100vh-2rem)] my-4 ml-4 rounded-lg shadow-lg'
-        } bg-white overflow-hidden`}>
-        
+      {/* Sidebar */}
+      <div
+        className={`fixed transition-all duration-300 ease-in-out ${
+          isSidebarOpen
+            ? "w-64 h-screen"
+            : "w-16 h-[calc(100vh-2rem)] my-4 ml-4 rounded-lg shadow-lg"
+        } bg-white overflow-hidden`}
+      >
         {isSidebarOpen ? (
           <div className="h-full flex flex-col justify-between">
             <div className="p-4">
@@ -123,27 +131,68 @@ function Layout({ menus = [] }) {
                   <p className="text-xs text-muted-foreground">React Router</p>
                 </div>
               </div>
+
               <nav className="space-y-2">
                 {menuItems.map((menu, index) => (
-                  <button
-                    key={index}
-                    className={`flex items-center gap-3 w-full text-left py-2 rounded-md text-sm font-medium transition ${
-                      activeItem === menu
-                        ? "bg-blue-600 text-white"
-                        : "hover:bg-blue-100"
-                    }`}
-                    onClick={() => handleMenuClick(menu)}
-                  >
-                    <div className={`w-6 ml-2 h-6 flex items-center justify-center ${activeItem === menu ? 'text-white' : 'text-slate-700'}`}>
-                      {iconMap[menu]}
-                    </div>
-                    <span>{menu}</span>
-                  </button>
+                  <div key={index}>
+                    <button
+                      className={`flex items-center justify-between w-full text-left py-2 px-2 rounded-md text-sm font-medium transition ${
+                        activeItem === menu ? "bg-blue-600 text-white" : "hover:bg-blue-100"
+                      }`}
+                      onClick={() => {
+                        if (submenu[menu]) {
+                          toggleSubmenu(menu);
+                        } else {
+                          handleMenuClick(menu);
+                        }
+                      }}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={`w-6 h-6 flex items-center justify-center ${
+                            activeItem === menu ? "text-white" : "text-slate-700"
+                          }`}
+                        >
+                          {iconMap[menu]}
+                        </div>
+                        <span>{menu}</span>
+                      </div>
+                      {submenu[menu] && (
+                        <span className="ml-auto text-xs">
+                          {openSubmenus[menu] ? "▲" : "▼"}
+                        </span>
+                      )}
+                    </button>
+
+                    {submenu[menu] && openSubmenus[menu] && (
+                      <div className="ml-8 mt-1 space-y-1">
+                        {submenu[menu].map((sub, subIdx) => (
+                          <button
+                            key={subIdx}
+                            className={`w-full text-left px-2 py-1 text-sm rounded-md ${
+                              activeItem === sub
+                                ? "bg-blue-100 text-blue-800"
+                                : "hover:bg-blue-50"
+                            }`}
+                            onClick={() => {
+                              setActiveItem(sub);
+                              navigate(
+                                `${getBasePath()}/${menu.toLowerCase()}/${sub
+                                  .toLowerCase()
+                                  .replace(/\s+/g, "-")}`
+                              );
+                            }}
+                          >
+                            {sub}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 ))}
               </nav>
             </div>
 
-            {/* Footer / Role */}
             <div className="border-t pt-4 mt-4 px-4 pb-4 flex items-center gap-3">
               <div className="bg-slate-200 text-slate-700 rounded-full px-2 py-1 text-sm font-semibold">SN</div>
               <div className="text-sm">
@@ -155,20 +204,17 @@ function Layout({ menus = [] }) {
         ) : (
           <div className="w-full h-full flex flex-col items-center py-4 justify-between">
             <div className="w-full flex flex-col items-center space-y-3">
-              {/* Logo */}
               <div className="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center mb-4">
                 ⌘
               </div>
-              
-              {/* Show all menu icons */}
               {menuItems.map((menu, index) => (
-                <button 
-                  key={index} 
+                <button
+                  key={index}
                   onClick={() => handleMenuClick(menu)}
                   className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
-                    activeItem === menu 
-                    ? 'bg-blue-600 text-white' 
-                    : 'text-slate-700 hover:bg-slate-100'
+                    activeItem === menu
+                      ? "bg-blue-600 text-white"
+                      : "text-slate-700 hover:bg-slate-100"
                   }`}
                   title={menu}
                 >
@@ -176,10 +222,12 @@ function Layout({ menus = [] }) {
                 </button>
               ))}
             </div>
-            
-            {/* User avatar at bottom */}
+
             <div className="mt-auto">
-              <div className="w-8 h-8 bg-slate-200 text-slate-700 rounded-full flex items-center justify-center font-medium text-sm" title={role}>
+              <div
+                className="w-8 h-8 bg-slate-200 text-slate-700 rounded-full flex items-center justify-center font-medium text-sm"
+                title={role}
+              >
                 SN
               </div>
             </div>
@@ -187,8 +235,12 @@ function Layout({ menus = [] }) {
         )}
       </div>
 
-      {/* Main content with padding to account for fixed sidebar */}
-      <div className={`flex-1 flex flex-col min-h-screen transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-20'}`}>
+      {/* Main Content */}
+      <div
+        className={`flex-1 flex flex-col min-h-screen transition-all duration-300 ${
+          isSidebarOpen ? "ml-64" : "ml-20"
+        }`}
+      >
         {/* Header */}
         <header className="sticky top-0 z-20 backdrop-blur-md">
           <div className="flex items-center justify-between px-6 py-4">
@@ -199,7 +251,6 @@ function Layout({ menus = [] }) {
               <Menu className="w-5 h-5 text-slate-700" />
             </button>
 
-            {/* Role Dropdown */}
             <div className="relative" ref={dropdownRef}>
               <span
                 className="bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full uppercase shadow-sm cursor-pointer hover:bg-blue-200 transition-colors"
@@ -230,7 +281,7 @@ function Layout({ menus = [] }) {
         </footer>
       </div>
     </div>
-  )
+  );
 }
 
-export default Layout
+export default Layout;
