@@ -1,0 +1,983 @@
+{
+    "form": [
+      {
+        "type": "categoryI",
+        "forms": [
+          {
+            "tableName": "Teaching and Duties",
+            "tableData": [
+              {
+                "fieldName": "Direct Teaching",
+                "fieldType": "Number",
+                "required": true,
+                "placeholder": "Enter Hours",
+                "value": ""
+              },
+              {
+                "fieldName": "Examination duties (question paper setting, invigilation, evaluation of answer scripts) as per allotment",
+                "fieldType": "Number",
+                "required": true,
+                "placeholder": "Enter Hours",
+                "value": ""
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Category II",
+        "forms": [
+          {
+            "tableName": "Journal Publications",
+            "tableData": [
+              {
+                "fieldName": "Category",
+                "fieldType": "Options",
+                "options": ["Select Option"],
+                "required": true,
+                "value": ""
+              },
+              {
+                "fieldName": "Journal Name",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Journal Name",
+                "value": ""
+              },
+              {
+                "fieldName": "Paper Title",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Paper Title",
+                "value": ""
+              },
+              {
+                "fieldName": "Category of Journal",
+                "fieldType": "Options",
+                "options": ["Select Option"],
+                "required": true,
+                "value": ""
+              },
+              {
+                "fieldName": "Type of Journal",
+                "fieldType": "Options",
+                "options": ["Select Option"],
+                "required": true,
+                "value": ""
+              },
+              {
+                "fieldName": "Month and Year of Publication",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Eg: Jan, 2024",
+                "value": ""
+              },
+              {
+                "fieldName": "ISSN",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter ISSN",
+                "value": ""
+              },
+              {
+                "fieldName": "Impact Factor",
+                "fieldType": "Options",
+                "options": ["Select Option"],
+                "required": true,
+                "value": ""
+              },
+              {
+                "fieldName": "Quartile of Scopus Journal",
+                "fieldType": "Options",
+                "options": ["Select Option"],
+                "required": true,
+                "value": ""
+              },
+              {
+                "fieldName": "Drive Link to the Certificate",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Link",
+                "value": ""
+              }
+            ]
+          },
+          {
+            "tableName": "Books Publication",
+            "tableData": [
+              {
+                "fieldName": "Category",
+                "fieldType": "Options",
+                "options": ["Select Option"],
+                "required": true,
+                "value": ""
+              },
+              {
+                "fieldName": "Title of the Book",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Title of the Book",
+                "value": ""
+              },
+              {
+                "fieldName": "Publisher Name",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Publisher Name",
+                "value": ""
+              },
+              {
+                "fieldName": "Month and Year of Publication",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Eg: Jan, 2024",
+                "value": ""
+              },
+              {
+                "fieldName": "ISBN/Others",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter ISBN or Other Info",
+                "value": ""
+              },
+              {
+                "fieldName": "Type of Publication",
+                "fieldType": "Options",
+                "options": ["Select Option"],
+                "required": true,
+                "value": ""
+              },
+              {
+                "fieldName": "Drive Link to the Certificate",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Link",
+                "value": ""
+              }
+            ]
+          },
+          {
+            "tableName": "Books Chapter / Conference Proceedings",
+            "tableData": [
+              {
+                "fieldName": "Status of Authors",
+                "fieldType": "Options",
+                "options": ["Select Option"],
+                "required": true,
+                "value": ""
+              },
+              {
+                "fieldName": "Name of the Paper",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Name of the Paper",
+                "value": ""
+              },
+              {
+                "fieldName": "Conference Name (if Book Chapter, write N/A)",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Conference Name or N/A",
+                "value": ""
+              },
+              {
+                "fieldName": "Book Title",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Book Title",
+                "value": ""
+              },
+              {
+                "fieldName": "Publisher",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Publisher",
+                "value": ""
+              },
+              {
+                "fieldName": "Year",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Year",
+                "value": ""
+              },
+              {
+                "fieldName": "Drive Link to the Certificate",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Link",
+                "value": ""
+              }
+            ]
+          },
+          {
+            "tableName": "Editor of Book",
+            "tableData": [
+              {
+                "fieldName": "Type",
+                "fieldType": "Options",
+                "options": ["Select Option"],
+                "required": true,
+                "value": ""
+              },
+              {
+                "fieldName": "Name of Editors",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Name of Editors",
+                "value": ""
+              },
+              {
+                "fieldName": "Book Title",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Book Title",
+                "value": ""
+              },
+              {
+                "fieldName": "Publishers",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Publisher Name",
+                "value": ""
+              },
+              {
+                "fieldName": "Drive Link to the Certificate",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Link",
+                "value": ""
+              }
+            ]
+          },
+          {
+            "tableName": "Translation Work",
+            "tableData": [
+              {
+                "fieldName": "Number of Authors",
+                "fieldType": "Options",
+                "options": ["Select Option"],
+                "required": true,
+                "value": ""
+              },
+              {
+                "fieldName": "Title of the Book",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Title of the Book",
+                "value": ""
+              },
+              {
+                "fieldName": "Publisher Name",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Publisher Name",
+                "value": ""
+              },
+              {
+                "fieldName": "Drive Link to the Certificate",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Link",
+                "value": ""
+              }
+            ]
+          },
+          {
+            "tableName": "Consultancy",
+            "tableData": [
+              {
+                "fieldName": "Name of the Consultancy Project",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Name of the Consultancy Project",
+                "value": ""
+              },
+              {
+                "fieldName": "Organisation of Consultancy",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Organisation of Consultancy",
+                "value": ""
+              },
+              {
+                "fieldName": "Duration (Eg: Jan, 2024)",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Duration",
+                "value": ""
+              },
+              {
+                "fieldName": "Date (Eg: Jan, 2024)",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Date",
+                "value": ""
+              },
+              {
+                "fieldName": "Drive Link to the Certificate",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Link",
+                "value": ""
+              }
+            ]
+          },
+          {
+            "tableName": "Patent Status",
+            "tableData": [
+              {
+                "fieldName": "Application No",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Application No",
+                "value": ""
+              },
+              {
+                "fieldName": "Inventors",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Inventors",
+                "value": ""
+              },
+              {
+                "fieldName": "Title of the Patent",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Title of the Patent",
+                "value": ""
+              },
+              {
+                "fieldName": "Status",
+                "fieldType": "Options",
+                "options": ["Select Option"],
+                "required": true,
+                "value": ""
+              },
+              {
+                "fieldName": "Date of Publication / Grant (Eg: Jan, 2024)",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Date of Publication / Grant",
+                "value": ""
+              },
+              {
+                "fieldName": "Country where Patented",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Country where Patented",
+                "value": ""
+              },
+              {
+                "fieldName": "Drive Link to the Certificate",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Link",
+                "value": ""
+              }
+            ]
+          },
+          {
+            "tableName": "Research Project",
+            "tableData": [
+              {
+                "fieldName": "Status of Investigator",
+                "fieldType": "Options",
+                "options": ["Select Option"],
+                "required": true,
+                "value": ""
+              },
+              {
+                "fieldName": "Status",
+                "fieldType": "Options",
+                "options": ["Select Option"],
+                "required": true,
+                "value": ""
+              },
+              {
+                "fieldName": "Title of the Project with name of sponsor (Eg: Application of AI in WSN - DST SERB)",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Title of the Project with name of sponsor",
+                "value": ""
+              },
+              {
+                "fieldName": "Category",
+                "fieldType": "Options",
+                "options": ["Select Option"],
+                "required": true,
+                "value": ""
+              },
+              {
+                "fieldName": "Fund in Rs.",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Fund in Rs.",
+                "value": ""
+              },
+              {
+                "fieldName": "Duration",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Duration",
+                "value": ""
+              },
+              {
+                "fieldName": "Date of Grant (Eg: Jan, 2024)",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Date of Grant",
+                "value": ""
+              },
+              {
+                "fieldName": "Drive Link to the Certificate",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Link",
+                "value": ""
+              }
+            ]
+          },
+          {
+            "tableName": "Award/Fellowship",
+            "tableData": [
+              {
+                "fieldName": "Name of Award/Fellowship",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Name of Award/Fellowship",
+                "value": ""
+              },
+              {
+                "fieldName": "International/National",
+                "fieldType": "Options",
+                "options": ["Select Option"],
+                "required": true,
+                "value": ""
+              },
+              {
+                "fieldName": "Name of the Awarding Agency",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Name of the Awarding Agency",
+                "value": ""
+              },
+              {
+                "fieldName": "Date (Eg: Jan, 2024)",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Date",
+                "value": ""
+              },
+              {
+                "fieldName": "Drive Link to the Certificate",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Link",
+                "value": ""
+              }
+            ]
+          },
+          {
+            "tableName": "Event Organiser / Participation",
+            "tableData": [
+              {
+                "fieldName": "Type of Event",
+                "fieldType": "Options",
+                "options": ["Select Option"],
+                "required": true,
+                "value": ""
+              },
+              {
+                "fieldName": "Event Name",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Event Name",
+                "value": ""
+              },
+              {
+                "fieldName": "Event Duration (Date Range) Eg: 01st Jan, 2024 - 05th Jan, 2024",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Event Duration",
+                "value": ""
+              },
+              {
+                "fieldName": "Job Responsibility / Responsibilities beared in the event",
+                "fieldType": "Options",
+                "options": ["Select Option"],
+                "required": true,
+                "value": ""
+              },
+              {
+                "fieldName": "Drive Link to the Certificate",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Link",
+                "value": ""
+              }
+            ]
+          },
+          {
+            "tableName": "Development of Innovative Pedagogy",
+            "tableData": [
+              {
+                "fieldName": "Description",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Description",
+                "value": ""
+              },
+              {
+                "fieldName": "Contributor/Contributors",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Contributor/Contributors",
+                "value": ""
+              },
+              {
+                "fieldName": "Drive Link to the Certificate",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Link",
+                "value": ""
+              }
+            ]
+          },
+          {
+            "tableName": "Design of New Curriculam and Courses (ICT Based)",
+            "tableData": [
+              {
+                "fieldName": "Description",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Description",
+                "value": ""
+              },
+              {
+                "fieldName": "Contributor/Contributors",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Contributor/Contributors",
+                "value": ""
+              },
+              {
+                "fieldName": "Drive Link to the Certificate",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Link",
+                "value": ""
+              }
+            ]
+          },
+          {
+            "tableName": "Development of Complete MOOC's in 4 Quadrant (4 Credit Course)",
+            "tableData": [
+              {
+                "fieldName": "Description",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Description",
+                "value": ""
+              },
+              {
+                "fieldName": "Credit Score",
+                "fieldType": "Options",
+                "options": ["Select Option"],
+                "required": true,
+                "value": ""
+              },
+              {
+                "fieldName": "Drive Link to the Certificate",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Link",
+                "value": ""
+              }
+            ]
+          },
+          {
+            "tableName": "MOOCs (development in 4 quadrant) per module / lecture",
+            "tableData": [
+              {
+                "fieldName": "Description",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Description",
+                "value": ""
+              },
+              {
+                "fieldName": "Drive Link to the Certificate",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Link",
+                "value": ""
+              }
+            ]
+          },
+          {
+            "tableName": "Content Writer/Subject Matter Expert for each Module of MOOCs (At Least One Quadrant)",
+            "tableData": [
+              {
+                "fieldName": "Description",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Description",
+                "value": ""
+              },
+              {
+                "fieldName": "Drive Link to the Certificate",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Link",
+                "value": ""
+              }
+            ]
+          },
+          {
+            "tableName": "Course Coordinator for MOOCs",
+            "tableData": [
+              {
+                "fieldName": "Description",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Description",
+                "value": ""
+              },
+              {
+                "fieldName": "Credit Score",
+                "fieldType": "Options",
+                "options": ["Select Option"],
+                "required": true,
+                "value": ""
+              },
+              {
+                "fieldName": "Drive Link to the Certificate",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Link",
+                "value": ""
+              }
+            ]
+          },
+          {
+            "tableName": "Development of E-Content in 4 quadrants for a Complete Course / E-Book",
+            "tableData": [
+              {
+                "fieldName": "Description",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Description",
+                "value": ""
+              },
+              {
+                "fieldName": "Drive Link to the Certificate",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Link",
+                "value": ""
+              }
+            ]
+          },
+          {
+            "tableName": "E-Content (developed in 4 quadrants) Per Module",
+            "tableData": [
+              {
+                "fieldName": "Description",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Description",
+                "value": ""
+              },
+              {
+                "fieldName": "Drive Link to the Certificate",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Link",
+                "value": ""
+              }
+            ]
+          },
+          {
+            "tableName": "Contribution to development of E-Content module in Complete Course / E-Book (at least one quadrant)",
+            "tableData": [
+              {
+                "fieldName": "Description",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Description",
+                "value": ""
+              },
+              {
+                "fieldName": "Drive Link to the Certificate",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Link",
+                "value": ""
+              }
+            ]
+          },
+          {
+            "tableName": "Editor of E-Content for Complete Course / E-Book",
+            "tableData": [
+              {
+                "fieldName": "Description",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Description",
+                "value": ""
+              },
+              {
+                "fieldName": "Drive Link to the Certificate",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Link",
+                "value": ""
+              }
+            ]
+          },
+          {
+            "tableName": "Status as Guide - Ph.D. Guidance (Degree Awarded)",
+            "tableData": [
+              {
+                "fieldName": "Name of Student",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Name of Student",
+                "value": ""
+              },
+              {
+                "fieldName": "Topic of Research",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Topic of Research",
+                "value": ""
+              },
+              {
+                "fieldName": "Domain",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Domain",
+                "value": ""
+              },
+              {
+                "fieldName": "PhD Award Date (Eg: Jan, 2024)",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter PhD Award Date",
+                "value": ""
+              },
+              {
+                "fieldName": "Guidance (Awarded)",
+                "fieldType": "Options",
+                "options": ["Select Option"],
+                "required": true,
+                "value": ""
+              },
+              {
+                "fieldName": "Drive Link to the Certificate",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Link",
+                "value": ""
+              }
+            ]
+          },
+          {
+            "tableName": "Status as Guide - Ph.D. Guidance (for Pursuing Students)",
+            "tableData": [
+              {
+                "fieldName": "Name of Student",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Name of Student",
+                "value": ""
+              },
+              {
+                "fieldName": "Topic of Research",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Topic of Research",
+                "value": ""
+              },
+              {
+                "fieldName": "Domain",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Domain",
+                "value": ""
+              },
+              {
+                "fieldName": "PhD Award Date (Eg: Jan, 2024)",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter PhD Award Date",
+                "value": ""
+              },
+              {
+                "fieldName": "Guidance (Submitted)",
+                "fieldType": "Options",
+                "options": ["Select Option"],
+                "required": true,
+                "value": ""
+              },
+              {
+                "fieldName": "Status",
+                "fieldType": "Options",
+                "options": ["Select Option"],
+                "required": true,
+                "value": ""
+              },
+              {
+                "fieldName": "Drive Link to the Certificate",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Link",
+                "value": ""
+              }
+            ]
+          },
+          {
+            "tableName": "M.Phil./P.G Dissertation Guidance",
+            "tableData": [
+              {
+                "fieldName": "Name of Student",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Name of Student",
+                "value": ""
+              },
+              {
+                "fieldName": "Topic of Research",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Topic of Research",
+                "value": ""
+              },
+              {
+                "fieldName": "Domain",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Domain",
+                "value": ""
+              },
+              {
+                "fieldName": "Dissertation",
+                "fieldType": "Options",
+                "options": ["Select Option"],
+                "required": true,
+                "value": ""
+              },
+              {
+                "fieldName": "Drive Link to the Certificate",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Link",
+                "value": ""
+              }
+            ]
+          },
+          {
+            "tableName": "Online AI Courses",
+            "tableData": [
+              {
+                "fieldName": "Name of Course",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Name of Course",
+                "value": ""
+              },
+              {
+                "fieldName": "Platform",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Platform",
+                "value": ""
+              },
+              {
+                "fieldName": "Number of Hours",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Number of Hours",
+                "value": ""
+              },
+              {
+                "fieldName": "Drive Link to the Certificate",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Link",
+                "value": ""
+              }
+            ]
+          },
+          {
+            "tableName": "Policy Document (International Body / Organisation / Central Govt. or state Govt.)",
+            "tableData": [
+              {
+                "fieldName": "Status",
+                "fieldType": "Options",
+                "options": ["Select Option"],
+                "required": true,
+                "value": ""
+              },
+              {
+                "fieldName": "Description",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Description",
+                "value": ""
+              },
+              {
+                "fieldName": "Drive Link to the Certificate",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Link",
+                "value": ""
+              }
+            ]
+          },
+          {
+            "tableName": "Invited Lectures / Paper Presentation in Seminars / Full Paper in Conference",
+            "tableData": [
+              {
+                "fieldName": "Title",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Title",
+                "value": ""
+              },
+              {
+                "fieldName": "Date",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Date",
+                "value": ""
+              },
+              {
+                "fieldName": "Category",
+                "fieldType": "Options",
+                "options": ["Select Option"],
+                "required": true,
+                "value": ""
+              },
+              {
+                "fieldName": "Type",
+                "fieldType": "Options",
+                "options": ["Select Option"],
+                "required": true,
+                "value": ""
+              },
+              {
+                "fieldName": "Drive Link to the Certificate",
+                "fieldType": "Text",
+                "required": true,
+                "placeholder": "Enter Link",
+                "value": ""
+              }
+            ]
+          }          
+        ]
+      }
+    ]
+  }
+  
