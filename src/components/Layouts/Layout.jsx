@@ -13,7 +13,8 @@
 //   UsersRound,
 //   BookType,
 // } from "lucide-react";
-// import {ProfileDropdown} from "./profile-dropdown";
+// import Dropdown from "./Dropdown";
+// import BelowDropDown from "./BelowDropDown";
 // function Layout({ menus = [], submenu = {} }) {
 //   const defaultMenus = [
 //     "Home",
@@ -81,11 +82,6 @@
 //       document.removeEventListener("mousedown", handleClickOutside);
 //     };
 //   }, [showDropdown]);
-
-//   const handleLogout = () => {
-//     sessionStorage.clear();
-//     navigate(`/login/${role.toLowerCase()}`);
-//   };
 
 //   const toggleSubmenu = (menu) => {
 //     setOpenSubmenus((prev) => ({
@@ -199,7 +195,11 @@
 //               </nav>
 //             </div>
 
-//             <div className="border-t pt-4 mt-4 px-4 pb-4 flex items-center gap-3">
+//             <div
+//               className="border-t pt-4 mt-4 px-4 pb-4 flex items-center gap-3 cursor-pointer relative"
+//               ref={dropdownRef}
+//               onClick={() => setShowDropdown(!showDropdown)}
+//             >
 //               <div className="bg-slate-200 text-slate-700 rounded-full px-2 py-1 text-sm font-semibold">
 //                 SN
 //               </div>
@@ -209,6 +209,19 @@
 //                   email@domain.com
 //                 </div>
 //               </div>
+
+//               {/* Dropdown */}
+//               {showDropdown && (
+//                 <div
+//                   className="absolute left-0 top-full mt-2 w-48 z-30 bg-white shadow-md rounded-md"
+//                   style={{
+//                     bottom: "100%", // Position the dropdown below the profile section
+//                     left: "1000", // Align dropdown to the left edge of the profile section
+//                   }}
+//                 >
+//                   <BelowDropDown />
+//                 </div>
+//               )}
 //             </div>
 //           </div>
 //         ) : (
@@ -260,7 +273,6 @@
 //             >
 //               <Menu className="w-5 h-5 text-slate-700" />
 //             </button>
-//             <ProfileDropdown />
 //             <div className="relative" ref={dropdownRef}>
 //               <span
 //                 className="bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full uppercase shadow-sm cursor-pointer hover:bg-blue-200 transition-colors"
@@ -268,16 +280,7 @@
 //               >
 //                 {role}
 //               </span>
-//               {showDropdown && (
-//                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-30">
-//                   <button
-//                     className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-slate-100"
-//                     onClick={handleLogout}
-//                   >
-//                     Logout
-//                   </button>
-//                 </div>
-//               )}
+//               {showDropdown && <Dropdown />}
 //             </div>
 //           </div>
 //         </header>
@@ -311,7 +314,8 @@ import {
   UsersRound,
   BookType,
 } from "lucide-react";
-import {ProfileDropdown} from "./profile-dropdown";
+import Dropdown from "./Dropdown";
+import BelowDropDown from "./BelowDropDown";
 
 function Layout({ menus = [], submenu = {} }) {
   const defaultMenus = [
@@ -343,8 +347,11 @@ function Layout({ menus = [], submenu = {} }) {
   const location = useLocation();
 
   const [activeItem, setActiveItem] = useState("Home");
+  const [showDropdown, setShowDropdown] = useState(false); 
+  const [showBelowDropdown, setShowBelowDropdown] = useState(false); 
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [openSubmenus, setOpenSubmenus] = useState({});
+  const dropdownRef = useRef(null);
 
   const getBasePath = () => {
     const parts = location.pathname.split("/");
@@ -365,10 +372,22 @@ function Layout({ menus = [], submenu = {} }) {
     }
   }, [location.pathname, menuItems]);
 
-  const handleLogout = () => {
-    sessionStorage.clear();
-    navigate(`/login/${role.toLowerCase()}`);
-  };
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+        setShowBelowDropdown(false); // Hide both dropdowns if clicked outside
+      }
+    };
+
+    if (showDropdown || showBelowDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showDropdown, showBelowDropdown]);
 
   const toggleSubmenu = (menu) => {
     setOpenSubmenus((prev) => ({
@@ -482,7 +501,14 @@ function Layout({ menus = [], submenu = {} }) {
               </nav>
             </div>
 
-            <div className="border-t pt-4 mt-4 px-4 pb-4 flex items-center gap-3">
+            <div
+              className="border-t pt-4 mt-4 px-4 pb-4 flex items-center gap-3 cursor-pointer relative"
+              ref={dropdownRef}
+              onClick={() => {
+                setShowBelowDropdown(!showBelowDropdown); 
+                setShowDropdown(false);
+              }}
+            >
               <div className="bg-slate-200 text-slate-700 rounded-full px-2 py-1 text-sm font-semibold">
                 SN
               </div>
@@ -492,6 +518,9 @@ function Layout({ menus = [], submenu = {} }) {
                   email@domain.com
                 </div>
               </div>
+
+              {/* Below Dropdown */}
+              {showBelowDropdown && <BelowDropDown />}
             </div>
           </div>
         ) : (
@@ -543,8 +572,18 @@ function Layout({ menus = [], submenu = {} }) {
             >
               <Menu className="w-5 h-5 text-slate-700" />
             </button>
-
-            <ProfileDropdown />
+            <div className="relative" ref={dropdownRef}>
+              <span
+                className="bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full uppercase shadow-sm cursor-pointer hover:bg-blue-200 transition-colors"
+                onClick={() => {
+                  setShowDropdown(!showDropdown);
+                  setShowBelowDropdown(false); 
+                }}
+              >
+                {role}
+              </span>
+              {showDropdown && <Dropdown />}
+            </div>
           </div>
         </header>
 
