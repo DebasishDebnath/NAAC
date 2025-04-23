@@ -131,7 +131,7 @@ function App() {
                 >
                   <Route path="dashboard" element={<SuperadminDashboard />} />
                   <Route path="emails" element={<div>SuperAdmin Emails</div>} />
-                  <Route path="pseudosuperadmin-add" element={<div>SuperAdmin PseudoSuperadmin Add</div>} />
+                  <Route path="pseudosuperadmin" element={<div>SuperAdmin PseudoSuperadmin Add</div>} />
                   <Route path="reports" element={<div>SuperAdmin Reports</div>} />
                   <Route path="*" element={<NotFound />} />
                   <Route index element={<Navigate to="dashboard" replace />} />
