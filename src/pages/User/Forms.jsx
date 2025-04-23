@@ -122,10 +122,10 @@ function Forms() {
                 <div
                   className={`flex items-center px-3 py-2 transition-all duration-200 ${
                     isSingleForm && isActiveCategory
-                      ? 'bg-blue-50 text-blue-600'
+                      ? 'bg-blue-100 text-blue-600'
                       : isActiveCategory
                       ? 'bg-gray-100'
-                      : 'hover:bg-gray-100'
+                      : 'hover:bg-gray-200'
                   } rounded-md cursor-pointer mb-1`}
                   onClick={() => handleCategorySelect(catIndex)}
                 >
@@ -138,7 +138,7 @@ function Forms() {
                     key={subIndex}
                     className={`flex items-center px-3 py-2 ml-4 text-sm transition-colors duration-150 ${
                       selectedSubcategory === subIndex
-                        ? 'bg-blue-50 text-blue-600'
+                        ? 'bg-blue-100 text-blue-600'
                         : 'text-gray-700 hover:bg-gray-50'
                     } rounded-md cursor-pointer`}
                     onClick={() => handleSubcategorySelect(subIndex)}
