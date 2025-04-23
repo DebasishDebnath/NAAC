@@ -20,7 +20,7 @@ import SuperadminDashboard from "./pages/Superadmin/Dashboard";
 // import PsudoSuperadminDashboard from "./pages/PsudoSuperadmin/Dashboard";
 import { ThemeProvider } from "./components/theme/ThemeProvider.jsx";
 import Home from "./pages/User/Home.jsx";
-import Reports from "./pages/User/Reports/Reports.jsx";
+import Reports from "./pages/User/Reports.jsx";
 
 // Allowed login roles
 const allowedRoles = ["user", "superadmin", "psudosuperadmin"];
