@@ -213,7 +213,7 @@ export default function ReportTable() {
     const MobileCard = ({ item }) => (
         <div className="bg-white p-4 rounded-md border mb-4 shadow-sm">
             <div className="flex justify-between items-start mb-2">
-                <Badge variant="secondary" className="text-xs">
+                <Badge variant="secondary" className="text-xs ">
                     {item.label}
                 </Badge>
                 <div className="flex items-center gap-1 text-sm">
@@ -268,8 +268,8 @@ export default function ReportTable() {
                 <Table>
                     <TableCaption>A list of your reports for this month.</TableCaption>
                     <TableHeader>
-                        <TableRow>
-                            <TableHead className="w-[100px]">ID</TableHead>
+                        <TableRow className={`bg-blue-500 `}>
+                            <TableHead>ID</TableHead>
                             <TableHead>Title</TableHead>
                             <TableHead>Status</TableHead>
                             <TableHead>Date</TableHead>
