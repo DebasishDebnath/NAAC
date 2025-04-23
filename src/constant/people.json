@@ -1,0 +1,39 @@
+[
+    {
+      "id": 1,
+      "name": "Alice Johnson",
+      "email": "alice.johnson@example.com",
+      "designation": "Frontend Developer",
+      "profilePic": "https://randomuser.me/api/portraits/women/44.jpg"
+    },
+    {
+      "id": 2,
+      "name": "Bob Smith",
+      "email": "bob.smith@example.com",
+      "designation": "Backend Engineer",
+      "profilePic": "https://randomuser.me/api/portraits/men/32.jpg"
+    },
+    {
+      "id": 3,
+      "name": "Carol Martinez",
+      "email": "carol.martinez@example.com",
+      "designation": "UI/UX Designer",
+      "profilePic": "https://randomuser.me/api/portraits/women/65.jpg"
+    },
+    {
+        "id": 3,
+        "name": "Carol Martinez",
+        "email": "carol.martinez@example.com",
+        "designation": "UI/UX Designer",
+        "profilePic": "https://randomuser.me/api/portraits/women/65.jpg"
+      },
+      {
+        "id": 3,
+        "name": "Carol Martinez",
+        "email": "carol.martinez@example.com",
+        "designation": "UI/UX Designer",
+        "profilePic": "https://randomuser.me/api/portraits/women/65.jpg"
+      }
+    
+  ]
+  
