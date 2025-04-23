@@ -33,7 +33,7 @@
               {
                 "fieldName": "Category",
                 "fieldType": "Options",
-                "options": ["Select Option"],
+                "options": ["option1","option2"],
                 "required": true,
                 "value": ""
               },

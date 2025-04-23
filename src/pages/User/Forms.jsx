@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import data from '../../constant/test.json';
 
 function Forms() {
@@ -7,21 +7,41 @@ function Forms() {
   const [selectedCategory, setSelectedCategory] = useState(0);
   const [selectedSubcategory, setSelectedSubcategory] = useState(0);
 
-  // Dynamically map categories with fallback naming
+  // Format categories with fallback names
   const categories = formData.form.map((category) => ({
     name: category.name || category.type || "Untitled Category",
-    subItems: category.forms.map(form => form.tableName),
+    subItems: category.forms.map(form => form.tableName || "Untitled Form"),
   }));
 
-  const renderFormFields = () => {
-    if (selectedCategory === null) return null;
+  // Automatically select first form if only one exists
+  useEffect(() => {
+    const selectedCategoryForms = formData.form[selectedCategory]?.forms || [];
+    if (selectedCategoryForms.length === 1) {
+      setSelectedSubcategory(0);
+    }
+  }, [selectedCategory]);
 
+  const handleCategorySelect = (catIndex) => {
+    setSelectedCategory(catIndex);
+    const categoryForms = formData.form[catIndex]?.forms || [];
+    setSelectedSubcategory(0); // reset or select only form
+  };
+
+  const handleSubcategorySelect = (subIndex) => {
+    setSelectedSubcategory(subIndex);
+  };
+
+  const renderFormFields = () => {
     const categoryData = formData.form[selectedCategory];
-    const formFields = categoryData.forms[selectedSubcategory].tableData;
+    const selectedForm = categoryData?.forms[selectedSubcategory];
+
+    if (!selectedForm) return null;
+
+    const formFields = selectedForm.tableData;
 
     return (
       <div className="space-y-6 transition-all duration-500 ease-in-out">
-        <h2 className="text-lg font-medium">{categoryData.forms[selectedSubcategory].tableName}</h2>
+        <h2 className="text-lg font-medium">{selectedForm.tableName || "Untitled Form"}</h2>
 
         {formFields.map((field, index) => (
           <div key={index} className="mb-4 transition-opacity duration-300">
@@ -87,55 +107,57 @@ function Forms() {
     );
   };
 
-  const handleCategorySelect = (catIndex) => {
-    setSelectedCategory(catIndex);
-    setSelectedSubcategory(0);
-  };
-
-  const handleSubcategorySelect = (subIndex) => {
-    setSelectedSubcategory(subIndex);
-  };
-
   return (
-    <div className="mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-1">Academic Performance Indicators</h1>
-      <p className="text-gray-500 mb-8">Manage your academic activities and achievements.</p>
+    <div className="h-screen flex">
+      {/* Sidebar */}
+      <div className="w-64 border-r border-gray-200 overflow-y-auto p-4">
+        <nav className="space-y-1">
+          {categories.map((category, catIndex) => {
+            const isActiveCategory = selectedCategory === catIndex;
+            const isSingleForm = category.subItems.length === 1;
 
-      <div className="border-t border-gray-200"></div>
-
-      <div className="flex mt-6">
-        {/* Sidebar */}
-        <div className="w-64 pr-8">
-          <nav className="space-y-1">
-            {categories.map((category, catIndex) => (
+            return (
               <div key={catIndex}>
-                {/* Category header */}
-                <div 
-                  className={`flex items-center px-3 py-2 transition-all duration-200 ${selectedCategory === catIndex ? 'bg-gray-100' : 'hover:bg-gray-100'} rounded-md cursor-pointer mb-1`}
+                {/* Category Header */}
+                <div
+                  className={`flex items-center px-3 py-2 transition-all duration-200 ${
+                    isSingleForm && isActiveCategory
+                      ? 'bg-blue-50 text-blue-600'
+                      : isActiveCategory
+                      ? 'bg-gray-100'
+                      : 'hover:bg-gray-100'
+                  } rounded-md cursor-pointer mb-1`}
                   onClick={() => handleCategorySelect(catIndex)}
                 >
                   <span className="font-medium">{category.name}</span>
                 </div>
 
-                {/* Subcategories */}
-                {selectedCategory === catIndex && category.subItems.map((subItem, subIndex) => (
-                  <div 
+                {/* Subcategories: Show only if more than one */}
+                {isActiveCategory && category.subItems.length > 1 && category.subItems.map((subItem, subIndex) => (
+                  <div
                     key={subIndex}
-                    className={`flex items-center px-3 py-2 ml-4 text-sm transition-colors duration-150 ${selectedSubcategory === subIndex ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50'} rounded-md cursor-pointer`}
+                    className={`flex items-center px-3 py-2 ml-4 text-sm transition-colors duration-150 ${
+                      selectedSubcategory === subIndex
+                        ? 'bg-blue-50 text-blue-600'
+                        : 'text-gray-700 hover:bg-gray-50'
+                    } rounded-md cursor-pointer`}
                     onClick={() => handleSubcategorySelect(subIndex)}
                   >
                     <span>{subItem}</span>
                   </div>
                 ))}
               </div>
-            ))}
-          </nav>
-        </div>
+            );
+          })}
+        </nav>
+      </div>
 
-        {/* Main content */}
-        <div className="flex-1 border-l border-gray-200 pl-8">
-          {renderFormFields()}
-        </div>
+      {/* Main content */}
+      <div className="flex-1 overflow-y-auto p-6">
+        <h1 className="text-2xl font-bold mb-1">Academic Performance Indicators</h1>
+        <p className="text-gray-500 mb-8">Manage your academic activities and achievements.</p>
+        <div className="border-t border-gray-200 mb-6"></div>
+        {renderFormFields()}
       </div>
     </div>
   );
