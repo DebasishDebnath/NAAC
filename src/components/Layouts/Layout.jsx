@@ -10,6 +10,11 @@ import {
   Users,
   Menu,
   LayoutDashboard,
+  HelpCircle,
+  Bug,
+  Grid,
+  Download,
+  MessageSquare,
 } from "lucide-react"
 
 function Layout({ menus = [] }) {
@@ -25,21 +30,21 @@ function Layout({ menus = [] }) {
   const menuItems = menus.length > 0 ? menus : defaultMenus
 
   const iconMap = {
-    "Home": <Home size={18} />,
-    "Email Request": <Mail size={18} />,
-    "Pseudo Superadmin Add": <UserPlus size={18} />,
-    "Reports": <BarChart size={18} />,
-    "Psudo": <LayoutDashboard size={18} />,
-    "Manage": <Settings size={18} />,
-    "Settings": <Settings size={18} />,
+    "Home": <Grid size={20} />,
+    "Email Request": <Download size={20} />,
+    "Pseudo Superadmin Add": <Users size={20} />,
+    "Reports": <MessageSquare size={20} />,
+    "Psudo": <Users size={20} />,
+    "Manage": <Bug size={20} />,
+    "Settings": <Settings size={20} />,
+    "Help": <HelpCircle size={20} />,
   }
-
 
   const role = sessionStorage.getItem("role") || "User"
   const navigate = useNavigate()
   const location = useLocation()
 
-  const [activeItem, setActiveItem] = useState(null)
+  const [activeItem, setActiveItem] = useState("Home")
   const [showDropdown, setShowDropdown] = useState(false)
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const dropdownRef = useRef(null)
@@ -58,6 +63,8 @@ function Layout({ menus = [] }) {
           menu.toLowerCase().replace(/\s+/g, "") === currentPage.toLowerCase()
       )
       setActiveItem(match || menuItems[0])
+    } else {
+      setActiveItem(menuItems[0])
     }
   }, [location.pathname, menuItems])
 
@@ -99,55 +106,89 @@ function Layout({ menus = [] }) {
 
   return (
     <div className="flex min-h-screen bg-slate-100 text-slate-800">
-
-      {/* Sidebar */}
-      <div className={`transition-all duration-300 ${isSidebarOpen ? 'w-64' : 'w-12 items-center ml-4 mt-4 mb-4 rounded-lg shadow-2xl'} bg-white border-r border-slate-200 flex flex-col justify-between px-0`}>
-        <div className="p-4">
-          <div className="flex items-center gap-3 mb-6">
-            <div className={`bg-slate-800 text-white px-2 py-1 mx-2 rounded-lg ${isSidebarOpen?'':'w-[70%]'}`}>⌘</div>
-            {isSidebarOpen && (
-              <div>
-                <h1 className="text-lg font-semibold">Shadcn Admin</h1>
-                <p className="text-xs text-muted-foreground">React Router</p>
+      {/* Sidebar with transitions */}
+      <div className={`fixed transition-all duration-300 ease-in-out ${
+        isSidebarOpen 
+          ? 'w-64 h-screen' 
+          : 'w-16 h-[calc(100vh-2rem)] my-4 ml-4 rounded-lg shadow-lg'
+        } bg-white overflow-hidden`}>
+        
+        {isSidebarOpen ? (
+          <div className="h-full flex flex-col justify-between">
+            <div className="p-4">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="bg-slate-800 text-white px-2 py-1 mx-2 rounded-lg">⌘</div>
+                <div>
+                  <h1 className="text-lg font-semibold">Shadcn Admin</h1>
+                  <p className="text-xs text-muted-foreground">React Router</p>
+                </div>
               </div>
-            )}
-          </div>
-          <nav className="space-y-2">
-            {menuItems.map((menu, index) => (
-              <button
-              key={index}
-              className={`flex items-center gap-3 ${isSidebarOpen? 'w-full':'w-[70%] h-[35px] mx-2'} text-left  py-2 rounded-md text-sm font-medium transition ${
-                activeItem === menu
-                  ? "bg-slate-300 text-white w-4"
-                  : "hover:bg-slate-100"
-              } ${!isSidebarOpen ? "justify-center" : ""}`}
-              onClick={() => handleMenuClick(menu)}
-            >
-              <div className={`w-6 ${isSidebarOpen?'ml-2': ''} h-6 flex items-center justify-center ${activeItem === menu? 'text-white':'text-slate-700'}`}>
-                {iconMap[menu]}
-              </div>
-              {isSidebarOpen && <span>{menu}</span>}
-            </button>
-            
-            ))}
-          </nav>
-        </div>
-
-        {/* Footer / Role */}
-        <div className="border-t pt-4 mt-4 px-4 pb-4 flex items-center gap-3">
-          <div className="bg-slate-200 text-slate-700 rounded-full px-2 py-1 text-sm font-semibold">SN</div>
-          {isSidebarOpen && (
-            <div className="text-sm">
-              <div className="font-semibold">{role}</div>
-              <div className="text-xs text-muted-foreground">email@domain.com</div>
+              <nav className="space-y-2">
+                {menuItems.map((menu, index) => (
+                  <button
+                    key={index}
+                    className={`flex items-center gap-3 w-full text-left py-2 rounded-md text-sm font-medium transition ${
+                      activeItem === menu
+                        ? "bg-slate-300 text-white"
+                        : "hover:bg-slate-100"
+                    }`}
+                    onClick={() => handleMenuClick(menu)}
+                  >
+                    <div className={`w-6 ml-2 h-6 flex items-center justify-center ${activeItem === menu ? 'text-white' : 'text-slate-700'}`}>
+                      {iconMap[menu]}
+                    </div>
+                    <span>{menu}</span>
+                  </button>
+                ))}
+              </nav>
             </div>
-          )}
-        </div>
+
+            {/* Footer / Role */}
+            <div className="border-t pt-4 mt-4 px-4 pb-4 flex items-center gap-3">
+              <div className="bg-slate-200 text-slate-700 rounded-full px-2 py-1 text-sm font-semibold">SN</div>
+              <div className="text-sm">
+                <div className="font-semibold">{role}</div>
+                <div className="text-xs text-muted-foreground">email@domain.com</div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="w-full h-full flex flex-col items-center py-4 justify-between">
+            <div className="w-full flex flex-col items-center space-y-3">
+              {/* Logo */}
+              <div className="w-8 h-8 bg-slate-800 text-white rounded-lg flex items-center justify-center mb-4">
+                ⌘
+              </div>
+              
+              {/* Show all menu icons */}
+              {menuItems.map((menu, index) => (
+                <button 
+                  key={index} 
+                  onClick={() => handleMenuClick(menu)}
+                  className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
+                    activeItem === menu 
+                    ? 'bg-slate-800 text-white' 
+                    : 'text-slate-700 hover:bg-slate-100'
+                  }`}
+                  title={menu}
+                >
+                  {iconMap[menu]}
+                </button>
+              ))}
+            </div>
+            
+            {/* User avatar at bottom */}
+            <div className="mt-auto">
+              <div className="w-8 h-8 bg-slate-200 text-slate-700 rounded-full flex items-center justify-center font-medium text-sm" title={role}>
+                SN
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Main content */}
-      <div className="flex-1 flex flex-col min-h-screen">
-
+      {/* Main content with padding to account for fixed sidebar */}
+      <div className={`flex-1 flex flex-col min-h-screen transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-20'}`}>
         {/* Header */}
         <header className="sticky top-0 z-20 backdrop-blur-md">
           <div className="flex items-center justify-between px-6 py-4">
