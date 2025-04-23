@@ -1,142 +1,150 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { 
-  Menubar, 
-  MenubarMenu, 
-  MenubarTrigger 
-} from '../ui/menubar'
-import { Outlet, useNavigate, useLocation } from 'react-router-dom'
+import React, { useState, useEffect, useRef } from "react"
+import { Outlet, useNavigate, useLocation } from "react-router-dom"
+import {
+  Sheet,
+  SheetTrigger,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "../ui/sheet"
+import { Menu } from "lucide-react"
 
 function Layout({ menus = [] }) {
-  const defaultMenus = ['File', 'Edit', 'View', 'Help']
+  const defaultMenus = [
+    "Home",
+    "Email Request",
+    "Pseudo Superadmin Add",
+    "Reports",
+    "Psudo",
+    "Manage",
+    "Settings",
+  ]
   const menuItems = menus.length > 0 ? menus : defaultMenus
-  const role = sessionStorage.getItem('role')
+
+  const role = sessionStorage.getItem("role")
   const navigate = useNavigate()
   const location = useLocation()
-
-  // Get the base path for the current role
-  const getBasePath = () => {
-    const pathParts = location.pathname.split('/')
-    if (pathParts.length >= 2) {
-      return `/${pathParts[1]}`
-    }
-    return '/'
-  }
-
-  // Set active item based on current path on component mount
-  useEffect(() => {
-    const currentPath = location.pathname
-    const pathParts = currentPath.split('/')
-    if (pathParts.length >= 3) {
-      const currentPage = pathParts[2]
-      const matchingMenu = menuItems.find(menu => 
-        menu.toLowerCase().replace(/\s+/g, '') === currentPage.toLowerCase()
-      )
-      if (matchingMenu) {
-        setActiveItem(matchingMenu)
-      } else if (currentPage === 'dashboard') {
-        // Default to first menu item if on dashboard
-        setActiveItem(menuItems[0])
-      }
-    }
-  }, [location.pathname, menuItems])
 
   const [activeItem, setActiveItem] = useState(null)
   const [showDropdown, setShowDropdown] = useState(false)
   const dropdownRef = useRef(null)
 
-  // Handle clicks outside of the dropdown
+  const getBasePath = () => {
+    const parts = location.pathname.split("/")
+    return parts.length >= 2 ? `/${parts[1]}` : "/"
+  }
+
   useEffect(() => {
-    function handleClickOutside(event) {
+    const pathParts = location.pathname.split("/")
+    if (pathParts.length >= 3) {
+      const currentPage = pathParts[2]
+      const match = menuItems.find(
+        (menu) =>
+          menu.toLowerCase().replace(/\s+/g, "") ===
+          currentPage.toLowerCase()
+      )
+      setActiveItem(match || menuItems[0])
+    }
+  }, [location.pathname, menuItems])
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setShowDropdown(false)
       }
     }
 
-    // Add event listener if dropdown is shown
     if (showDropdown) {
-      document.addEventListener('mousedown', handleClickOutside)
+      document.addEventListener("mousedown", handleClickOutside)
     }
-
-    // Clean up the event listener
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener("mousedown", handleClickOutside)
     }
   }, [showDropdown])
 
   const handleLogout = () => {
-    // Clear session storage
     sessionStorage.clear()
-    // Navigate to login page based on role
-    const roleForLogin = role || 'user' 
-    navigate(`/login/${roleForLogin.toLowerCase()}`)
-  }
-
-  const toggleDropdown = () => {
-    setShowDropdown(!showDropdown)
+    navigate(`/login/${(role || "user").toLowerCase()}`)
   }
 
   const handleMenuClick = (menu) => {
     setActiveItem(menu)
-    
     const basePath = getBasePath()
-    
     const routeMap = {
-      // Superadmin routes
-      'Home': `${basePath}/dashboard`,
-      'Email Request': `${basePath}/emailrequest`,
-      'Pseudo Superadmin Add': `${basePath}/pseudosuperadmin-add`,
-      'Reports': `${basePath}/reports`,
-      
-      // Psudo routes
-      'Psudo': `${basePath}/dashboard`,
-      'Manage': `${basePath}/panel`,
-      'Settings': `${basePath}/panel`,
-      
-      // User routes
-      'File': `${basePath}/dashboard`,
-      'Edit': `${basePath}/dashboard`,
-      'View': `${basePath}/dashboard`,
-      'Help': `${basePath}/dashboard`
+      "Home": `${basePath}/dashboard`,
+      "Email Request": `${basePath}/emailrequest`,
+      "Pseudo Superadmin Add": `${basePath}/pseudosuperadmin-add`,
+      "Reports": `${basePath}/reports`,
+      "Psudo": `${basePath}/dashboard`,
+      "Manage": `${basePath}/panel`,
+      "Settings": `${basePath}/panel`,
     }
-    
     const route = routeMap[menu] || `${basePath}/dashboard`
     navigate(route)
   }
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-100 via-slate-200 to-slate-300 text-slate-800">
-      
-      {/* Header */}
-      <header className="sticky top-0 z-20 backdrop-blur-md bg-white/30 shadow-md border-b border-slate-200">
-        <div className="flex items-center justify-between px-6 py-4">
-          
-          {/* Menubar */}
-          <Menubar className="bg-white h-auto">
-            {menuItems.map((menu, index) => (
-              <MenubarMenu key={index}>
-                <MenubarTrigger
-                  className={`text-sm font-medium transition duration-150 px-4 py-2 ${
-                    activeItem === menu 
-                      ? "bg-slate-700 text-white" 
-                      : "hover:bg-slate-200"
-                  }`}
-                  onClick={() => handleMenuClick(menu)}
-                >
-                  {menu}
-                </MenubarTrigger>
-              </MenubarMenu>
-            ))}
-          </Menubar>
 
+      {/* Header */}
+      <header className="sticky top-0 z-20 backdrop-blur-md bg-white/30 shadow-sm border-b border-slate-200">
+        <div className="flex items-center justify-between px-6 py-4">
+
+          {/* Sidebar Trigger */}
+          <Sheet>
+            <SheetTrigger className="p-2 bg-white border border-slate-300 rounded hover:bg-slate-100">
+              <Menu className="w-5 h-5 text-slate-700" />
+            </SheetTrigger>
+
+            <SheetContent side="left" className="w-64 bg-white text-slate-900 p-4 flex flex-col justify-between">
+
+              {/* Sidebar Header */}
+              <div>
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="bg-slate-800 text-white p-2 rounded-full">⌘</div>
+                  <div>
+                    <h1 className="text-lg font-semibold">Shadcn Admin</h1>
+                    <p className="text-xs text-muted-foreground">React Router</p>
+                  </div>
+                </div>
+
+                {/* Navigation */}
+                <nav className="space-y-2">
+                  {menuItems.map((menu, index) => (
+                    <button
+                      key={index}
+                      className={`w-full text-left px-4 py-2 rounded-md text-sm font-medium transition ${
+                        activeItem === menu
+                          ? "bg-slate-700 text-white"
+                          : "hover:bg-slate-100"
+                      }`}
+                      onClick={() => handleMenuClick(menu)}
+                    >
+                      {menu}
+                    </button>
+                  ))}
+                </nav>
+              </div>
+
+              {/* Footer / Role */}
+              <div className="border-t pt-4 mt-4 flex items-center gap-3">
+                <div className="bg-slate-200 text-slate-700 rounded-full px-2 py-1 text-sm font-semibold">SN</div>
+                <div className="text-sm">
+                  <div className="font-semibold">{role}</div>
+                  <div className="text-xs text-muted-foreground">email@domain.com</div>
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
+
+          {/* Role Dropdown */}
           <div className="relative" ref={dropdownRef}>
-            <span 
+            <span
               className="bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full uppercase shadow-sm cursor-pointer hover:bg-blue-200 transition-colors"
-              onClick={toggleDropdown}
+              onClick={() => setShowDropdown(!showDropdown)}
             >
               {role}
             </span>
-
-            {/* Logout dropdown */}
             {showDropdown && (
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-30">
                 <button
@@ -151,7 +159,7 @@ function Layout({ menus = [] }) {
         </div>
       </header>
 
-      {/* Main Content */}
+      {/* Main content */}
       <main className="flex-1 px-6 py-4">
         <Outlet />
       </main>
