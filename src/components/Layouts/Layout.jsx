@@ -74,6 +74,7 @@ function Layout({ menus = [] }) {
       "Home": `${basePath}/dashboard`,
       "Email Request": `${basePath}/emailrequest`,
       "Pseudo Superadmin Add": `${basePath}/pseudosuperadmin-add`,
+      "Forms": `${basePath}/forms`,
       "Reports": `${basePath}/reports`,
       "Psudo": `${basePath}/dashboard`,
       "Manage": `${basePath}/panel`,
