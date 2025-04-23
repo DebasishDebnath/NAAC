@@ -1,51 +1,53 @@
-import * as React from 'react'
-import * as TabsPrimitive from '@radix-ui/react-tabs'
-import { cn } from '@/lib/utils'
+'use client';
 
-function Tabs({ className, ...props }) {
-  return (
-    <TabsPrimitive.Root
-      data-slot="tabs"
-      className={cn('flex flex-col gap-2', className)}
-      {...props}
-    />
-  )
-}
+import React, { forwardRef } from 'react';
+import * as TabsPrimitive from '@radix-ui/react-tabs';
+import { cn } from '@/lib/utils';
 
-function TabsList({ className, ...props }) {
-  return (
-    <TabsPrimitive.List
-      data-slot="tabs-list"
-      className={cn(
-        'bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px]',
-        className
-      )}
-      {...props}
-    />
-  )
-}
+const tabsTriggerVariants = (variant) => {
+  const base =
+    "inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 disabled:pointer-events-none disabled:opacity-50";
 
-function TabsTrigger({ className, ...props }) {
-  return (
-    <TabsPrimitive.Trigger
-      data-slot="tabs-trigger"
-      className={cn(
-        "data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-        className
-      )}
-      {...props}
-    />
-  )
-}
+  const variants = {
+    default:
+      "data-[state=active]:bg-blue-600 data-[state=active]:text-white text-neutral-700 hover:text-blue-600",
+    underline:
+      "border-b-2 rounded-none data-[state=active]:border-blue-600 data-[state=active]:text-blue-600 text-neutral-600 hover:text-blue-600",
+  };
 
-function TabsContent({ className, ...props }) {
-  return (
-    <TabsPrimitive.Content
-      data-slot="tabs-content"
-      className={cn('flex-1 outline-none', className)}
-      {...props}
-    />
-  )
-}
+  return `${base} ${variants[variant || 'default']}`;
+};
 
-export { Tabs, TabsList, TabsTrigger, TabsContent }
+const Tabs = TabsPrimitive.Root;
+
+const TabsList = forwardRef(({ className, ...props }, ref) => (
+  <TabsPrimitive.List
+    ref={ref}
+    className={cn(
+      "inline-flex w-fit items-center justify-center rounded-lg border border-neutral-200 bg-white p-[3px] text-neutral-600",
+      className
+    )}
+    {...props}
+  />
+));
+TabsList.displayName = 'TabsList';
+
+const TabsTrigger = forwardRef(({ className, variant, ...props }, ref) => (
+  <TabsPrimitive.Trigger
+    ref={ref}
+    className={cn(tabsTriggerVariants(variant), className)}
+    {...props}
+  />
+));
+TabsTrigger.displayName = 'TabsTrigger';
+
+const TabsContent = forwardRef(({ className, ...props }, ref) => (
+  <TabsPrimitive.Content
+    ref={ref}
+    className={cn("flex-1 outline-none", className)}
+    {...props}
+  />
+));
+TabsContent.displayName = 'TabsContent';
+
+export { Tabs, TabsList, TabsTrigger, TabsContent };

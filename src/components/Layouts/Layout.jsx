@@ -431,8 +431,8 @@ function Layout({ menus = [], submenu = {} }) {
                   ⌘
                 </div>
                 <div>
-                  <h1 className="text-lg font-semibold">Shadcn Admin</h1>
-                  <p className="text-xs text-muted-foreground">React Router</p>
+                  <h1 className="text-lg font-semibold">IEM UEM Group</h1>
+                  <p className="text-xs text-muted-foreground">API Project</p>
                 </div>
               </div>
 
@@ -502,7 +502,7 @@ function Layout({ menus = [], submenu = {} }) {
             </div>
 
             <div
-              className="border-t pt-4 mt-4 px-4 pb-4 flex items-center gap-3 cursor-pointer relative"
+              className="border-t pt-4 mt-4 px-4 pb-4 flex items-center gap-3 cursor-pointer relative hover:bg-[#0000ff1d]"
               ref={dropdownRef}
               onClick={() => {
                 setShowBelowDropdown(!showBelowDropdown); 

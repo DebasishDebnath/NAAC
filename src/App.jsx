@@ -25,6 +25,7 @@ import Forms from "./pages/User/Forms.jsx";
 import SuperadminReports from "../src/pages/Superadmin/Reports/index.jsx";
 import User from "./pages/Superadmin/Users/User.jsx";
 import AddEmails from "./pages/Superadmin/Users/AddEmails.jsx";
+import Profile from "./pages/User/Profile.jsx";
 
 // Flag to control route protection
 // When set to true: Protected routes are enforced (normal security behavior)
@@ -143,6 +144,7 @@ function App() {
                   <Route path="dashboard" element={<Home />} />
                   <Route path="forms" element={<Forms />} />
                   <Route path="reports" element={<Reports />} />
+                  <Route path="profile" element={<Profile />} />
                   <Route path="*" element={<NotFound />} />
                   <Route index element={<Navigate to="dashboard" replace />} />
                 </Route>

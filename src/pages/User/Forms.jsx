@@ -17,14 +17,12 @@ import {
 
 import facultyData from "../../constant/invoices.json"
 
-
 function Forms() {
   const formData = data;
   const { enqueueSnackbar } = useSnackbar();
   const [selectedCategory, setSelectedCategory] = useState(0);
   const [selectedSubcategory, setSelectedSubcategory] = useState(0);
   const [formDates, setFormDates] = useState({});
-
 
   // Format categories with fallback names
   const categories = formData.form.map((category) => ({
@@ -110,9 +108,6 @@ function Forms() {
               />
             )}
 
-
-
-
             {field.fieldType === "Options" && (
               <div className="relative">
                 <select className="w-full appearance-none px-3 py-2 border border-gray-300 rounded-md pr-10">
@@ -143,7 +138,7 @@ function Forms() {
           </div>
         ))}
 
-        <div className="pt-2">
+        <div className="pt-2 pb-6">
           <button className="px-4 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition">
             Submit
           </button>
@@ -153,12 +148,11 @@ function Forms() {
   };
 
   return (
-    <div className="h-screen flex">
-      {/* Sidebar */}
-      <ResizablePanelGroup direction="horizontal" className="w-full rounded-lg border ">
-
-        <ResizablePanel className=' ' defaultSize={20}>
-          <div className="w-64 border-r border-gray-200 overflow-y-auto p-4">
+    <div className="h-screen flex flex-col">
+      <ResizablePanelGroup direction="horizontal" className="flex-grow">
+        {/* Sidebar */}
+        <ResizablePanel defaultSize={20} className="max-h-full">
+          <div className="h-full overflow-y-auto p-4 border-r border-gray-200">
             <nav className="space-y-1">
               {categories.map((category, catIndex) => {
                 const isActiveCategory = selectedCategory === catIndex;
@@ -181,14 +175,11 @@ function Forms() {
 
                     {/* Subcategories: Show only if more than one */}
                     {isActiveCategory && category.subItems.length > 1 && category.subItems.map((subItem, subIndex) => (
-                      <div className='flex items-center'>
-
+                      <div key={subIndex} className='flex items-center'>
                         {selectedSubcategory !== subIndex &&
-                          <div className='h-full min-w-[10px] border-gray-400 border-[1px] '></div>
+                          <div className='h-full min-w-[10px] border-gray-400 border-[1px]'></div>
                         }
-
                         <div
-                          key={subIndex}
                           className={`flex items-center px-3 py-2 ml-4 text-sm transition-colors duration-150 ${selectedSubcategory === subIndex
                             ? 'bg-blue-100 text-blue-600'
                             : 'text-gray-700 hover:bg-gray-50'
@@ -197,7 +188,6 @@ function Forms() {
                         >
                           <span>{subItem}</span>
                         </div>
-
                       </div>
                     ))}
                   </div>
@@ -206,46 +196,50 @@ function Forms() {
             </nav>
           </div>
         </ResizablePanel>
+        
         <ResizableHandle />
-        {/* Main content */}
-        <ResizablePanel defaultSize={50}>
-          <div className="flex-1 overflow-y-auto p-6">
-            <h1 className="text-2xl font-bold mb-1">Academic Performance Indicators</h1>
-            <p className="text-gray-500 mb-8">Manage your academic activities and achievements.</p>
-            <div className="border-t border-gray-200 mb-6"></div>
-            {renderFormFields()}
+        
+        {/* Main content - Form Panel */}
+        <ResizablePanel defaultSize={50} className="max-h-full">
+          <div className="h-full flex flex-col">
+            <div className="p-6 border-b">
+              <h1 className="text-2xl font-bold mb-1">Academic Performance Indicators</h1>
+              <p className="text-gray-500">Manage your academic activities and achievements.</p>
+            </div>
+            <div className="flex-grow overflow-y-auto p-6">
+              {renderFormFields()}
+            </div>
           </div>
         </ResizablePanel>
+        
         <ResizableHandle />
-        <ResizablePanel defaultSize={60}>
-
-
-
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[120px]">Faculty ID</TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead>Department</TableHead>
-                <TableHead>Designation</TableHead>
-                <TableHead className="text-right">Submitted On</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {facultyData.map((faculty) => (
-                <TableRow key={faculty.facultyId}>
-                  <TableCell className="font-medium">{faculty.facultyId}</TableCell>
-                  <TableCell>{faculty.name}</TableCell>
-                  <TableCell>{faculty.department}</TableCell>
-                  <TableCell>{faculty.designation}</TableCell>
-                  <TableCell className="text-right">{faculty.submittedOn}</TableCell>
+        
+        {/* Table Panel */}
+        <ResizablePanel defaultSize={30} className="max-h-full">
+          <div className="h-full overflow-y-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[120px]">Faculty ID</TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Department</TableHead>
+                  <TableHead>Designation</TableHead>
+                  <TableHead className="text-right">Submitted On</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-
-
-
+              </TableHeader>
+              <TableBody>
+                {facultyData.map((faculty) => (
+                  <TableRow key={faculty.facultyId}>
+                    <TableCell className="font-medium">{faculty.facultyId}</TableCell>
+                    <TableCell>{faculty.name}</TableCell>
+                    <TableCell>{faculty.department}</TableCell>
+                    <TableCell>{faculty.designation}</TableCell>
+                    <TableCell className="text-right">{faculty.submittedOn}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>
