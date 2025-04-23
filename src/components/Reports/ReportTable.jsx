@@ -269,7 +269,7 @@ export default function ReportTable() {
                     <TableCaption>A list of your reports for this month.</TableCaption>
                     <TableHeader>
                         <TableRow className={`bg-blue-500 `}>
-                            <TableHead>ID</TableHead>
+                            <TableHead className={`text-black`}>ID</TableHead>
                             <TableHead>Title</TableHead>
                             <TableHead>Status</TableHead>
                             <TableHead>Date</TableHead>
