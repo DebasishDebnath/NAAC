@@ -190,7 +190,7 @@ function Profile() {
                 {isEditing && (
                   <CardFooter className="flex justify-end space-x-2">
                     <Button variant="outline" onClick={() => setIsEditing(false)} className="border-blue-200 text-blue-800">Cancel</Button>
-                    <Button onClick={handleSave} className="bg-blue-600 hover:bg-blue-700">
+                    <Button onClick={handleSave} className="bg-blue-600 hover:bg-blue-700 text-white">
                       <Save className="mr-2 h-4 w-4" /> Save Changes
                     </Button>
                   </CardFooter>
@@ -252,10 +252,10 @@ function Profile() {
                   </div>
                 </CardContent>
                 {isEditing && (
-                  <CardFooter className="flex justify-end space-x-2">
+                  <CardFooter className="flex justify-end space-x-2 ">
                     <Button variant="outline" onClick={() => setIsEditing(false)} className="border-blue-200 text-blue-800">Cancel</Button>
-                    <Button onClick={handleSave} className="bg-blue-600 hover:bg-blue-700">
-                      <Save className="mr-2 h-4 w-4" /> Save Changes
+                    <Button onClick={handleSave} className="bg-blue-600 hover:bg-blue-700 text-white">
+                      <Save className="mr-2 h-4 w-4 text-white" /> Save Changes
                     </Button>
                   </CardFooter>
                 )}
