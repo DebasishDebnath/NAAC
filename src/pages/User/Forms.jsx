@@ -134,6 +134,12 @@ function Forms() {
 
                 {/* Subcategories: Show only if more than one */}
                 {isActiveCategory && category.subItems.length > 1 && category.subItems.map((subItem, subIndex) => (
+                  <div className='flex items-center'>
+                  
+                  {selectedSubcategory !== subIndex &&
+                    <div className='h-full min-w-[10px] border-gray-400 border-[1px] '></div>
+                    }
+                  
                   <div
                     key={subIndex}
                     className={`flex items-center px-3 py-2 ml-4 text-sm transition-colors duration-150 ${
@@ -144,6 +150,8 @@ function Forms() {
                     onClick={() => handleSubcategorySelect(subIndex)}
                   >
                     <span>{subItem}</span>
+                  </div>
+
                   </div>
                 ))}
               </div>
