@@ -21,6 +21,7 @@ import SuperadminDashboard from "./pages/Superadmin/Dashboard";
 import { ThemeProvider } from "./components/theme/ThemeProvider.jsx";
 import Home from "./pages/User/Home.jsx";
 import Reports from "./pages/User/Reports.jsx";
+import Forms from "./pages/User/Forms.jsx";
 
 // Allowed login roles
 const allowedRoles = ["user", "superadmin", "psudosuperadmin"];
@@ -111,7 +112,7 @@ function App() {
                   }
                 >
                   <Route path="dashboard" element={<Home />} />
-                  <Route path="forms" element={<div>User Forms</div>} />
+                  <Route path="forms" element={<Forms/>} />
                   <Route path="reports" element={<Reports/>} />
                   <Route path="*" element={<NotFound />} />
                   <Route index element={<Navigate to="dashboard" replace />} />
