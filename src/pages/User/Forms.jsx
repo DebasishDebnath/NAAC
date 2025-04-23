@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import data from '../../constant/test.json';
+import { useSnackbar } from 'notistack';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
 
 function Forms() {
   const formData = data;
-
+  const { enqueueSnackbar } = useSnackbar();
   const [selectedCategory, setSelectedCategory] = useState(0);
   const [selectedSubcategory, setSelectedSubcategory] = useState(0);
+  const [formDates, setFormDates] = useState({});
+
 
   // Format categories with fallback names
   const categories = formData.form.map((category) => ({
@@ -65,8 +71,34 @@ function Forms() {
                 className="w-full px-3 py-2 border border-gray-300 rounded-md transition-all duration-200 focus:ring-2 focus:ring-blue-400"
                 placeholder={field.placeholder}
                 defaultValue={field.value}
+                min={field.min}
+                max={field.max}
+                onChange={(e) => {
+                  const val = Number(e.target.value);
+
+                  if (val < field.min) {
+                    enqueueSnackbar(`Value should not be less than ${field.min}`, { variant: 'warning' });
+                    e.target.value = field.min;
+                  } else if (val > field.max) {
+                    enqueueSnackbar(`Value should not exceed ${field.max}`, { variant: 'warning' });
+                    e.target.value = field.max;
+                  }
+                }}
               />
             )}
+
+            {field.fieldType === "Date" && (
+              <DatePicker
+                selected={formDates[index] || null}
+                onChange={(date) => setFormDates(prev => ({ ...prev, [index]: date }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                placeholderText={field.placeholder}
+                dateFormat="yyyy-MM-dd"
+              />
+            )}
+
+
+
 
             {field.fieldType === "Options" && (
               <div className="relative">
@@ -120,13 +152,12 @@ function Forms() {
               <div key={catIndex}>
                 {/* Category Header */}
                 <div
-                  className={`flex items-center px-3 py-2 transition-all duration-200 ${
-                    isSingleForm && isActiveCategory
-                      ? 'bg-blue-100 text-blue-600'
-                      : isActiveCategory
+                  className={`flex items-center px-3 py-2 transition-all duration-200 ${isSingleForm && isActiveCategory
+                    ? 'bg-blue-100 text-blue-600'
+                    : isActiveCategory
                       ? 'bg-gray-100'
                       : 'hover:bg-gray-200'
-                  } rounded-md cursor-pointer mb-1`}
+                    } rounded-md cursor-pointer mb-1`}
                   onClick={() => handleCategorySelect(catIndex)}
                 >
                   <span className="font-medium">{category.name}</span>
@@ -135,22 +166,21 @@ function Forms() {
                 {/* Subcategories: Show only if more than one */}
                 {isActiveCategory && category.subItems.length > 1 && category.subItems.map((subItem, subIndex) => (
                   <div className='flex items-center'>
-                  
-                  {selectedSubcategory !== subIndex &&
-                    <div className='h-full min-w-[10px] border-gray-400 border-[1px] '></div>
+
+                    {selectedSubcategory !== subIndex &&
+                      <div className='h-full min-w-[10px] border-gray-400 border-[1px] '></div>
                     }
-                  
-                  <div
-                    key={subIndex}
-                    className={`flex items-center px-3 py-2 ml-4 text-sm transition-colors duration-150 ${
-                      selectedSubcategory === subIndex
+
+                    <div
+                      key={subIndex}
+                      className={`flex items-center px-3 py-2 ml-4 text-sm transition-colors duration-150 ${selectedSubcategory === subIndex
                         ? 'bg-blue-100 text-blue-600'
                         : 'text-gray-700 hover:bg-gray-50'
-                    } rounded-md cursor-pointer`}
-                    onClick={() => handleSubcategorySelect(subIndex)}
-                  >
-                    <span>{subItem}</span>
-                  </div>
+                        } rounded-md cursor-pointer`}
+                      onClick={() => handleSubcategorySelect(subIndex)}
+                    >
+                      <span>{subItem}</span>
+                    </div>
 
                   </div>
                 ))}
