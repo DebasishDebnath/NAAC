@@ -15,9 +15,12 @@ import {
   Grid,
   Download,
   MessageSquare,
+  BookType,
+  UsersRound,
+  House,
 } from "lucide-react"
 
-function Layout({ menus = [] }) {
+function Layout({ menus = [], subMenus= [] }) {
   const defaultMenus = [
     "Home",
     "Emails",
@@ -30,14 +33,16 @@ function Layout({ menus = [] }) {
   const menuItems = menus.length > 0 ? menus : defaultMenus
 
   const iconMap = {
-    "Home": <Grid size={20} />,
+    "Home": <House size={20} />,
     "Emails": <Download size={20} />,
+    "Forms": <BookType size={20} />,
     "Pseudo Superadmin Add": <Users size={20} />,
     "Reports": <MessageSquare size={20} />,
     "Psudo": <Users size={20} />,
     "Manage": <Bug size={20} />,
     "Settings": <Settings size={20} />,
     "Help": <HelpCircle size={20} />,
+    "Users": <UsersRound size={20} />
   }
 
   const role = sessionStorage.getItem("role") || "User"
