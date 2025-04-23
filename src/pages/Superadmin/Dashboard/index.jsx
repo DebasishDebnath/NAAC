@@ -13,6 +13,8 @@ import {
   TabsTrigger,
 } from "../../../components/ui/tabs";
 import { Overview } from "./overview";
+import { Button } from "@/components/ui/button";
+
 function SuperadminDashboard() {
   return (
     <div>
@@ -37,6 +39,14 @@ function SuperadminDashboard() {
           <CardContent>
             <div className="text-2xl font-bold">$45,231.89</div>
           </CardContent>
+          <div className="flex items-end justify-end mr-5">
+            <Button
+              variant="destructive"
+              className={`hover:bg-slate-200 hover:text-black`}
+            >
+              View
+            </Button>
+          </div>
         </Card>
 
         <Card>
@@ -59,6 +69,14 @@ function SuperadminDashboard() {
           <CardContent>
             <div className="text-2xl font-bold">+2350</div>
           </CardContent>
+          <div className="flex items-end justify-end mr-5">
+            <Button
+              variant="destructive"
+              className={`hover:bg-slate-200 hover:text-black`}
+            >
+              View
+            </Button>
+          </div>
         </Card>
 
         <Card>
@@ -81,6 +99,14 @@ function SuperadminDashboard() {
           <CardContent>
             <div className="text-2xl font-bold">+12,234</div>
           </CardContent>
+          <div className="flex items-end justify-end mr-5">
+            <Button
+              variant="destructive"
+              className={`hover:bg-slate-200 hover:text-black`}
+            >
+              View
+            </Button>
+          </div>
         </Card>
 
         <Card>
@@ -101,6 +127,14 @@ function SuperadminDashboard() {
           <CardContent>
             <div className="text-2xl font-bold">+573</div>
           </CardContent>
+          <div className="flex items-end justify-end mr-5 ">
+            <Button
+              variant="destructive"
+              className={`hover:bg-slate-200 hover:text-black`}
+            >
+              View
+            </Button>
+          </div>
         </Card>
       </div>
 
