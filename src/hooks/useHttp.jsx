@@ -13,18 +13,21 @@ export const useHttp = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-
   // const baseURL = "http://192.168.90.24:8000";
   const baseURL = "http://192.168.1.167:8000";
 
   const handleResponse = async (response) => {
-    let message = 
-      response.data?.message || 
-      (response.data?.success === true ? "Operation successful" : `Status ${response.status}: ${response.statusText}`);
+    // Default message if none is provided
+    let message =
+      response.data?.message ||
+      (response.data?.success === true
+        ? "Operation successful"
+        : `Status ${response.status}: ${response.statusText}`);
 
     if ([401, 403].includes(response.status)) {
       showNotification(message, "error");
       localStorage.clear();
+
       const path = location.pathname;
       if (path.includes("superadmin")) {
         navigate("/login/superadmin");
@@ -33,48 +36,42 @@ export const useHttp = () => {
       } else {
         navigate("/login/user");
       }
+
       return null;
     }
 
+    // Always show notification for every response
     let variant = "info";
-    if (response.data?.success === true) variant = "success";
-    else if (response.data?.success === false || response.status >= 400) variant = "error";
-    else if (response.status >= 200 && response.status < 300) variant = "success";
+
+    if (response.data?.success === true) {
+      variant = "success";
+    } else if (response.data?.success === false) {
+      variant = "error";
+    } else if (response.status >= 400) {
+      variant = "error";
+    } else if (response.status >= 200 && response.status < 300) {
+      variant = "success";
+    }
 
     showNotification(message, variant);
+
     return response.data;
   };
 
-  const requestWrapper = async (method, url, token = "", data = null, isFormData = false) => {
+  const getReq = async (url, token = "") => {
     setLoading(true);
     setError(null);
-
     try {
-      const headers = {
-        Authorization: `Bearer ${token}`,
-      };
-      if (!isFormData) {
-        headers["Content-Type"] = "application/json";
-      }
-
-      const config = {
-        method,
-        url: `${baseURL}/${url}`,
-        headers,
-        data,
+      const response = await axios.get(`${baseURL}/${url}`, {
+        headers: { Authorization: `Bearer ${token}` },
         validateStatus: () => true,
-      };
-
-      // Remove data key for GET/DELETE requests
-      if (["get", "delete"].includes(method)) {
-        delete config.data;
-      }
-
-      const response = await axios(config);
+      });
       return await handleResponse(response);
     } catch (err) {
       showNotification(
-        err.response?.data?.message || err.message || "An unexpected error occurred.",
+        err.response?.data?.message ||
+          err.message ||
+          "An unexpected error occurred.",
         "error"
       );
       return null;
@@ -83,20 +80,167 @@ export const useHttp = () => {
     }
   };
 
-  const getReq = (url, token = "") => requestWrapper("get", url, token);
-  const postReq = (url, token = "", data, isFormData = false) => requestWrapper("post", url, token, data, isFormData);
-  const patchReq = (url, token = "", data, isFormData = false) => requestWrapper("patch", url, token, data, isFormData);
-  const putReq = (url, token = "", data, isFormData = false) => requestWrapper("put", url, token, data, isFormData);
-  const deleteReq = (url, token = "", data = null) => requestWrapper("delete", url, token, data);
+  const postReq = async (url, token = "", data, isFormData = false) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+
+      if (!isFormData) {
+        headers["Content-Type"] = "application/json";
+      }
+
+      const response = await axios.post(`${baseURL}/${url}`, data, {
+        headers,
+        validateStatus: () => true,
+      });
+
+      return await handleResponse(response);
+    } catch (err) {
+      showNotification(
+        err.response?.data?.message ||
+          err.message ||
+          "An unexpected error occurred.",
+        "error"
+      );
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const putReq = async (url, token = "", data, isFormData = false) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+
+      if (!isFormData) {
+        headers["Content-Type"] = "application/json";
+      }
+
+      const response = await axios.put(`${baseURL}/${url}`, data, {
+        headers,
+        validateStatus: () => true,
+      });
+
+      return await handleResponse(response);
+    } catch (err) {
+      showNotification(
+        err.response?.data?.message ||
+          err.message ||
+          "An unexpected error occurred.",
+        "error"
+      );
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const patchReq = async (url, token = "", data, isFormData = false) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+
+      if (!isFormData) {
+        headers["Content-Type"] = "application/json";
+      }
+
+      const response = await axios.patch(`${baseURL}/${url}`, data, {
+        headers,
+        validateStatus: () => true,
+      });
+
+      return await handleResponse(response);
+    } catch (err) {
+      showNotification(
+        err.response?.data?.message ||
+          err.message ||
+          "An unexpected error occurred.",
+        "error"
+      );
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteReq = async (url, token = "", data = null) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      };
+
+      const response = await axios.delete(`${baseURL}/${url}`, {
+        headers,
+        data,
+        validateStatus: () => true,
+      });
+
+      return await handleResponse(response);
+    } catch (err) {
+      showNotification(
+        err.response?.data?.message ||
+          err.message ||
+          "An unexpected error occurred.",
+        "error"
+      );
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return {
     getReq,
     postReq,
-    patchReq,
     putReq,
+    patchReq,
     deleteReq,
     loading,
     error,
     setError,
   };
+};
+
+export const NotificationProvider = ({ children }) => {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
+  const showNotification = (message, variant = "default") => {
+    if (!message) return;
+
+    enqueueSnackbar(message, {
+      variant,
+      autoHideDuration: 5000,
+      anchorOrigin: {
+        vertical: "top",
+        horizontal: "right",
+      },
+    });
+  };
+
+  return (
+    <NotificationContext.Provider
+      value={{
+        showNotification,
+        showSuccess: (msg) => showNotification(msg, "success"),
+        showError: (msg) => showNotification(msg, "error"),
+        showInfo: (msg) => showNotification(msg, "info"),
+        showWarning: (msg) => showNotification(msg, "warning"),
+      }}
+    >
+      {children}
+    </NotificationContext.Provider>
+  );
 };

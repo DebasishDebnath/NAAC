@@ -10,7 +10,6 @@ import Unauthorized from "./pages/Unauthorized";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
-import { NotificationProvider } from "./hooks/useHttp.jsx";
 import LoginPage from "./pages/Login.jsx";
 import { SnackbarProvider } from "notistack";
 import "./index.css";
@@ -28,11 +27,12 @@ import AddEmails from "./pages/Superadmin/Users/AddEmails.jsx";
 import Profile from "./pages/User/Profile.jsx";
 import PsudoUser from "./pages/Superadmin/PsudoUser/PsudoUser.jsx";
 import Drafts from "./pages/User/Drafts.jsx";
+import { NotificationProvider } from "./hooks/useHttp.jsx";
 
 // Flag to control route protection
 // When set to true: Protected routes are enforced (normal security behavior)
 // When set to false: All routes are accessible without authentication/authorization
-const ENFORCE_ROUTE_PROTECTION = false;
+const ENFORCE_ROUTE_PROTECTION = true;
 
 // Allowed login roles
 const allowedRoles = ["user", "superadmin", "psudosuperadmin"];
