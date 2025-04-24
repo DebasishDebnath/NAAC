@@ -31,7 +31,7 @@ import PsudoUser from "./pages/Superadmin/PsudoUser/PsudoUser.jsx";
 // Flag to control route protection
 // When set to true: Protected routes are enforced (normal security behavior)
 // When set to false: All routes are accessible without authentication/authorization
-const ENFORCE_ROUTE_PROTECTION = true;
+const ENFORCE_ROUTE_PROTECTION = false;
 
 // Allowed login roles
 const allowedRoles = ["user", "superadmin", "psudosuperadmin"];
@@ -129,7 +129,11 @@ function App() {
                   element={
                     <TokenWrapper>
                       <ProtectedRouteWrapper allowedRoles={["user"]}>
-                        <Layout menus={["Home", "Forms", "Reports"]}>
+                        <Layout menus={["Home", "Forms", "Reports"]}
+                        submenu={{
+                          Reports: ["Drafts", "Submitted Reports"],
+                        }}
+                        >
                           <Routes>
                             <Route
                               path="dashboard"

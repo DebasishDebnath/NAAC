@@ -5,9 +5,11 @@
       "forms": [
         {
           "tableName": "Teaching and Duties",
+          "backend_table_name": "teaching_duties",
           "tableData": [
             {
               "fieldName": "Direct Teaching",
+              "backend_field_name":"direct_teaching",
               "fieldType": "Number",
               "required": true,
               "placeholder": "Enter Hours",
@@ -18,6 +20,7 @@
             
             {
               "fieldName": "Examination duties (question paper setting, invigilation, evaluation of answer scripts) as per allotment",
+              "backend_field_name":"examination_duties",
               "fieldType": "Number",
               "required": true,
               "placeholder": "Enter Hours",
