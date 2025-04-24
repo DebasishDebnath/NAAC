@@ -1,0 +1,43 @@
+[
+    {
+      "facultyId": "FAC001",
+      "category": "CategoryI",
+      "tableName": "Teaching",
+      "status": "Pending",
+      "date": "2025-04-20",
+      "reportId": "REP001"
+    },
+    {
+      "facultyId": "FAC002",
+      "category": "CategoryII",
+      "tableName": "Journal Publications",
+      "status": "Accepted",
+      "date": "2025-04-18",
+      "reportId": "REP002"
+    },
+    {
+      "facultyId": "FAC003",
+      "category": "CategoryII",
+      "tableName": "Patent Status",
+      "status": "Pending",
+      "date": "2025-04-22",
+      "reportId": "REP003"
+    },
+    {
+      "facultyId": "FAC004",
+      "category": "CategoryI",
+      "tableName": "Duties",
+      "status": "Rejected",
+      "date": "2025-04-19",
+      "reportId": "REP004"
+    },
+    {
+      "facultyId": "FAC005",
+      "category": "CategoryII",
+      "tableName": "E-Content (developed in 4 quadrants) Per Module",
+      "status": "Pending",
+      "date": "2025-04-21",
+      "reportId": "REP005"
+    }
+  ]
+  
