@@ -29,6 +29,7 @@ import PsudoUser from "./pages/Superadmin/PsudoUser/PsudoUser.jsx";
 import Drafts from "./pages/User/Drafts.jsx";
 import { NotificationProvider } from "./hooks/useHttp.jsx";
 import SubmittedReports from "./pages/User/SubmittedReports.jsx";
+import Notificatons from "./pages/User/Notificatons.jsx";
 
 // Flag to control route protection
 // When set to true: Protected routes are enforced (normal security behavior)
@@ -155,6 +156,7 @@ function App() {
                   <Route path="forms" element={<Forms />} />
                   <Route path="reports" element={<Reports />} />
                   <Route path="profile" element={<Profile />} />
+                  <Route path="notifications" element={<Notificatons />} />
                   <Route path="reports/drafts" element={<Drafts />} />
                   <Route
                     path="reports/submitted-reports"

@@ -8,155 +8,14 @@ import {
   Bug,
   Settings,
   HelpCircle,
-  Menu,
   House,
   UsersRound,
   BookType,
 } from "lucide-react";
-import Dropdown from "./Dropdown";
-import BelowDropDown from "./BelowDropDown";
 
-// Memoized menu item component to prevent re-renders
-const MenuItem = memo(
-  ({
-    menu,
-    isActive,
-    icon,
-    hasSubmenu,
-    isSubmenuOpen,
-    onClick,
-    onSubmenuToggle,
-  }) => {
-    const handleClick = () => {
-      if (hasSubmenu) {
-        onSubmenuToggle();
-      } else {
-        onClick();
-      }
-    };
-
-    return (
-      <button
-        className={`flex items-center justify-between w-full text-left py-2 px-2 rounded-md text-sm font-medium transition ${
-          isActive ? "bg-blue-600 text-white" : "hover:bg-blue-100"
-        }`}
-        onClick={handleClick}
-      >
-        <div className="flex items-center gap-3">
-          <div
-            className={`w-6 h-6 flex items-center justify-center ${
-              isActive ? "text-white" : "text-slate-700"
-            }`}
-          >
-            {icon}
-          </div>
-          <span>{menu}</span>
-        </div>
-        {hasSubmenu && (
-          <span className="ml-auto text-xs">{isSubmenuOpen ? "▲" : "▼"}</span>
-        )}
-      </button>
-    );
-  }
-);
-
-// Memoized submenu item component
-const SubmenuItem = memo(({ subItem, isActive, onClick }) => {
-  return (
-    <button
-      className={`w-full text-left px-2 py-1 text-sm rounded-md ${
-        isActive ? "bg-blue-100 text-blue-800" : "hover:bg-blue-50"
-      }`}
-      onClick={onClick}
-    >
-      {subItem}
-    </button>
-  );
-});
-
-// Memoized icon button for collapsed sidebar
-const IconButton = memo(({ menu, icon, isActive, onClick }) => {
-  return (
-    <button
-      onClick={onClick}
-      className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
-        isActive
-          ? "bg-blue-600 text-white"
-          : "text-slate-700 hover:bg-slate-100"
-      }`}
-      title={menu}
-    >
-      {icon}
-    </button>
-  );
-});
-
-// Memoized profile section component
-const ProfileSection = memo(({ role, onClick, showDropdown }) => {
-  return (
-    <div
-      className="border-t pt-4 mt-4 px-4 pb-4 flex items-center gap-3 cursor-pointer relative hover:bg-[#0000ff1d]"
-      onClick={onClick}
-    >
-      <div className="bg-slate-200 text-slate-700 rounded-full px-2 py-1 text-sm font-semibold">
-        SN
-      </div>
-      <div className="text-sm">
-        <div className="font-semibold">{role}</div>
-        <div className="text-xs text-muted-foreground">email@domain.com</div>
-      </div>
-
-      {showDropdown && <BelowDropDown />}
-    </div>
-  );
-});
-
-const Header = memo(({ toggleSidebar, role, toggleDropdown, showDropdown }) => {
-  useEffect(() => {
-    console.log(showDropdown);
-  }, [showDropdown]);
-
-  return (
-    <header className="sticky top-0 z-20 backdrop-blur-md">
-      <div className="flex items-center justify-between px-6 py-4">
-        <button
-          className="p-2 bg-white border border-slate-300 rounded hover:bg-slate-100"
-          onClick={toggleSidebar}
-        >
-          <Menu className="w-5 h-5 text-slate-700" />
-        </button>
-        {/* <div className="relative">
-          <span
-            className="bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full uppercase shadow-sm cursor-pointer hover:bg-blue-200 transition-colors"
-            onClick={toggleDropdown}
-          >
-            {role}
-          </span>
-        </div> */}
-
-        <div className="relative">
-          <span
-            className="w-8 h-8 bg-slate-200 text-slate-700 rounded-full flex items-center justify-center font-medium text-sm cursor-pointer select-none"
-            title={role}
-            onClick={toggleDropdown}
-          >
-            SN
-          </span>
-          {showDropdown && <Dropdown />}
-        </div>
-      </div>
-    </header>
-  );
-});
-
-// Memoized footer component
-const Footer = memo(() => {
-  return (
-    <footer className="border-t border-slate-300 bg-white/60 backdrop-blur-md py-3 text-center text-sm text-slate-600 shadow-inner">
-      © {new Date().getFullYear()} Built with IEM-UEM GROUP
-    </footer>
-  );
-});
+import Header from './Header';
+import Footer from './Footer';
+import Sidebar from "./Sidebar";
 
 function Layout({ menus = [], submenu = {} }) {
   const defaultMenus = [
@@ -188,6 +47,7 @@ function Layout({ menus = [], submenu = {} }) {
   const location = useLocation();
 
   const [activeItem, setActiveItem] = useState("Home");
+  const [activeSubmenuItem, setActiveSubmenuItem] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const [showBelowDropdown, setShowBelowDropdown] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -200,35 +60,72 @@ function Layout({ menus = [], submenu = {} }) {
   };
 
   useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+        setShowBelowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
     const pathParts = location.pathname.split("/");
+    
+    // Handle nested routes for submenus
+    if (pathParts.length >= 4) {
+      // This might be a submenu route
+      const parentMenu = pathParts[2];
+      const submenuPath = pathParts[3];
+      
+      // Find the corresponding parent menu
+      const matchedParentMenu = menuItems.find(
+        (menu) => menu.toLowerCase().replace(/\s+/g, "") === parentMenu.toLowerCase()
+      );
+      
+      if (matchedParentMenu && submenu[matchedParentMenu]) {
+        // Find the matching submenu item
+        const matchedSubmenuItem = submenu[matchedParentMenu].find(
+          (sub) => sub.toLowerCase().replace(/\s+/g, "-") === submenuPath.toLowerCase()
+        );
+        
+        if (matchedSubmenuItem) {
+          setActiveItem(matchedParentMenu);
+          setActiveSubmenuItem(matchedSubmenuItem);
+          // Make sure the submenu is open
+          setOpenSubmenus(prev => ({
+            ...prev,
+            [matchedParentMenu]: true
+          }));
+          return;
+        }
+      }
+    }
+    
+    // Handle regular routes
     if (pathParts.length >= 3) {
       const currentPage = pathParts[2];
       const match = menuItems.find(
         (menu) =>
           menu.toLowerCase().replace(/\s+/g, "") === currentPage.toLowerCase()
       );
-      setActiveItem(match || menuItems[0]);
+      
+      if (match) {
+        setActiveItem(match);
+        setActiveSubmenuItem("");
+      } else {
+        setActiveItem(menuItems[0]);
+        setActiveSubmenuItem("");
+      }
     } else {
       setActiveItem(menuItems[0]);
+      setActiveSubmenuItem("");
     }
-  }, [location.pathname, menuItems]);
-
-  // useEffect(() => {
-  //   const handleClickOutside = (event) => {
-  //     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-  //       setShowDropdown(false);
-  //       setShowBelowDropdown(false);
-  //     }
-  //   };
-
-  //   if (showDropdown || showBelowDropdown) {
-  //     document.addEventListener("mousedown", handleClickOutside);
-  //   }
-
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, [showDropdown, showBelowDropdown]);
+  }, [location.pathname, menuItems, submenu]);
 
   const toggleSubmenu = (menu) => {
     setOpenSubmenus((prev) => ({
@@ -238,21 +135,52 @@ function Layout({ menus = [], submenu = {} }) {
   };
 
   const handleMenuClick = React.useCallback(
-    (menu) => {
+    (menu, fromIconButton = false) => {
       setActiveItem(menu);
+      
+      // If this is from an icon button in collapsed mode, we need to ensure submenu opens
+      if (fromIconButton && submenu[menu] && submenu[menu].length > 0) {
+        setOpenSubmenus((prev) => ({
+          ...prev,
+          [menu]: true
+        }));
+      }
+      
+      // Only navigate if it's not a submenu parent or if explicitly requested
+      // This way clicking on a menu with submenus won't navigate away immediately
+      if (!submenu[menu] || submenu[menu].length === 0) {
+        const basePath = getBasePath();
+        const routeMap = {
+          Home: `${basePath}/dashboard`,
+          Emails: `${basePath}/emails`,
+          "Pseudo Superadmin Add": `${basePath}/pseudosuperadminadd`,
+          Forms: `${basePath}/forms`,
+          Reports: `${basePath}/reports`,
+          Psudo: `${basePath}/psudo`,
+          Manage: `${basePath}/manage`, 
+          Settings: `${basePath}/settings`,
+        };
+        const route = routeMap[menu] || `${basePath}/dashboard`;
+        navigate(route);
+        
+        // Clear active submenu when navigating to a parent menu route
+        setActiveSubmenuItem("");
+      }
+    },
+    [navigate, getBasePath, submenu]
+  );
+
+  const handleSubmenuClick = React.useCallback(
+    (parentMenu, submenuItem) => {
+      setActiveItem(parentMenu);
+      setActiveSubmenuItem(submenuItem);
+      
       const basePath = getBasePath();
-      const routeMap = {
-        Home: `${basePath}/dashboard`,
-        Emails: `${basePath}/emails`,
-        "Pseudo Superadmin": `${basePath}/pseudosuperadmin`,
-        Forms: `${basePath}/forms`,
-        Reports: `${basePath}/reports`,
-        Psudo: `${basePath}/dashboard`,
-        Manage: `${basePath}/panel`,
-        Settings: `${basePath}/panel`,
-      };
-      const route = routeMap[menu] || `${basePath}/dashboard`;
-      navigate(route);
+      navigate(
+        `${basePath}/${parentMenu.toLowerCase().replace(/\s+/g, "")}/${submenuItem
+          .toLowerCase()
+          .replace(/\s+/g, "-")}`
+      );
     },
     [navigate, getBasePath]
   );
@@ -271,104 +199,31 @@ function Layout({ menus = [], submenu = {} }) {
     setIsSidebarOpen((prev) => !prev);
   }, []);
 
-  const renderExpandedSidebar = () => (
-    <div className="h-full flex flex-col justify-between">
-      <div className="p-4">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="bg-blue-600 text-white px-2 py-1 mx-2 rounded-lg">
-            ⌘
-          </div>
-          <div>
-            <h1 className="text-lg font-semibold">IEM UEM Group</h1>
-            <p className="text-xs text-muted-foreground">API Project</p>
-          </div>
-        </div>
-
-        <nav className="space-y-2">
-          {menuItems.map((menu, index) => (
-            <div key={index}>
-              <MenuItem
-                menu={menu}
-                isActive={activeItem === menu}
-                icon={iconMap[menu]}
-                hasSubmenu={!!submenu[menu]}
-                isSubmenuOpen={openSubmenus[menu]}
-                onClick={() => handleMenuClick(menu)}
-                onSubmenuToggle={() => toggleSubmenu(menu)}
-              />
-
-              {submenu[menu] && openSubmenus[menu] && (
-                <div className="ml-8 mt-1 space-y-1">
-                  {submenu[menu].map((sub, subIdx) => (
-                    <SubmenuItem
-                      key={subIdx}
-                      subItem={sub}
-                      isActive={activeItem === sub}
-                      onClick={() => {
-                        setActiveItem(sub);
-                        navigate(
-                          `${getBasePath()}/${menu.toLowerCase()}/${sub
-                            .toLowerCase()
-                            .replace(/\s+/g, "-")}`
-                        );
-                      }}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-        </nav>
-      </div>
-
-      <ProfileSection
-        role={role}
-        onClick={toggleBelowDropdown}
-        showDropdown={showBelowDropdown}
-      />
-    </div>
-  );
-
-  const renderCollapsedSidebar = () => (
-    <div className="w-full h-full flex flex-col items-center py-4 justify-between">
-      <div className="w-full flex flex-col items-center space-y-3">
-        <div className="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center mb-4">
-          ⌘
-        </div>
-        {menuItems.map((menu, index) => (
-          <IconButton
-            key={index}
-            menu={menu}
-            icon={iconMap[menu]}
-            isActive={activeItem === menu}
-            onClick={() => handleMenuClick(menu)}
-          />
-        ))}
-      </div>
-
-      <div className="mt-auto">
-        <div
-          className="w-8 h-8 bg-slate-200 text-slate-700 rounded-full flex items-center justify-center font-medium text-sm"
-          title={role}
-        >
-          SN
-        </div>
-      </div>
-    </div>
-  );
+  // Check if a menu is parent of the active submenu item
+  const isParentOfActive = (menu) => {
+    return activeSubmenuItem && submenu[menu]?.includes(activeSubmenuItem);
+  };
 
   return (
-    <div className="flex min-h-screen bg-[#f5f5f5] text-slate-800">
+    <div className="flex min-h-screen bg-slate-50 text-slate-800">
       {/* Sidebar */}
-      <div
-        className={`fixed transition-all duration-300 ease-in-out ${
-          isSidebarOpen
-            ? "w-64 h-screen"
-            : "w-16 h-[calc(100vh-2rem)] my-4 ml-4 rounded-lg shadow-lg"
-        } bg-white overflow-hidden`}
-        ref={dropdownRef}
-      >
-        {isSidebarOpen ? renderExpandedSidebar() : renderCollapsedSidebar()}
+      <div ref={dropdownRef}>
+        <Sidebar
+          isSidebarOpen={isSidebarOpen}
+          menuItems={menuItems}
+          iconMap={iconMap}
+          activeItem={activeItem}
+          activeSubmenuItem={activeSubmenuItem}
+          openSubmenus={openSubmenus}
+          submenu={submenu}
+          handleMenuClick={handleMenuClick}
+          handleSubmenuClick={handleSubmenuClick}
+          toggleSubmenu={toggleSubmenu}
+          toggleBelowDropdown={toggleBelowDropdown}
+          showBelowDropdown={showBelowDropdown}
+          role={role}
+          isParentOfActive={isParentOfActive}
+        />
       </div>
 
       {/* Main Content */}
@@ -388,7 +243,7 @@ function Layout({ menus = [], submenu = {} }) {
           <Outlet />
         </main>
 
-        <Footer />
+        {/* <Footer /> */}
       </div>
     </div>
   );

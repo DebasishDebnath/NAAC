@@ -17,6 +17,7 @@ import {
 
 import facultyData from "../../constant/invoices.json";
 import { useFormSubmission } from '../../Apis/FormSubmission/FormSubmission';
+import SubmittedReportsTable from '@/components/Drafts/DraftsTable';
 
 function Forms() {
   const formData = data;
@@ -25,7 +26,8 @@ function Forms() {
   const [selectedSubcategory, setSelectedSubcategory] = useState(0);
   const [formDates, setFormDates] = useState({});
   const [formValues, setFormValues] = useState({});
-  const {formSubmit}= useFormSubmission()
+  const { formSubmit } = useFormSubmission()
+  const [popUpShow, setPopUpShow] = useState(false)
 
   // Format categories with fallback names
   const categories = formData.form.map((category) => ({
@@ -76,7 +78,7 @@ function Forms() {
   };
 
   // Handle form submission
-  const handleSubmit = async() => {
+  const handleSubmit = async () => {
     console.log("Form Values:", formValues);
 
     // Check if all required fields are filled
@@ -87,16 +89,14 @@ function Forms() {
     const type = categoryData.type;
     const endpoint = selectedForm.endpoint;
 
+    const data = await formSubmit(formValues, endpoint)
 
-    const data= await formSubmit(formValues, endpoint)
-
-    if(!data?.success){
+    if (!data?.success) {
       enqueueSnackbar(data.message, { variant: 'error' });
-      return 
+      return
     }
 
     console.log("data1", data)
-
     console.log(backend_table_name, type)
 
     if (selectedForm) {
@@ -113,6 +113,7 @@ function Forms() {
 
       // Submit the form
       enqueueSnackbar("Form submitted successfully", { variant: 'success' });
+      setPopUpShow(false);
     }
   };
 
@@ -237,6 +238,55 @@ function Forms() {
     );
   };
 
+  // New function to render popup content
+  const renderPopupContent = () => {
+    const categoryData = formData.form[selectedCategory];
+    const selectedForm = categoryData?.forms[selectedSubcategory];
+
+    if (!selectedForm) return null;
+
+    return (
+      <div className="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all max-w-4xl w-full">
+        {/* Popup Header */}
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-xl font-bold text-white">
+              Preview & Submit: {selectedForm.tableName || "Form"}
+            </h3>
+            <button
+              onClick={() => setPopUpShow(false)}
+              className="text-white hover:text-gray-200 transition-colors"
+            >
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <SubmittedReportsTable />
+
+        {/* Popup Footer */}
+        <div className="bg-gray-50 px-6 py-4 flex justify-end gap-3">
+          <button
+            type="button"
+            className="inline-flex justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            onClick={() => setPopUpShow(false)}
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 border border-transparent rounded-md shadow-sm hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300 transform hover:scale-105"
+            onClick={handleSubmit}
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="h-screen flex flex-col">
       <ResizablePanelGroup direction="horizontal" className="flex-grow">
@@ -278,7 +328,6 @@ function Forms() {
                         >
                           <span>{subItem}
                             {selectedSubcategory !== subIndex &&
-                              // <div className='h-full min-w-[10px] border-gray-400 border-[1px]'></div>
                               <div className='text-[#fff] bg-slate-400 px-2 rounded-full absolute top-2 -right-5'>{3}</div>
                             }
                           </span>
@@ -313,37 +362,48 @@ function Forms() {
         <ResizablePanel defaultSize={30} className="max-h-full">
           <div className="h-full overflow-y-auto">
             <div className='flex w-full justify-end'>
-                <div className='bg-blue-400 px-5 py-1 text-[1.2rem] mb-4 text-white font-bold rounded shadow-md hover:shadow-lg cursor-pointer'
-                onClick={()=>{
-                  
-                }}
-                >Preview & Submit</div>
+              <div
+                className='bg-blue-400 px-5 py-1 text-[1.2rem] mb-4 text-white font-bold rounded shadow-md hover:shadow-lg cursor-pointer transition-all duration-300 hover:bg-blue-500 transform hover:scale-105'
+                onClick={() => setPopUpShow(true)}
+              >
+                Preview & Submit
+              </div>
             </div>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[120px]">Faculty ID</TableHead>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Department</TableHead>
-                  <TableHead>Designation</TableHead>
-                  <TableHead className="text-right">Submitted On</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {facultyData.map((faculty) => (
-                  <TableRow key={faculty.facultyId}>
-                    <TableCell className="font-medium">{faculty.facultyId}</TableCell>
-                    <TableCell>{faculty.name}</TableCell>
-                    <TableCell>{faculty.department}</TableCell>
-                    <TableCell>{faculty.designation}</TableCell>
-                    <TableCell className="text-right">{faculty.submittedOn}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+
+            <SubmittedReportsTable />
           </div>
         </ResizablePanel>
       </ResizablePanelGroup>
+
+      {/* Modal Popup */}
+      {popUpShow && (
+        <div className="flex bg-[#00000034] backdrop-blur-md fixed justify-center items-center w-full h-full top-[0px] left-0 z-40 alertcontainer font-poppins text-">
+          <div
+            className="inline-block align-bottom sm:align-middle sm:max-w-4xl sm:w-full sm:p-6 transform transition-all ease-in-out duration-300"
+            style={{
+              opacity: 1,
+              transform: 'scale(1)',
+              animation: 'modalFadeIn 0.3s'
+            }}
+          >
+            {renderPopupContent()}
+          </div>
+        </div>
+      )}
+
+      {/* Add global styles for animations */}
+      <style jsx global>{`
+        @keyframes modalFadeIn {
+          from {
+            opacity: 0;
+            transform: scale(0.95);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+      `}</style>
     </div>
   );
 }
