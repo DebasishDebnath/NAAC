@@ -5,6 +5,7 @@
       "forms": [
         {
           "tableName": "Teaching and Duties",
+          "endpoint": "CategoryI/teaching_duties",
           "backend_table_name": "teaching_duties",
           "tableData": [
             {
