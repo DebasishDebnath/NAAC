@@ -16,17 +16,16 @@ import {
 } from '../../components/ui/DataTable';
 
 import facultyData from "../../constant/invoices.json";
+import { useFormSubmission } from '../../Apis/FormSubmission/FormSubmission';
 
 function Forms() {
-
-
-  // Use sample data for demonstration, in production you'd use data from props/API
   const formData = data;
   const { enqueueSnackbar } = useSnackbar();
   const [selectedCategory, setSelectedCategory] = useState(0);
   const [selectedSubcategory, setSelectedSubcategory] = useState(0);
   const [formDates, setFormDates] = useState({});
   const [formValues, setFormValues] = useState({});
+  const {formSubmit}= useFormSubmission()
 
   // Format categories with fallback names
   const categories = formData.form.map((category) => ({
@@ -77,7 +76,7 @@ function Forms() {
   };
 
   // Handle form submission
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
     console.log("Form Values:", formValues);
 
     // Check if all required fields are filled
@@ -86,6 +85,17 @@ function Forms() {
 
     const backend_table_name = selectedForm.backend_table_name;
     const type = categoryData.type;
+    const endpoint = selectedForm.endpoint;
+
+
+    const data= await formSubmit(formValues, endpoint)
+
+    if(!data?.success){
+      enqueueSnackbar(data.message, { variant: 'error' });
+      return 
+    }
+
+    console.log("data1", data)
 
     console.log(backend_table_name, type)
 
@@ -303,7 +313,11 @@ function Forms() {
         <ResizablePanel defaultSize={30} className="max-h-full">
           <div className="h-full overflow-y-auto">
             <div className='flex w-full justify-end'>
-                <div className='bg-blue-400 px-5 py-1 text-[1.2rem] mb-4 text-white font-bold rounded shadow-md hover:shadow-lg cursor-pointer'>Preview & Submit</div>
+                <div className='bg-blue-400 px-5 py-1 text-[1.2rem] mb-4 text-white font-bold rounded shadow-md hover:shadow-lg cursor-pointer'
+                onClick={()=>{
+                  
+                }}
+                >Preview & Submit</div>
             </div>
             <Table>
               <TableHeader>
