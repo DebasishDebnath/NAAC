@@ -28,6 +28,8 @@ import Profile from "./pages/User/Profile.jsx";
 import PsudoUser from "./pages/Superadmin/PsudoUser/PsudoUser.jsx";
 import Drafts from "./pages/User/Drafts.jsx";
 import { NotificationProvider } from "./hooks/useHttp.jsx";
+import SubmittedReports from "./pages/User/SubmittedReports.jsx";
+import Notificatons from "./pages/User/Notificatons.jsx";
 
 // Flag to control route protection
 // When set to true: Protected routes are enforced (normal security behavior)
@@ -43,7 +45,7 @@ const TokenWrapper = ({ children }) => {
   if (!ENFORCE_ROUTE_PROTECTION) {
     return children;
   }
-  
+
   const token = sessionStorage.getItem("token");
   const role = sessionStorage.getItem("role");
 
@@ -60,9 +62,11 @@ const ProtectedRouteWrapper = ({ allowedRoles, children }) => {
   if (!ENFORCE_ROUTE_PROTECTION) {
     return children;
   }
-  
+
   // Otherwise use the original ProtectedRoute component
-  return <ProtectedRoute allowedRoles={allowedRoles}>{children}</ProtectedRoute>;
+  return (
+    <ProtectedRoute allowedRoles={allowedRoles}>{children}</ProtectedRoute>
+  );
 };
 
 // LoginRouteWrapper: restricts login route to only valid roles
@@ -80,7 +84,7 @@ const RedirectDashboard = () => {
   if (!ENFORCE_ROUTE_PROTECTION) {
     return <Navigate to="/user/dashboard" replace />;
   }
-  
+
   const role = sessionStorage.getItem("role");
 
   switch (role) {
@@ -130,10 +134,11 @@ function App() {
                   element={
                     <TokenWrapper>
                       <ProtectedRouteWrapper allowedRoles={["user"]}>
-                        <Layout menus={["Home", "Forms", "Reports"]}
-                        submenu={{
-                          Reports: ["Drafts", "Submitted Reports"],
-                        }}
+                        <Layout
+                          menus={["Home", "Forms", "Reports"]}
+                          submenu={{
+                            Reports: ["Drafts", "Submitted Reports"],
+                          }}
                         >
                           <Routes>
                             <Route
@@ -151,8 +156,13 @@ function App() {
                   <Route path="forms" element={<Forms />} />
                   <Route path="reports" element={<Reports />} />
                   <Route path="profile" element={<Profile />} />
-                  <Route path="reports/drafts" element={<Drafts/>} />
-                 
+                  <Route path="notifications" element={<Notificatons />} />
+                  <Route path="reports/drafts" element={<Drafts />} />
+                  <Route
+                    path="reports/submitted-reports"
+                    element={<SubmittedReports />}
+                  />
+
                   <Route path="*" element={<NotFound />} />
                   <Route index element={<Navigate to="dashboard" replace />} />
                 </Route>
@@ -175,10 +185,10 @@ function App() {
                 >
                   <Route path="dashboard" element={<SuperadminDashboard />} />
                   <Route path="emails" element={<div>SuperAdmin Emails</div>} />
-                  <Route path="users/user" element={<User/>} />
-                  <Route path="users/add-email" element={<AddEmails/>} />
-                  <Route path="users/pseudo-user" element={<PsudoUser/>} />
-                 
+                  <Route path="users/user" element={<User />} />
+                  <Route path="users/add-email" element={<AddEmails />} />
+                  <Route path="users/pseudo-user" element={<PsudoUser />} />
+
                   <Route
                     path="pseudosuperadmin"
                     element={<div>SuperAdmin PseudoSuperadmin Add</div>}
