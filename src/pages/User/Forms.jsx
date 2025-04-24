@@ -46,7 +46,7 @@ function Forms() {
   useEffect(() => {
     const categoryData = formData.form[selectedCategory];
     const selectedForm = categoryData?.forms[selectedSubcategory];
-    
+
     if (selectedForm) {
       const initialValues = {};
       selectedForm.tableData.forEach(field => {
@@ -79,28 +79,28 @@ function Forms() {
   // Handle form submission
   const handleSubmit = () => {
     console.log("Form Values:", formValues);
-    
+
     // Check if all required fields are filled
     const categoryData = formData.form[selectedCategory];
     const selectedForm = categoryData?.forms[selectedSubcategory];
 
-    const backend_table_name= selectedForm.backend_table_name;
-    const type= categoryData.type;
+    const backend_table_name = selectedForm.backend_table_name;
+    const type = categoryData.type;
 
     console.log(backend_table_name, type)
-    
+
     if (selectedForm) {
       const requiredFields = selectedForm.tableData
         .filter(field => field.required && field.backend_field_name)
         .map(field => field.backend_field_name);
-      
+
       const missingFields = requiredFields.filter(field => !formValues[field]);
-      
+
       if (missingFields.length > 0) {
         enqueueSnackbar("Please fill all required fields", { variant: 'error' });
         return;
       }
-      
+
       // Submit the form
       enqueueSnackbar("Form submitted successfully", { variant: 'success' });
     }
@@ -116,12 +116,15 @@ function Forms() {
 
     return (
       <div className="space-y-6 transition-all duration-500 ease-in-out">
-        <h2 className="text-lg font-medium">{selectedForm.tableName || "Untitled Form"}</h2>
+        <div>
+          <h2 className="text-lg font-medium">{selectedForm.tableName || "Untitled Form"}</h2>
+          <span className='text-gray-500'>Total Submissions: {3}</span>
+        </div>
 
         {formFields.map((field, index) => {
           // Make sure each field has a backend_field_name to track in state
           const fieldKey = field.backend_field_name || `field_${index}`;
-          
+
           return (
             <div key={index} className="mb-4 transition-opacity duration-300">
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -178,7 +181,7 @@ function Forms() {
 
               {field.fieldType === "Options" && (
                 <div className="relative">
-                  <select 
+                  <select
                     className="w-full appearance-none px-3 py-2 border border-gray-300 rounded-md pr-10"
                     value={formValues[fieldKey] || ''}
                     onChange={(e) => handleInputChange(fieldKey, e.target.value)}
@@ -213,7 +216,7 @@ function Forms() {
         })}
 
         <div className="pt-2 pb-6">
-          <button 
+          <button
             className="px-4 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition"
             onClick={handleSubmit}
           >
@@ -260,10 +263,15 @@ function Forms() {
                           className={`flex items-center px-3 py-2 ml-4 text-sm transition-colors duration-150 ${selectedSubcategory === subIndex
                             ? 'bg-blue-100 text-blue-600'
                             : 'text-gray-700 hover:bg-gray-50'
-                            } rounded-md cursor-pointer`}
+                            } rounded-md cursor-pointer relative`}
                           onClick={() => handleSubcategorySelect(subIndex)}
                         >
-                          <span>{subItem}</span>
+                          <span>{subItem}
+                            {selectedSubcategory !== subIndex &&
+                              // <div className='h-full min-w-[10px] border-gray-400 border-[1px]'></div>
+                              <div className='text-[#fff] bg-slate-400 px-2 rounded-full absolute top-2 -right-5'>{3}</div>
+                            }
+                          </span>
                         </div>
                       </div>
                     ))}
@@ -273,9 +281,9 @@ function Forms() {
             </nav>
           </div>
         </ResizablePanel>
-        
+
         <ResizableHandle />
-        
+
         {/* Main content - Form Panel */}
         <ResizablePanel defaultSize={50} className="max-h-full">
           <div className="h-full flex flex-col">
@@ -288,12 +296,15 @@ function Forms() {
             </div>
           </div>
         </ResizablePanel>
-        
+
         <ResizableHandle />
-        
+
         {/* Table Panel */}
         <ResizablePanel defaultSize={30} className="max-h-full">
           <div className="h-full overflow-y-auto">
+            <div className='flex w-full justify-end'>
+                <div className='bg-blue-400 px-5 py-1 text-[1.2rem] mb-4 text-white font-bold rounded shadow-md hover:shadow-lg cursor-pointer'>Preview & Submit</div>
+            </div>
             <Table>
               <TableHeader>
                 <TableRow>
