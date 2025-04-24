@@ -27,6 +27,7 @@ import User from "./pages/Superadmin/Users/User.jsx";
 import AddEmails from "./pages/Superadmin/Users/AddEmails.jsx";
 import Profile from "./pages/User/Profile.jsx";
 import PsudoUser from "./pages/Superadmin/PsudoUser/PsudoUser.jsx";
+import Drafts from "./pages/User/Drafts.jsx";
 
 // Flag to control route protection
 // When set to true: Protected routes are enforced (normal security behavior)
@@ -150,6 +151,8 @@ function App() {
                   <Route path="forms" element={<Forms />} />
                   <Route path="reports" element={<Reports />} />
                   <Route path="profile" element={<Profile />} />
+                  <Route path="reports/drafts" element={<Drafts/>} />
+                 
                   <Route path="*" element={<NotFound />} />
                   <Route index element={<Navigate to="dashboard" replace />} />
                 </Route>
@@ -175,6 +178,7 @@ function App() {
                   <Route path="users/user" element={<User/>} />
                   <Route path="users/add-email" element={<AddEmails/>} />
                   <Route path="users/pseudo-user" element={<PsudoUser/>} />
+                 
                   <Route
                     path="pseudosuperadmin"
                     element={<div>SuperAdmin PseudoSuperadmin Add</div>}
