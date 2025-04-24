@@ -1,76 +1,100 @@
-import React, { useState } from "react";
-import { Trash2 } from "lucide-react";
+import { useState } from 'react';
+import { Trash2, Search, Mail, Plus } from 'lucide-react';
 
-const EmailListManager = () => {
-  const [email, setEmail] = useState("");
+export default function ImprovedEmailList() {
+  const [email, setEmail] = useState('');
   const [emails, setEmails] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [error, setError] = useState("");
-
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const [searchTerm, setSearchTerm] = useState('');
+  const [error, setError] = useState('');
 
   const handleAddEmail = () => {
+    // Basic email validation
+    if (!email) {
+      setError('Please enter an email address');
+      return;
+    }
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      setError("Please enter a valid email address.");
+      setError('Please enter a valid email address');
       return;
     }
 
     if (emails.includes(email)) {
-      setError("This email is already in the list.");
+      setError('Email already exists in the list');
       return;
     }
 
     setEmails([...emails, email]);
-    setEmail("");
-    setError("");
+    setEmail('');
+    setError('');
   };
 
-  const handleDeleteEmail = (targetEmail) => {
-    setEmails(emails.filter((e) => e !== targetEmail));
+  const handleDeleteEmail = (emailToDelete) => {
+    setEmails(emails.filter(e => e !== emailToDelete));
   };
 
-  const filteredEmails = emails.filter((e) =>
-    e.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredEmails = emails.filter(email => 
+    email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-gray-100 p-4">
-      <h1 className="text-2xl font-bold mb-4">Email List</h1>
+    <div className="flex flex-col items-center w-full  mx-auto bg-white p-6 rounded-lg shadow-md">
+      <h1 className="text-3xl font-bold mb-6 text-gray-800">Email List</h1>
 
-      <div className="flex flex-col sm:flex-row items-center gap-2 mb-2">
-        <input
-          type="email"
-          placeholder="Enter email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring focus:border-blue-500"
-        />
-        <button
-          onClick={handleAddEmail}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-        >
-          Add Email
-        </button>
+      <div className="w-full mb-6">
+        <div className="flex items-center mb-1">
+          <Mail className="text-gray-500 mr-2" size={20} />
+          <label className="font-medium text-gray-700">Add New Email</label>
+        </div>
+
+        <div className="flex flex-col sm:flex-row w-full gap-2">
+          <div className="relative flex-grow">
+            <input
+              type="email"
+              placeholder="name@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              onKeyPress={(e) => e.key === 'Enter' && handleAddEmail()}
+            />
+          </div>
+          <button
+            onClick={handleAddEmail}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition flex items-center justify-center whitespace-nowrap"
+          >
+            <Plus size={18} className="mr-2" />
+            Add Email
+          </button>
+        </div>
+        
+        {error && (
+          <p className="text-red-500 text-sm mt-2 flex items-center">
+            <span className="inline-block w-1 h-1 bg-red-500 rounded-full mr-2"></span>
+            {error}
+          </p>
+        )}
       </div>
 
-      {error && (
-        <p className="text-red-500 text-sm mb-4">{error}</p>
-      )}
+      <div className="w-full mb-6">
+        <div className="relative">
+          <Search className="absolute left-3 top-3 text-gray-400" size={18} />
+          <input
+            type="text"
+            placeholder="Search emails..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="border border-gray-300 rounded-lg pl-10 pr-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+      </div>
 
-      <input
-        type="text"
-        placeholder="Search emails..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="border border-gray-300 rounded-lg px-4 py-2 mb-4 w-full max-w-md focus:outline-none focus:ring focus:border-blue-500"
-      />
-
-      <div className="w-full max-w-md">
-        <table className="min-w-full bg-white rounded-lg shadow-sm">
+      <div className="w-full overflow-hidden rounded-lg border border-gray-200">
+        <table className="min-w-full bg-white">
           <thead>
-            <tr className="bg-blue-100 text-left text-gray-700">
-              <th className="px-4 py-2">Email</th>
-              <th className="px-4 py-2 text-center">Actions</th>
+            <tr className="bg-gray-50 border-b border-gray-200">
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Email Address</th>
+              <th className="px-6 py-3 text-right text-sm font-semibold text-gray-700 w-20">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -78,13 +102,13 @@ const EmailListManager = () => {
               filteredEmails.map((email, index) => (
                 <tr
                   key={index}
-                  className="border-t border-gray-200 hover:bg-gray-50 transition"
+                  className="border-b border-gray-200 hover:bg-gray-50 transition"
                 >
-                  <td className="px-4 py-2">{email}</td>
-                  <td className="px-4 py-2 text-center">
+                  <td className="px-6 py-4 text-gray-800">{email}</td>
+                  <td className="px-6 py-4 text-right">
                     <button
                       onClick={() => handleDeleteEmail(email)}
-                      className="text-red-500 hover:text-red-700"
+                      className="text-gray-400 hover:text-red-600 transition p-1 rounded-full hover:bg-red-50"
                       title="Delete Email"
                     >
                       <Trash2 size={18} />
@@ -94,16 +118,24 @@ const EmailListManager = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="2" className="text-center text-gray-400 py-4 italic">
-                  No emails found.
+                <td colSpan="2" className="text-center text-gray-400 py-8">
+                  <div className="flex flex-col items-center justify-center">
+                    <Mail size={32} className="mb-2 opacity-30" />
+                    <p className="text-sm">No emails found</p>
+                    {searchTerm && <p className="text-xs mt-1">Try a different search term</p>}
+                  </div>
                 </td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
+      
+      {emails.length > 0 && (
+        <div className="w-full mt-4 text-right text-sm text-gray-500">
+          Showing {filteredEmails.length} of {emails.length} email{emails.length !== 1 ? 's' : ''}
+        </div>
+      )}
     </div>
   );
-};
-
-export default EmailListManager;
+}
