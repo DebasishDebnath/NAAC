@@ -22,6 +22,9 @@ import {
     ChevronDownIcon,
     XIcon,
     Trash2Icon,
+    FileIcon,
+    UserIcon,
+    FolderIcon,
 } from "lucide-react";
 import {
     Popover,
@@ -35,105 +38,23 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-
-const DraftsTable = () => {
-    const allData = [
-        {
-            id: "DB001",
-            tableName: "Users",
-            type: "MySQL",
-            time: "2023-04-01",
-            editable: true
-        },
-        {
-            id: "DB002",
-            tableName: "Products",
-            type: "PostgreSQL",
-            time: "2023-04-12",
-            editable: true
-        },
-        {
-            id: "DB003",
-            tableName: "Orders",
-            type: "MySQL",
-            time: "2023-03-20",
-            editable: true
-        },
-        {
-            id: "DB004",
-            tableName: "Customers",
-            type: "MongoDB",
-            time: "2023-04-15",
-            editable: true
-        },
-        {
-            id: "DB005",
-            tableName: "Inventory",
-            type: "PostgreSQL",
-            time: "2023-04-22",
-            editable: true
-        },
-        {
-            id: "DB006",
-            tableName: "Transactions",
-            type: "MySQL",
-            time: "2023-05-01",
-            editable: true
-        },
-        {
-            id: "DB007",
-            tableName: "Analytics",
-            type: "MongoDB",
-            time: "2023-04-18",
-            editable: true
-        },
-        {
-            id: "DB008",
-            tableName: "Employees",
-            type: "PostgreSQL",
-            time: "2023-04-05",
-            editable: true
-        },
-        {
-            id: "DB009",
-            tableName: "Departments",
-            type: "MySQL",
-            time: "2023-03-25",
-            editable: true
-        },
-        {
-            id: "DB010",
-            tableName: "Logs",
-            type: "MongoDB",
-            time: "2023-04-30",
-            editable: true
-        },
-        {
-            id: "DB011",
-            tableName: "Settings",
-            type: "MySQL",
-            time: "2023-03-15",
-            editable: true
-        },
-        {
-            id: "DB012",
-            tableName: "Categories",
-            type: "PostgreSQL",
-            time: "2023-05-10",
-            editable: true
-        },
-    ];
-
+import data from "../../constant/submittedreports.json"
+import categoryData from "../../constant/category.json"
+const SubmittedReportsTable = () => {
+    const allData = data;
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [isMobileView, setIsMobileView] = useState(false);
     const [sortConfig, setSortConfig] = useState({
-        key: "time",
+        key: "date",
         direction: "desc"
     });
     const [filters, setFilters] = useState({
-        type: [],
+        status: [],
+        category: [],
     });
+    const [selectedCategory, setSelectedCategory] = useState("All");
+    const [selectedSubCategory, setSelectedSubCategory] = useState([categoryData.CategoryI])// New state for category dropdown
     const [isFilterActive, setIsFilterActive] = useState(false);
     const itemsPerPage = 5;
 
@@ -155,20 +76,29 @@ const DraftsTable = () => {
 
     // Check if any filters are active
     useEffect(() => {
-        const hasActiveFilters = filters.type.length > 0;
+        const hasActiveFilters = filters.status.length > 0 || filters.category.length > 0;
         setIsFilterActive(hasActiveFilters);
     }, [filters]);
+
+    // Handle category selection
+    const handleCategoryChange = (value) => {
+        setSelectedCategory(value);
+        setCurrentPage(1);
+    };
+    const handleSubCategory = () => {
+
+    }
 
     // Handle action buttons (delete and edit)
     const handleDelete = (id) => {
         // Add your delete logic here
-        console.log(`Delete item with ID: ${id}`);
+        console.log(`Delete report with ID: ${id}`);
         // You would typically call an API or modify state here
     };
 
     const handleEdit = (id) => {
         // Add your edit logic here
-        console.log(`Edit item with ID: ${id}`);
+        console.log(`Edit report with ID: ${id}`);
         // You would typically navigate to edit page or open modal
     };
 
@@ -197,16 +127,24 @@ const DraftsTable = () => {
     const filteredData = sortedData.filter((item) => {
         // Search term filter
         const matchesSearch = item.tableName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                             item.id.toLowerCase().includes(searchTerm.toLowerCase());
-        
-        // Type filter
-        const matchesType = filters.type.length === 0 || filters.type.includes(item.type);
-        
-        return matchesSearch && matchesType;
+            item.reportId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.facultyId.toLowerCase().includes(searchTerm.toLowerCase());
+
+        // Status filter
+        const matchesStatus = filters.status.length === 0 || filters.status.includes(item.status);
+
+        // Category filter from dropdown
+        const matchesSelectedCategory = selectedCategory === "All" || item.category === selectedCategory;
+
+        // Category filter from filter panel
+        const matchesCategory = filters.category.length === 0 || filters.category.includes(item.category);
+
+        return matchesSearch && matchesStatus && matchesCategory && matchesSelectedCategory;
     });
 
     // Get unique values for filters
-    const uniqueTypes = [...new Set(allData.map(item => item.type))];
+    const uniqueStatuses = [...new Set(allData.map(item => item.status))];
+    const uniqueCategories = [...new Set(allData.map(item => item.category))];
 
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
     const paginatedData = filteredData.slice(
@@ -219,35 +157,56 @@ const DraftsTable = () => {
         setFilters(prev => {
             const updatedFilters = [...prev[filterType]];
             const index = updatedFilters.indexOf(value);
-            
+
             if (index > -1) {
                 updatedFilters.splice(index, 1);
             } else {
                 updatedFilters.push(value);
             }
-            
+
             return {
                 ...prev,
                 [filterType]: updatedFilters
             };
         });
-        
+
         setCurrentPage(1);
     };
 
     // Clear all filters
     const clearFilters = () => {
         setFilters({
-            type: [],
+            status: [],
+            category: [],
         });
+        setSelectedCategory("All");
         setCurrentPage(1);
     };
 
-    // Type icon mapping
-    const typeIcon = {
-        "MySQL": <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 border-blue-200">MySQL</Badge>,
-        "PostgreSQL": <Badge className="bg-indigo-100 text-indigo-800 hover:bg-indigo-200 border-indigo-200">PostgreSQL</Badge>,
-        "MongoDB": <Badge className="bg-green-100 text-green-800 hover:bg-green-200 border-green-200">MongoDB</Badge>,
+    // Status badge mapping
+    const statusBadge = (status) => {
+        switch (status) {
+            case "Pending":
+                return <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-200 border-yellow-200">Pending</Badge>;
+            case "Accepted":
+                return <Badge className="bg-green-100 text-green-800 hover:bg-green-200 border-green-200">Accepted</Badge>;
+            case "Rejected":
+                return <Badge className="bg-red-100 text-red-800 hover:bg-red-200 border-red-200">Rejected</Badge>;
+            default:
+                return <Badge className="bg-gray-100 text-gray-800 hover:bg-gray-200 border-gray-200">{status}</Badge>;
+        }
+    };
+
+    // Category badge mapping
+    const categoryBadge = (category) => {
+        switch (category) {
+            case "CategoryI":
+                return <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 border-blue-200">Category I</Badge>;
+            case "CategoryII":
+                return <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-200 border-purple-200">Category II</Badge>;
+            default:
+                return <Badge className="bg-gray-100 text-gray-800 hover:bg-gray-200 border-gray-200">{category}</Badge>;
+        }
     };
 
     // Mobile card view for each row
@@ -255,31 +214,40 @@ const DraftsTable = () => {
         <div className="bg-white p-4 rounded-md border mb-4 shadow-sm">
             <div className="flex justify-between items-start mb-3">
                 <div className="font-medium">{item.tableName}</div>
-                <div>{typeIcon[item.type]}</div>
+                <div>{statusBadge(item.status)}</div>
             </div>
 
-            <div className="text-xs text-muted-foreground mb-3">
-                <span className="font-medium">ID:</span> {item.id}
+            <div className="flex flex-col gap-1 mb-3">
+                <div className="text-xs text-muted-foreground">
+                    <span className="font-medium">Report ID:</span> {item.reportId}
+                </div>
+                <div className="text-xs text-muted-foreground flex items-center gap-1">
+                    <UserIcon className="h-3 w-3" />
+                    <span className="font-medium">Faculty ID:</span> {item.facultyId}
+                </div>
+                <div className="text-xs text-muted-foreground">
+                    {categoryBadge(item.category)}
+                </div>
             </div>
 
             <div className="flex items-center gap-2 text-sm mb-4">
                 <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-                {item.time}
+                {item.date}
             </div>
 
             <div className="border-t pt-3 flex justify-between gap-2">
-                <Button 
-                    size="sm" 
+                <Button
+                    size="sm"
                     className="flex-1 flex items-center justify-center gap-1 bg-black text-white hover:bg-black/90"
-                    onClick={() => handleEdit(item.id)}
+                    onClick={() => handleEdit(item.reportId)}
                 >
                     <PencilIcon className="h-4 w-4" /> Edit
                 </Button>
-                <Button 
-                    size="sm" 
+                <Button
+                    size="sm"
                     variant="outline"
                     className="flex-1 flex items-center justify-center gap-1 text-red-500 hover:text-red-700 hover:bg-red-50"
-                    onClick={() => handleDelete(item.id)}
+                    onClick={() => handleDelete(item.reportId)}
                 >
                     <Trash2Icon className="h-4 w-4" /> Delete
                 </Button>
@@ -290,17 +258,64 @@ const DraftsTable = () => {
     // Sort indicator component
     const SortIndicator = ({ column }) => {
         if (sortConfig.key !== column) return null;
-        return sortConfig.direction === 'asc' 
-            ? <ChevronUpIcon className="h-4 w-4 ml-1" /> 
+        return sortConfig.direction === 'asc'
+            ? <ChevronUpIcon className="h-4 w-4 ml-1" />
             : <ChevronDownIcon className="h-4 w-4 ml-1" />;
     };
 
     return (
         <div className="p-3 md:p-6 space-y-4">
+            {/* Category Selection Dropdown */}
+            <div className="flex gap-10">
+                <div className="mb-4">
+                    <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
+                        <div className="w-full md:w-auto flex items-center gap-2">
+                            <FolderIcon className="h-5 w-5 text-blue-600" />
+                            <span className="font-medium text-gray-700">Category:</span>
+                        </div>
+                        <Select value={selectedCategory} onValueChange={handleCategoryChange}>
+                            <SelectTrigger className="w-full md:w-64 ">
+                                <SelectValue placeholder="Select Category" />
+                            </SelectTrigger>
+                            <SelectContent className={`bg-white`}>
+                                <SelectItem value="All">All Categories</SelectItem>
+                                {uniqueCategories.map(category => (
+                                    <SelectItem key={category} value={category}>
+                                        {category === "CategoryI" ? "Category I" : "Category II"}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </div>
+                {/* category data */}
+                <div className="mb-4">
+                    <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
+                        <div className="w-full md:w-auto flex items-center gap-2">
+                            <FolderIcon className="h-5 w-5 text-blue-600" />
+                            <span className="font-medium text-gray-700">Category:</span>
+                        </div>
+                        <Select value={selectedSubCategory} onValueChange={handleSubCategory}>
+                            <SelectTrigger className="w-full md:w-64 ">
+                                <SelectValue placeholder="Select Category" />
+                            </SelectTrigger>
+                            <SelectContent className={`bg-white`}>
+                                <SelectItem value="All">All Categories</SelectItem>
+                                {uniqueCategories.map(category => (
+                                    <SelectItem key={category} value={category}>
+                                        {category === "CategoryI" ? "Category I" : "Category II"}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </div>
+            </div>
+
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
                 <Input
                     type="text"
-                    placeholder="Search tables..."
+                    placeholder="Search reports..."
                     value={searchTerm}
                     onChange={(e) => {
                         setSearchTerm(e.target.value);
@@ -308,13 +323,13 @@ const DraftsTable = () => {
                     }}
                     className="w-full md:max-w-xs"
                 />
-                
+
                 <div className="flex gap-2 w-full md:w-auto">
-                    {isFilterActive && (
-                        <Button 
-                            variant="outline" 
-                            size="sm" 
-                            onClick={clearFilters} 
+                    {(isFilterActive || selectedCategory !== "All") && (
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={clearFilters}
                             className="text-red-500 hover:text-red-600 hover:bg-red-50"
                         >
                             <XIcon className="h-4 w-4 mr-1" /> Clear Filters
@@ -325,50 +340,73 @@ const DraftsTable = () => {
                         <PopoverTrigger asChild>
                             <Button variant="outline" size="sm" className={`${isFilterActive ? 'bg-blue-50 border-blue-200 text-blue-600' : ''} w-full md:w-auto`}>
                                 <FilterIcon className="h-4 w-4 mr-2" /> Filter
-                                {isFilterActive && <Badge variant="secondary" className="ml-2 bg-blue-100">{filters.type.length}</Badge>}
+                                {isFilterActive && (
+                                    <Badge variant="secondary" className="ml-2 bg-blue-100">
+                                        {filters.status.length + filters.category.length}
+                                    </Badge>
+                                )}
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-80 p-4">
                             <div className="space-y-4">
-                                <h3 className="font-medium">Filter Tables</h3>
-                                
-                                {/* Type Filter */}
+                                <h3 className="font-medium">Filter Reports</h3>
+
+                                {/* Status Filter */}
                                 <div>
-                                    <h4 className="text-sm font-medium mb-2">Type</h4>
+                                    <h4 className="text-sm font-medium mb-2">Status</h4>
                                     <div className="flex flex-wrap gap-2">
-                                        {uniqueTypes.map(type => (
-                                            <Badge 
-                                                key={type}
-                                                variant={filters.type.includes(type) ? "default" : "outline"}
+                                        {uniqueStatuses.map(status => (
+                                            <Badge
+                                                key={status}
+                                                variant={filters.status.includes(status) ? "default" : "outline"}
                                                 className="cursor-pointer"
-                                                onClick={() => toggleFilter('type', type)}
+                                                onClick={() => toggleFilter('status', status)}
                                             >
-                                                {type}
+                                                {status}
                                             </Badge>
                                         ))}
                                     </div>
                                 </div>
-                                
+
+                                {/* Category Filter */}
+                                <div>
+                                    <h4 className="text-sm font-medium mb-2">Category</h4>
+                                    <div className="flex flex-wrap gap-2">
+                                        {uniqueCategories.map(category => (
+                                            <Badge
+                                                key={category}
+                                                variant={filters.category.includes(category) ? "default" : "outline"}
+                                                className="cursor-pointer"
+                                                onClick={() => toggleFilter('category', category)}
+                                            >
+                                                {category === "CategoryI" ? "Category I" : "Category II"}
+                                            </Badge>
+                                        ))}
+                                    </div>
+                                </div>
+
                                 {/* Sort Option */}
                                 <div>
                                     <h4 className="text-sm font-medium mb-2">Sort By</h4>
                                     <div className="flex gap-2">
-                                        <Select 
-                                            value={sortConfig.key} 
+                                        <Select
+                                            value={sortConfig.key}
                                             onValueChange={(value) => setSortConfig(prev => ({ ...prev, key: value }))}
                                         >
                                             <SelectTrigger className="w-full">
                                                 <SelectValue placeholder="Sort by" />
                                             </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="time">Time</SelectItem>
+                                            <SelectContent className={`bg-white`}>
+                                                <SelectItem value="date">Date</SelectItem>
                                                 <SelectItem value="tableName">Table Name</SelectItem>
-                                                <SelectItem value="type">Type</SelectItem>
-                                                <SelectItem value="id">ID</SelectItem>
+                                                <SelectItem value="status">Status</SelectItem>
+                                                <SelectItem value="reportId">Report ID</SelectItem>
+                                                <SelectItem value="facultyId">Faculty ID</SelectItem>
+                                                <SelectItem value="category">Category</SelectItem>
                                             </SelectContent>
                                         </Select>
-                                        
-                                        <Button 
+
+                                        <Button
                                             variant="outline"
                                             size="sm"
                                             onClick={() => setSortConfig(prev => ({
@@ -391,21 +429,37 @@ const DraftsTable = () => {
                 </div>
             </div>
 
+            {/* Selected Category Info */}
+            {selectedCategory !== "All" && (
+                <div className="bg-blue-50 p-3 rounded-md border border-blue-100 flex items-center gap-2">
+                    <FolderIcon className="h-5 w-5 text-blue-600" />
+                    <span className="font-medium">Showing reports from: {selectedCategory === "CategoryI" ? "Category I" : "Category II"}</span>
+                </div>
+            )}
+
             {/* Desktop table view */}
             <div className="hidden md:block overflow-x-auto rounded-lg border">
                 <Table>
-                    <TableCaption>Database tables overview</TableCaption>
+                    <TableCaption>Submitted Reports Overview</TableCaption>
                     <TableHeader>
-                        <TableRow className="bg-blue-500">
-                            <TableHead 
-                                className="text-black cursor-pointer"
-                                onClick={() => handleSort('id')}
+                        <TableRow className="bg-blue-600">
+                            <TableHead
+                                className="cursor-pointer"
+                                onClick={() => handleSort('reportId')}
                             >
                                 <div className="flex items-center">
-                                    ID <SortIndicator column="id" />
+                                    Report ID <SortIndicator column="reportId" />
                                 </div>
                             </TableHead>
-                            <TableHead 
+                            <TableHead
+                                className="cursor-pointer"
+                                onClick={() => handleSort('facultyId')}
+                            >
+                                <div className="flex items-center">
+                                    Faculty ID <SortIndicator column="facultyId" />
+                                </div>
+                            </TableHead>
+                            <TableHead
                                 className="cursor-pointer"
                                 onClick={() => handleSort('tableName')}
                             >
@@ -413,20 +467,28 @@ const DraftsTable = () => {
                                     Table Name <SortIndicator column="tableName" />
                                 </div>
                             </TableHead>
-                            <TableHead 
+                            <TableHead
                                 className="cursor-pointer"
-                                onClick={() => handleSort('type')}
+                                onClick={() => handleSort('category')}
                             >
                                 <div className="flex items-center">
-                                    Type <SortIndicator column="type" />
+                                    Category <SortIndicator column="category" />
                                 </div>
                             </TableHead>
-                            <TableHead 
+                            <TableHead
                                 className="cursor-pointer"
-                                onClick={() => handleSort('time')}
+                                onClick={() => handleSort('status')}
                             >
                                 <div className="flex items-center">
-                                    Time <SortIndicator column="time" />
+                                    Status <SortIndicator column="status" />
+                                </div>
+                            </TableHead>
+                            <TableHead
+                                className="cursor-pointer"
+                                onClick={() => handleSort('date')}
+                            >
+                                <div className="flex items-center">
+                                    Date <SortIndicator column="date" />
                                 </div>
                             </TableHead>
                             <TableHead>Actions</TableHead>
@@ -436,29 +498,36 @@ const DraftsTable = () => {
                         {paginatedData.length > 0 ? (
                             paginatedData.map((item, i) => (
                                 <TableRow key={i}>
-                                    <TableCell className="font-medium">{item.id}</TableCell>
-                                    <TableCell>{item.tableName}</TableCell>
-                                    <TableCell>{typeIcon[item.type]}</TableCell>
+                                    <TableCell className="font-medium">{item.reportId}</TableCell>
+                                    <TableCell>{item.facultyId}</TableCell>
+                                    <TableCell>
+                                        <div className="flex items-center gap-2">
+                                            <FileIcon className="h-4 w-4 text-muted-foreground" />
+                                            {item.tableName}
+                                        </div>
+                                    </TableCell>
+                                    <TableCell>{categoryBadge(item.category)}</TableCell>
+                                    <TableCell>{statusBadge(item.status)}</TableCell>
                                     <TableCell>
                                         <div className="flex items-center gap-2 text-sm">
                                             <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-                                            {item.time}
+                                            {item.date}
                                         </div>
                                     </TableCell>
                                     <TableCell>
                                         <div className="flex items-center gap-2">
-                                            <Button 
-                                                size="sm" 
+                                            <Button
+                                                size="sm"
                                                 className="flex items-center gap-1 bg-black text-white hover:bg-black/90"
-                                                onClick={() => handleEdit(item.id)}
+                                                onClick={() => handleEdit(item.reportId)}
                                             >
                                                 <PencilIcon className="h-4 w-4" /> Edit
                                             </Button>
-                                            <Button 
-                                                size="sm" 
-                                                variant="outline" 
+                                            <Button
+                                                size="sm"
+                                                variant="outline"
                                                 className="flex items-center gap-1 text-red-500 hover:text-red-700 hover:bg-red-50"
-                                                onClick={() => handleDelete(item.id)}
+                                                onClick={() => handleDelete(item.reportId)}
                                             >
                                                 <Trash2Icon className="h-4 w-4" /> Delete
                                             </Button>
@@ -468,9 +537,9 @@ const DraftsTable = () => {
                             ))
                         ) : (
                             <TableRow>
-                                <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                                    No tables found
-                                    {isFilterActive && <div className="mt-2 text-sm">Try adjusting your filters</div>}
+                                <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                                    No reports found
+                                    {(isFilterActive || selectedCategory !== "All") && <div className="mt-2 text-sm">Try adjusting your filters</div>}
                                 </TableCell>
                             </TableRow>
                         )}
@@ -486,8 +555,8 @@ const DraftsTable = () => {
                     ))
                 ) : (
                     <div className="text-center py-8 text-muted-foreground">
-                        No tables found
-                        {isFilterActive && <div className="mt-2 text-sm">Try adjusting your filters</div>}
+                        No reports found
+                        {(isFilterActive || selectedCategory !== "All") && <div className="mt-2 text-sm">Try adjusting your filters</div>}
                     </div>
                 )}
             </div>
@@ -495,7 +564,7 @@ const DraftsTable = () => {
             {/* Pagination */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4">
                 <span className="text-sm text-muted-foreground order-2 sm:order-1">
-                    Page {currentPage} of {totalPages || 1} 
+                    Page {currentPage} of {totalPages || 1}
                     {filteredData.length > 0 && ` (${filteredData.length} total results)`}
                 </span>
                 <div className="space-x-2 order-1 sm:order-2 w-full sm:w-auto flex justify-center">
@@ -523,4 +592,4 @@ const DraftsTable = () => {
     );
 }
 
-export default DraftsTable
+export default SubmittedReportsTable;
