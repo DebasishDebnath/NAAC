@@ -129,7 +129,11 @@ function App() {
                   element={
                     <TokenWrapper>
                       <ProtectedRouteWrapper allowedRoles={["user"]}>
-                        <Layout menus={["Home", "Forms", "Reports"]}>
+                        <Layout menus={["Home", "Forms", "Reports"]}
+                        submenu={{
+                          Reports: ["Drafts", "Submitted Reports"],
+                        }}
+                        >
                           <Routes>
                             <Route
                               path="dashboard"
