@@ -49,7 +49,7 @@ const Sidebar = ({
               />
 
               {submenu[menu] && openSubmenus[menu] && (
-                <div className="mt-1 space-y-1 mb-1 bg-slate-50 rounded-md py-1">
+                <div className="mt-1 space-y-1 mb-1 bg-slate-200 rounded-md py-1">
                   {submenu[menu].map((sub, subIdx) => (
                     <SubmenuItem
                       key={subIdx}

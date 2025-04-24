@@ -1,6 +1,8 @@
 import React, { memo } from "react";
 import { Menu, ChevronDown } from "lucide-react";
 import Dropdown from "./Sidebar/Dropdown";
+import { IoMdNotifications } from "react-icons/io";
+
 
 const Header = memo(({ toggleSidebar, toggleDropdown, showDropdown }) => {
   return (
@@ -13,7 +15,9 @@ const Header = memo(({ toggleSidebar, toggleDropdown, showDropdown }) => {
           <Menu className="w-5 h-5 text-slate-700" />
         </button>
 
-        <div className="relative">
+
+        <div className="relative flex gap-10 items-center">
+        <div className="cursor-pointer duration-150 hover:bg-gray-200 rounded-full p-2" ><IoMdNotifications size={26}/></div>
           <div
             className="flex items-center gap-2 cursor-pointer group"
             onClick={toggleDropdown}

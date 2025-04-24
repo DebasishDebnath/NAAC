@@ -5,7 +5,7 @@ const SubmenuItem = memo(({ subItem, isActive, onClick, icon }) => {
     <button
       className={`w-full text-left flex items-center gap-2 pl-12 pr-3 py-2 text-sm rounded-md transition-all duration-200 ${
         isActive 
-          ? "bg-blue-100 text-blue-800 font-medium" 
+          ? "bg-blue-200 text-blue-800 font-medium" 
           : "hover:bg-blue-50 text-slate-700"
       }`}
       onClick={onClick}
