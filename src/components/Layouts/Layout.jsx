@@ -17,48 +17,48 @@ import Dropdown from "./Dropdown";
 import BelowDropDown from "./BelowDropDown";
 
 // Memoized menu item component to prevent re-renders
-const MenuItem = memo(({ 
-  menu, 
-  isActive, 
-  icon, 
-  hasSubmenu, 
-  isSubmenuOpen, 
-  onClick, 
-  onSubmenuToggle 
-}) => {
-  const handleClick = () => {
-    if (hasSubmenu) {
-      onSubmenuToggle();
-    } else {
-      onClick();
-    }
-  };
+const MenuItem = memo(
+  ({
+    menu,
+    isActive,
+    icon,
+    hasSubmenu,
+    isSubmenuOpen,
+    onClick,
+    onSubmenuToggle,
+  }) => {
+    const handleClick = () => {
+      if (hasSubmenu) {
+        onSubmenuToggle();
+      } else {
+        onClick();
+      }
+    };
 
-  return (
-    <button
-      className={`flex items-center justify-between w-full text-left py-2 px-2 rounded-md text-sm font-medium transition ${
-        isActive ? "bg-blue-600 text-white" : "hover:bg-blue-100"
-      }`}
-      onClick={handleClick}
-    >
-      <div className="flex items-center gap-3">
-        <div
-          className={`w-6 h-6 flex items-center justify-center ${
-            isActive ? "text-white" : "text-slate-700"
-          }`}
-        >
-          {icon}
+    return (
+      <button
+        className={`flex items-center justify-between w-full text-left py-2 px-2 rounded-md text-sm font-medium transition ${
+          isActive ? "bg-blue-600 text-white" : "hover:bg-blue-100"
+        }`}
+        onClick={handleClick}
+      >
+        <div className="flex items-center gap-3">
+          <div
+            className={`w-6 h-6 flex items-center justify-center ${
+              isActive ? "text-white" : "text-slate-700"
+            }`}
+          >
+            {icon}
+          </div>
+          <span>{menu}</span>
         </div>
-        <span>{menu}</span>
-      </div>
-      {hasSubmenu && (
-        <span className="ml-auto text-xs">
-          {isSubmenuOpen ? "▲" : "▼"}
-        </span>
-      )}
-    </button>
-  );
-});
+        {hasSubmenu && (
+          <span className="ml-auto text-xs">{isSubmenuOpen ? "▲" : "▼"}</span>
+        )}
+      </button>
+    );
+  }
+);
 
 // Memoized submenu item component
 const SubmenuItem = memo(({ subItem, isActive, onClick }) => {
@@ -80,7 +80,9 @@ const IconButton = memo(({ menu, icon, isActive, onClick }) => {
     <button
       onClick={onClick}
       className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
-        isActive ? "bg-blue-600 text-white" : "text-slate-700 hover:bg-slate-100"
+        isActive
+          ? "bg-blue-600 text-white"
+          : "text-slate-700 hover:bg-slate-100"
       }`}
       title={menu}
     >
@@ -101,9 +103,7 @@ const ProfileSection = memo(({ role, onClick, showDropdown }) => {
       </div>
       <div className="text-sm">
         <div className="font-semibold">{role}</div>
-        <div className="text-xs text-muted-foreground">
-          email@domain.com
-        </div>
+        <div className="text-xs text-muted-foreground">email@domain.com</div>
       </div>
 
       {showDropdown && <BelowDropDown />}
@@ -113,8 +113,12 @@ const ProfileSection = memo(({ role, onClick, showDropdown }) => {
 
 // Memoized header component
 const Header = memo(({ toggleSidebar, role, toggleDropdown, showDropdown }) => {
+  useEffect(() => {
+    console.log(showDropdown);
+  }, [showDropdown]);
+
   return (
-    <header className="sticky top-0 z-20 backdrop-blur-md">
+    <header className="sticky top-0 z-0 backdrop-blur-md">
       <div className="flex items-center justify-between px-6 py-4">
         <button
           className="p-2 bg-white border border-slate-300 rounded hover:bg-slate-100"
@@ -129,9 +133,20 @@ const Header = memo(({ toggleSidebar, role, toggleDropdown, showDropdown }) => {
           >
             {role}
           </span>
-          {showDropdown && <Dropdown />}
         </div>
+
+        {/* <div className="relative">
+          <span
+            className="w-8 h-8 bg-slate-200 text-slate-700 rounded-full flex items-center justify-center font-medium text-sm cursor-pointer select-none"
+            title={role}
+            onClick={toggleDropdown}
+          >
+            SN
+          </span>
+          {showDropdown && <Dropdown />}
+        </div> */}
       </div>
+      {showDropdown && <Dropdown />}
     </header>
   );
 });
@@ -175,8 +190,8 @@ function Layout({ menus = [], submenu = {} }) {
   const location = useLocation();
 
   const [activeItem, setActiveItem] = useState("Home");
-  const [showDropdown, setShowDropdown] = useState(false); 
-  const [showBelowDropdown, setShowBelowDropdown] = useState(false); 
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [showBelowDropdown, setShowBelowDropdown] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [openSubmenus, setOpenSubmenus] = useState({});
   const dropdownRef = useRef(null);
@@ -200,22 +215,22 @@ function Layout({ menus = [], submenu = {} }) {
     }
   }, [location.pathname, menuItems]);
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setShowDropdown(false);
-        setShowBelowDropdown(false);
-      }
-    };
+  // useEffect(() => {
+  //   const handleClickOutside = (event) => {
+  //     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+  //       setShowDropdown(false);
+  //       setShowBelowDropdown(false);
+  //     }
+  //   };
 
-    if (showDropdown || showBelowDropdown) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
+  //   if (showDropdown || showBelowDropdown) {
+  //     document.addEventListener("mousedown", handleClickOutside);
+  //   }
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showDropdown, showBelowDropdown]);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, [showDropdown, showBelowDropdown]);
 
   const toggleSubmenu = (menu) => {
     setOpenSubmenus((prev) => ({
@@ -224,35 +239,38 @@ function Layout({ menus = [], submenu = {} }) {
     }));
   };
 
-  const handleMenuClick = React.useCallback((menu) => {
-    setActiveItem(menu);
-    const basePath = getBasePath();
-    const routeMap = {
-      Home: `${basePath}/dashboard`,
-      Emails: `${basePath}/emails`,
-      "Pseudo Superadmin": `${basePath}/pseudosuperadmin`,
-      Forms: `${basePath}/forms`,
-      Reports: `${basePath}/reports`,
-      Psudo: `${basePath}/dashboard`,
-      Manage: `${basePath}/panel`,
-      Settings: `${basePath}/panel`,
-    };
-    const route = routeMap[menu] || `${basePath}/dashboard`;
-    navigate(route);
-  }, [navigate, getBasePath]);
+  const handleMenuClick = React.useCallback(
+    (menu) => {
+      setActiveItem(menu);
+      const basePath = getBasePath();
+      const routeMap = {
+        Home: `${basePath}/dashboard`,
+        Emails: `${basePath}/emails`,
+        "Pseudo Superadmin": `${basePath}/pseudosuperadmin`,
+        Forms: `${basePath}/forms`,
+        Reports: `${basePath}/reports`,
+        Psudo: `${basePath}/dashboard`,
+        Manage: `${basePath}/panel`,
+        Settings: `${basePath}/panel`,
+      };
+      const route = routeMap[menu] || `${basePath}/dashboard`;
+      navigate(route);
+    },
+    [navigate, getBasePath]
+  );
 
   const toggleDropdown = React.useCallback(() => {
-    setShowDropdown(prev => !prev);
+    setShowDropdown((prev) => !prev);
     setShowBelowDropdown(false);
   }, []);
 
   const toggleBelowDropdown = React.useCallback(() => {
-    setShowBelowDropdown(prev => !prev);
+    setShowBelowDropdown((prev) => !prev);
     setShowDropdown(false);
   }, []);
 
   const toggleSidebar = React.useCallback(() => {
-    setIsSidebarOpen(prev => !prev);
+    setIsSidebarOpen((prev) => !prev);
   }, []);
 
   const renderExpandedSidebar = () => (
@@ -271,7 +289,7 @@ function Layout({ menus = [], submenu = {} }) {
         <nav className="space-y-2">
           {menuItems.map((menu, index) => (
             <div key={index}>
-              <MenuItem 
+              <MenuItem
                 menu={menu}
                 isActive={activeItem === menu}
                 icon={iconMap[menu]}
@@ -305,10 +323,10 @@ function Layout({ menus = [], submenu = {} }) {
         </nav>
       </div>
 
-      <ProfileSection 
-        role={role} 
-        onClick={toggleBelowDropdown} 
-        showDropdown={showBelowDropdown} 
+      <ProfileSection
+        role={role}
+        onClick={toggleBelowDropdown}
+        showDropdown={showBelowDropdown}
       />
     </div>
   );
@@ -361,11 +379,11 @@ function Layout({ menus = [], submenu = {} }) {
           isSidebarOpen ? "ml-64" : "ml-20"
         }`}
       >
-        <Header 
-          toggleSidebar={toggleSidebar} 
-          role={role} 
-          toggleDropdown={toggleDropdown} 
-          showDropdown={showDropdown} 
+        <Header
+          toggleSidebar={toggleSidebar}
+          role={role}
+          toggleDropdown={toggleDropdown}
+          showDropdown={showDropdown}
         />
 
         <main className="flex-1 px-6 py-4">
@@ -378,5 +396,4 @@ function Layout({ menus = [], submenu = {} }) {
   );
 }
 
-// Memoize the entire Layout component to prevent unnecessary re-renders
 export default memo(Layout);
