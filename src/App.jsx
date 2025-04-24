@@ -26,6 +26,7 @@ import SuperadminReports from "../src/pages/Superadmin/Reports/index.jsx";
 import User from "./pages/Superadmin/Users/User.jsx";
 import AddEmails from "./pages/Superadmin/Users/AddEmails.jsx";
 import Profile from "./pages/User/Profile.jsx";
+import PsudoUser from "./pages/Superadmin/PsudoUser/PsudoUser.jsx";
 
 // Flag to control route protection
 // When set to true: Protected routes are enforced (normal security behavior)
@@ -169,6 +170,7 @@ function App() {
                   <Route path="emails" element={<div>SuperAdmin Emails</div>} />
                   <Route path="users/user" element={<User/>} />
                   <Route path="users/add-email" element={<AddEmails/>} />
+                  <Route path="users/pseudo-user" element={<PsudoUser/>} />
                   <Route
                     path="pseudosuperadmin"
                     element={<div>SuperAdmin PseudoSuperadmin Add</div>}
