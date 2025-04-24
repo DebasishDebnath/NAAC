@@ -59,19 +59,19 @@ function Layout({ menus = [], submenu = {} }) {
     return parts.length >= 2 ? `/${parts[1]}` : "/";
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setShowDropdown(false);
-        setShowBelowDropdown(false);
-      }
-    };
+  // useEffect(() => {
+  //   const handleClickOutside = (event) => {
+  //     // if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+  //     //   setShowDropdown(false);
+  //     //   setShowBelowDropdown(false);
+  //     // }
+  //   };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, []);
 
   useEffect(() => {
     const pathParts = location.pathname.split("/");

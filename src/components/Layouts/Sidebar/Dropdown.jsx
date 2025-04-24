@@ -28,9 +28,7 @@ const Dropdown = memo(() => {
       
       <div className="py-1">
         <button className="flex items-center gap-3 w-full px-4 py-2 text-sm text-left hover:bg-blue-50 transition-colors"
-        onClick={()=>{
-            console.log('first')
-        }}
+        onClick={() => navigate(`${getBasePath()}/profile`)}
         >
           <User size={16} className="text-slate-500" />
           <span>Your Profile</span>

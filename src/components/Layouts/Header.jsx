@@ -29,7 +29,7 @@ const Header = memo(({ toggleSidebar, toggleDropdown, showDropdown }) => {
           </div>
         </div>
           {showDropdown && 
-              <Dropdown/>
+          <Dropdown/>
           }
       </div>
     </header>
