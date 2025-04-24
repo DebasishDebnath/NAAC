@@ -33,7 +33,9 @@ const Dropdown = memo(() => {
           <User size={16} className="text-slate-500" />
           <span>Your Profile</span>
         </button>
-        <button className="flex items-center gap-3 w-full px-4 py-2 text-sm text-left hover:bg-blue-50 transition-colors">
+        <button className="flex items-center gap-3 w-full px-4 py-2 text-sm text-left hover:bg-blue-50 transition-colors" onClick={()=>{
+          navigate(`${getBasePath()}/notifications`);
+        }}>
           <Bell size={16} className="text-slate-500" />
           <span>Notifications</span>
         </button>
