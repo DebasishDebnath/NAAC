@@ -139,7 +139,7 @@ export default function UserTable() {
   });
 
   return (
-    <div className="w-full overflow-auto rounded-md border">
+    <div className="w-full overflow-auto rounded-md border text-black">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

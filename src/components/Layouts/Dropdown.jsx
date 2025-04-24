@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 function Dropdown() {
   const navigate = useNavigate();
   const location = useLocation();
-  const role = localStorage.getItem("role") || "user";
+  const role = sessionStorage.getItem("role") || "user";
 
   const getBasePath = () => {
     const parts = location.pathname.split("/");
@@ -12,8 +12,10 @@ function Dropdown() {
   };
 
   const handleLogout = () => {
+    const cachedRole = sessionStorage.getItem("role") || "user";
     sessionStorage.clear();
-    navigate(`/login/${role.toLowerCase()}`);
+    console.log("clickeddd")
+    navigate(`/login/${cachedRole.toLowerCase()}`);
   };
 
   return (
