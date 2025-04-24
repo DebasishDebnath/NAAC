@@ -111,14 +111,13 @@ const ProfileSection = memo(({ role, onClick, showDropdown }) => {
   );
 });
 
-// Memoized header component
 const Header = memo(({ toggleSidebar, role, toggleDropdown, showDropdown }) => {
   useEffect(() => {
     console.log(showDropdown);
   }, [showDropdown]);
 
   return (
-    <header className="sticky top-0 z-0 backdrop-blur-md">
+    <header className="sticky top-0 z-20 backdrop-blur-md">
       <div className="flex items-center justify-between px-6 py-4">
         <button
           className="p-2 bg-white border border-slate-300 rounded hover:bg-slate-100"
@@ -126,16 +125,16 @@ const Header = memo(({ toggleSidebar, role, toggleDropdown, showDropdown }) => {
         >
           <Menu className="w-5 h-5 text-slate-700" />
         </button>
-        <div className="relative">
+        {/* <div className="relative">
           <span
             className="bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full uppercase shadow-sm cursor-pointer hover:bg-blue-200 transition-colors"
             onClick={toggleDropdown}
           >
             {role}
           </span>
-        </div>
+        </div> */}
 
-        {/* <div className="relative">
+        <div className="relative">
           <span
             className="w-8 h-8 bg-slate-200 text-slate-700 rounded-full flex items-center justify-center font-medium text-sm cursor-pointer select-none"
             title={role}
@@ -144,9 +143,8 @@ const Header = memo(({ toggleSidebar, role, toggleDropdown, showDropdown }) => {
             SN
           </span>
           {showDropdown && <Dropdown />}
-        </div> */}
+        </div>
       </div>
-      {showDropdown && <Dropdown />}
     </header>
   );
 });
