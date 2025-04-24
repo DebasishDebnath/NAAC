@@ -301,7 +301,7 @@ export default function ReportTable() {
                                 </TableCell>
                                 <TableCell className="">
                                     {item.editable ? (
-                                        <Button variant="ghost" size="sm" className="flex items-center gap-1 bg-black">
+                                        <Button  size="sm" className="flex items-center gap-1 bg-black text-white hover:bg-black/90">
                                             <PencilIcon className="h-4 w-4 " /> Edit
                                         </Button>
                                     ) : (
