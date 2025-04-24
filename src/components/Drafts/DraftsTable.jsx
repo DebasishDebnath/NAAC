@@ -39,9 +39,39 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import data from "../../constant/submittedreports.json"
-import categoryData from "../../constant/category.json"
+// import categoryData from "../../constant/category.json"
 const SubmittedReportsTable = () => {
     const allData = data;
+    const categoryData = {
+        CategoryI: ["Teaching", "Duties"],
+        CategoryII: [
+            "Journal Publications",
+            "Books Publication",
+            "Books Chapter / Conference Proceedings",
+            "Editor of Book",
+            "Translation Work",
+            "Consultancy",
+            "Patent Status",
+            "Research Project",
+            "Award/Fellowship",
+            "Event Organiser / Participation",
+            "Development of Innovative Pedagogy",
+            "Design of New Curriculam and Courses (ICT Based)",
+            "Development of Complete MOOC's in 4 Quadrant (4 Credit Course)",
+            "MOOCs (development in 4 quadrant) per module / lecture",
+            "Content Writer/Subject Matter Expert for each Module of MOOCs (At Least One Quadrant)",
+            "Course Coordinator for MOOCs",
+            "Development of E-Content in 4 quadrants for a Complete Course / E-Book",
+            "E-Content (developed in 4 quadrants) Per Module",
+            "Contribution to development of E-Content module in Complete Course / E-Book (at least one quadrant)",
+            "Editor of E-Content for Complete Course / E-Book",
+            "Status as Guide - Ph.D. Guidance (Degree Awarded)",
+            "Status as Guide - Ph.D. Guidance (for Pursuing Students)",
+            "M.Phil./P.G Dissertation Guidance",
+            "Online AI Courses",
+        ],
+    };
+    // const categoryData = categoryData;
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [isMobileView, setIsMobileView] = useState(false);
@@ -54,7 +84,7 @@ const SubmittedReportsTable = () => {
         category: [],
     });
     const [selectedCategory, setSelectedCategory] = useState("All");
-    const [selectedSubCategory, setSelectedSubCategory] = useState([categoryData.CategoryI])// New state for category dropdown
+    const [selectedSubCategory, setSelectedSubCategory] = useState("");// New state for category dropdown
     const [isFilterActive, setIsFilterActive] = useState(false);
     const itemsPerPage = 5;
 
@@ -85,9 +115,9 @@ const SubmittedReportsTable = () => {
         setSelectedCategory(value);
         setCurrentPage(1);
     };
-    const handleSubCategory = () => {
-
-    }
+    const handleSubCategoryChange = (value) => {
+        setSelectedSubCategory(value);
+    };
 
     // Handle action buttons (delete and edit)
     const handleDelete = (id) => {
@@ -262,6 +292,16 @@ const SubmittedReportsTable = () => {
             ? <ChevronUpIcon className="h-4 w-4 ml-1" />
             : <ChevronDownIcon className="h-4 w-4 ml-1" />;
     };
+    useEffect(() => {
+        const getSubcategories = () => {
+            if (selectedCategory === "All") {
+                return Object.values(categoryData).flat();
+            }
+            return categoryData[selectedCategory] || [];
+        };
+        getSubcategories()
+    }, [])
+
 
     return (
         <div className="p-3 md:p-6 space-y-4">
@@ -289,27 +329,28 @@ const SubmittedReportsTable = () => {
                     </div>
                 </div>
                 {/* category data */}
-                <div className="mb-4">
+                {/* Subcategory Selection */}
+
+                {selectedCategory && selectedCategory !== "All" && (
                     <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
                         <div className="w-full md:w-auto flex items-center gap-2">
-                            <FolderIcon className="h-5 w-5 text-blue-600" />
-                            <span className="font-medium text-gray-700">Category:</span>
+                            <FolderIcon className="h-5 w-5 text-green-600" />
+                            <span className="font-medium text-gray-700">Subcategory:</span>
                         </div>
-                        <Select value={selectedSubCategory} onValueChange={handleSubCategory}>
-                            <SelectTrigger className="w-full md:w-64 ">
-                                <SelectValue placeholder="Select Category" />
+                        <Select value={selectedSubCategory} onValueChange={handleSubCategoryChange}>
+                            <SelectTrigger className="w-full md:w-64">
+                                <SelectValue placeholder="Select Subcategory" />
                             </SelectTrigger>
-                            <SelectContent className={`bg-white`}>
-                                <SelectItem value="All">All Categories</SelectItem>
-                                {uniqueCategories.map(category => (
-                                    <SelectItem key={category} value={category}>
-                                        {category === "CategoryI" ? "Category I" : "Category II"}
+                            <SelectContent className="bg-white">
+                                {categoryData[selectedCategory].map((sub, index) => (
+                                    <SelectItem key={index} value={sub}>
+                                        {sub}
                                     </SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
                     </div>
-                </div>
+                )}
             </div>
 
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
