@@ -240,7 +240,7 @@ export default function DraftTable() {
                             {/* Sub-report Dropdown */}
                             {selectedCategory && (
                                 <select
-                                    className="border border-gray-300 rounded-md px-4 p-1 shadow-sm focus:ring-2 focus:ring-[#002946]"
+                                    className="border border-gray-300 min-w-[800px] rounded-md px-4 p-1 shadow-sm focus:ring-2 focus:ring-[#002946]"
                                     value={selectedSubReport}
                                     onChange={(e) => setSelectedSubReport(e.target.value)}
                                 >
