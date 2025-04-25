@@ -20,7 +20,7 @@ const Dropdown = memo(() => {
   };
 
   return (
-    <div className="absolute right-0 top-full mt-2 w-64 bg-white shadow-lg rounded-lg border border-slate-200 py-2 overflow-hidden">
+    <div className="absolute right-0 top-[70px] mt-2 w-64 bg-white shadow-lg rounded-lg border border-slate-200 py-2 overflow-hidden z-50">
       <div className="px-4 py-2 border-b border-slate-100">
         <div className="font-medium">Sarah Newman</div>
         <div className="text-xs text-slate-500">eml@domain.com</div>
