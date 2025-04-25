@@ -9,7 +9,7 @@ const reports = [
     facultyId: "FAC001",
     category: "Category I",
     tableName: "Teaching",
-    status: "Pending",
+    status: "Rejected",
     date: "2025-04-20",
     reportId: "REP001"
   },
@@ -25,7 +25,7 @@ const reports = [
     facultyId: "FAC003",
     category: "Category II",
     tableName: "Patent Status",
-    status: "Pending",
+    status: "Rejected",
     date: "2025-04-22",
     reportId: "REP003"
   },
@@ -259,8 +259,8 @@ const SubmittedReportsTable = () => {
           <thead className="text-white" style={{ backgroundColor: '#002946' }}>
             <tr>
               <th className="px-4 py-3 text-center first:rounded-tl-xl first:rounded-bl-xl">Report ID</th>
-              <th className="px-4 py-3 text-center">Category</th>
-              <th className="px-4 py-3 text-center">Title</th>
+              {/* <th className="px-4 py-3 text-center">Category</th>
+              <th className="px-4 py-3 text-center">Title</th> */}
               <th className="px-4 py-3 text-center">Status</th>
 
               <th className="px-4 py-3 text-center ">Date</th>
@@ -272,8 +272,8 @@ const SubmittedReportsTable = () => {
               filteredReports.map((report, index) => (
                 <tr key={index} className="hover:bg-gray-100 transition duration-200">
                   <td className="px-4 py-3 text-center">{report.reportId}</td>
-                  <td className="px-4 py-3 text-center">{report.category}</td>
-                  <td className="px-4 py-3 text-center">{report.tableName}</td>
+                  {/* <td className="px-4 py-3 text-center">{report.category}</td>
+                  <td className="px-4 py-3 text-center">{report.tableName}</td> */}
                   <td className="px-4 py-3 text-center">{getStatusBadge(report.status)}</td>
                   <td className="px-4 py-3 text-center">{report.date}</td>
                   {
