@@ -83,7 +83,7 @@ const SubmittedReportsTable = () => {
         status: [],
         category: [],
     });
-    const [selectedCategory, setSelectedCategory] = useState("All");
+    const [selectedCategory, setSelectedCategory] = useState("CategoryI");
     const [selectedSubCategory, setSelectedSubCategory] = useState("");// New state for category dropdown
     const [isFilterActive, setIsFilterActive] = useState(false);
     const itemsPerPage = 5;
@@ -318,7 +318,7 @@ const SubmittedReportsTable = () => {
                                 <SelectValue placeholder="Select Category" />
                             </SelectTrigger>
                             <SelectContent className={`bg-white`}>
-                                <SelectItem value="All">All Categories</SelectItem>
+                                {/* <SelectItem value="All">All Categories</SelectItem> */}
                                 {uniqueCategories.map(category => (
                                     <SelectItem key={category} value={category}>
                                         {category === "CategoryI" ? "Category I" : "Category II"}
