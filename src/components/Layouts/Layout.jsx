@@ -205,7 +205,7 @@ function Layout({ menus = [], submenu = {} }) {
   };
 
   return (
-    <div className="flex min-h-screen  text-slate-800">
+    <div className="flex min-h-screen  text-slate-800 bg-[#e7e7e777]">
       {/* Sidebar */}
       <div ref={dropdownRef}>
         <Sidebar
