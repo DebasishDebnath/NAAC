@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import { ChevronUp } from "lucide-react";
-import BelowDropdown from "./BelowDropdown";
+// import BelowDropdown from "./BelowDropdown";
 
 const ProfileSection = memo(({ role, onClick, showDropdown }) => {
   return (
@@ -17,7 +17,7 @@ const ProfileSection = memo(({ role, onClick, showDropdown }) => {
       </div>
       <ChevronUp size={16} className={`text-slate-400 transform transition-transform ${showDropdown ? "" : "rotate-180"}`} />
 
-      {showDropdown && <BelowDropdown />}
+      {/* {showDropdown && <BelowDropdown />} */}
     </div>
   );
 });

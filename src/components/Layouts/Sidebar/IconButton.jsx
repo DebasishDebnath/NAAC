@@ -16,8 +16,8 @@ const IconButton = memo(({ menu, icon, isActive, onClick, hasSubmenu, isParentOf
       onClick={handleIconClick}
       className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors relative ${
         isActiveStyle
-          ? "bg-blue-600 text-white"
-          : "text-slate-700 hover:bg-slate-100"
+          ? "bg-[#94DCFF] text-black"
+          : "text-white hover:bg-[#94dbff56] hover:text-black"
       } ${hasSubmenu ? "after:content-[''] after:absolute after:right-1 after:bottom-1 after:w-2 after:h-2 after:rounded-full after:bg-blue-400" : ""}`}
       title={menu}
     >
