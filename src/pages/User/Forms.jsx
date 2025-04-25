@@ -289,10 +289,10 @@ function Forms() {
 
   return (
     <div className="h-screen flex flex-col">
-      <ResizablePanelGroup direction="horizontal" className="flex-grow">
+      <ResizablePanelGroup direction="horizontal" className="flex-grow gap-2">
         {/* Sidebar */}
-        <ResizablePanel defaultSize={20} className="max-h-full">
-          <div className="h-full overflow-y-auto p-4 border-r border-gray-200">
+        <ResizablePanel defaultSize={20} className="max-h-full ">
+          <div className="h-full overflow-y-auto p-4  border-gray-200 bg-white rounded-xl">
             <nav className="space-y-1">
               {categories.map((category, catIndex) => {
                 const isActiveCategory = selectedCategory === catIndex;
@@ -341,11 +341,11 @@ function Forms() {
           </div>
         </ResizablePanel>
 
-        <ResizableHandle />
+        <ResizableHandle className={"bg-gray-400 h-24 justify-self-center self-center w-1 rounded-full"}/>
 
         {/* Main content - Form Panel */}
         <ResizablePanel defaultSize={50} className="max-h-full">
-          <div className="h-full flex flex-col">
+          <div className="h-full flex flex-col bg-white rounded-xl">
             <div className="p-6 border-b">
               <h1 className="text-2xl font-bold mb-1">Academic Performance Indicators</h1>
               <p className="text-gray-500">Manage your academic activities and achievements.</p>
@@ -356,11 +356,11 @@ function Forms() {
           </div>
         </ResizablePanel>
 
-        <ResizableHandle />
+        <ResizableHandle className={"bg-gray-400 h-24 justify-self-center self-center w-1 rounded-full"}/>
 
         {/* Table Panel */}
         <ResizablePanel defaultSize={30} className="max-h-full">
-          <div className="h-full overflow-y-auto">
+          <div className="h-full overflow-y-auto bg-white rounded-xl">
             <div className='flex w-full justify-end'>
               <div
                 className='bg-blue-400 px-5 py-1 text-[1.2rem] mb-4 text-white font-bold rounded shadow-md hover:shadow-lg cursor-pointer transition-all duration-300 hover:bg-blue-500 transform hover:scale-105'
