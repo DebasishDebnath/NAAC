@@ -1,10 +1,16 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import { Menu, ChevronDown } from "lucide-react";
 import Dropdown from "./Sidebar/Dropdown";
 import { IoMdNotifications } from "react-icons/io";
+import NotificationShortView from "../ui/Notifications/NotificationShortView";
 
 
 const Header = memo(({ toggleSidebar, toggleDropdown, showDropdown }) => {
+  const [NotificationDropdown, setNotificationDropdown] = useState(false)
+    const toggleBelowDropdown = React.useCallback(() => {
+      setNotificationDropdown((prev) => !prev);
+     
+    }, []);
   return (
     <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-md border-b border-slate-200">
       <div className="flex items-center justify-between px-6 py-4">
@@ -17,7 +23,7 @@ const Header = memo(({ toggleSidebar, toggleDropdown, showDropdown }) => {
 
 
         <div className="relative flex gap-10 items-center">
-        <div className="cursor-pointer duration-150 hover:bg-gray-200 rounded-full p-2" ><IoMdNotifications size={26}/></div>
+        <div className="cursor-pointer duration-150 hover:bg-gray-200 rounded-full p-2" onClick={toggleBelowDropdown}><IoMdNotifications size={26}/></div>
           <div
             className="flex items-center gap-2 cursor-pointer group"
             onClick={toggleDropdown}
@@ -28,6 +34,7 @@ const Header = memo(({ toggleSidebar, toggleDropdown, showDropdown }) => {
             <ChevronDown size={16} className={`text-slate-400 transform transition-transform ${showDropdown ? "rotate-180" : ""}`} />
           </div>
         </div>
+        {NotificationDropdown&&<NotificationShortView/>}
           {showDropdown && 
           <Dropdown/>
           }
