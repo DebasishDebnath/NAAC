@@ -137,7 +137,7 @@ function App() {
                         <Layout
                           menus={["Home", "Forms", "Reports"]}
                           submenu={{
-                            Reports: ["Drafts", "Reviewed", "Pending"],
+                            Reports: ["Drafts", "Reviewed"],
                           }}
                         >
                           <Routes>
@@ -159,7 +159,7 @@ function App() {
                   <Route path="notifications" element={<Notificatons />} />
                   <Route path="reports/drafts" element={<Drafts />} />
                   <Route
-                    path="reports/submitted-reports"
+                    path="reports/reviewed"
                     element={<SubmittedReports />}
                   />
 

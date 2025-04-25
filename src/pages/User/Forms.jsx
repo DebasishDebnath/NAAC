@@ -18,6 +18,7 @@ import {
 import facultyData from "../../constant/invoices.json";
 import { useFormSubmission } from '../../Apis/FormSubmission/FormSubmission';
 import SubmittedReportsTable from '@/components/Drafts/DraftsTable';
+import { PanelRightOpen } from 'lucide-react';
 
 function Forms() {
   const formData = data;
@@ -27,7 +28,15 @@ function Forms() {
   const [formDates, setFormDates] = useState({});
   const [formValues, setFormValues] = useState({});
   const { formSubmit } = useFormSubmission()
-  const [popUpShow, setPopUpShow] = useState(false)
+  const [popUpShow, setPopUpShow] = useState(false)  
+  const [isCollapsed, setIsCollapsed] = useState(false); // State to manage collapse
+
+  const handleToggleSidebar = () => {
+    setIsCollapsed((prev) => !prev);
+  };
+
+
+  
 
   // Format categories with fallback names
   const categories = formData.form.map((category) => ({
@@ -288,11 +297,21 @@ function Forms() {
   };
 
   return (
-    <div className="h-screen flex ">
-      
+    <div className="h-[80vh] flex flex-col ">
+
+      <div className='h-[100%] flex'>
         {/* Sidebar */}
        
-          <div className="h-full overflow-y-auto p-4 mr-2.5  border-gray-200 bg-white rounded-xl w-[30%]">
+          <div className={`h-full pt-12 relative overflow-y-auto p-4 mr-2.5 border-gray-200 bg-white rounded-xl transition-all duration-300 ${
+          isCollapsed ? "w-[15%]" : "w-[30%]"
+        }`}
+      >
+        <div
+          onClick={handleToggleSidebar}
+          className="absolute top-2 right-4 cursor-pointer"
+        >
+          <PanelRightOpen size={24} />
+        </div>
             <nav className="space-y-1">
               {categories.map((category, catIndex) => {
                 const isActiveCategory = selectedCategory === catIndex;
@@ -361,7 +380,16 @@ function Forms() {
         {/* Table Panel */}
         <ResizablePanel defaultSize={30} className="max-h-full">
           <div className="h-full overflow-y-auto bg-white rounded-xl">
-            <div className='flex w-full justify-end'>
+            
+
+            <SubmittedReportsTable />
+          </div>
+        </ResizablePanel>
+      </ResizablePanelGroup>
+      </div>
+      
+
+      <div className='flex w-full justify-end'>
               <div
                 className='bg-blue-400 px-5 py-1 text-[1.2rem] mb-4 text-white font-bold rounded shadow-md hover:shadow-lg cursor-pointer transition-all duration-300 hover:bg-blue-500 transform hover:scale-105'
                 onClick={() => setPopUpShow(true)}
@@ -370,10 +398,6 @@ function Forms() {
               </div>
             </div>
 
-            <SubmittedReportsTable />
-          </div>
-        </ResizablePanel>
-      </ResizablePanelGroup>
 
       {/* Modal Popup */}
       {popUpShow && (
@@ -391,7 +415,6 @@ function Forms() {
         </div>
       )}
 
-      {/* Add global styles for animations */}
       <style jsx global>{`
         @keyframes modalFadeIn {
           from {
