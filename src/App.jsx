@@ -8,7 +8,7 @@ import {
 import Signup from "./pages/SignUp.jsx";
 import Unauthorized from "./pages/Unauthorized";
 import NotFound from "./pages/NotFound";
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import LoginPage from "./pages/Login.jsx";
 import { SnackbarProvider } from "notistack";
@@ -40,34 +40,34 @@ const ENFORCE_ROUTE_PROTECTION = true;
 const allowedRoles = ["user", "superadmin", "psudosuperadmin"];
 
 // TokenWrapper: wraps protected routes
-const TokenWrapper = ({ children }) => {
-  // If we're not enforcing protection, skip the token check
-  if (!ENFORCE_ROUTE_PROTECTION) {
-    return children;
-  }
+// const TokenWrapper = ({ children }) => {
+//   // If we're not enforcing protection, skip the token check
+//   if (!ENFORCE_ROUTE_PROTECTION) {
+//     return children;
+//   }
 
-  const token = sessionStorage.getItem("token");
-  const role = sessionStorage.getItem("role");
+//   const token = sessionStorage.getItem("token");
+//   const role = sessionStorage.getItem("role");
 
-  if (!token || !role) {
-    return <Navigate to="/login/user" replace />;
-  }
+//   if (!token || !role) {
+//     return <Navigate to="/login/user" replace />;
+//   }
 
-  return children;
-};
+//   return children;
+// };
 
-// Modified ProtectedRouteWrapper to honor the flag
-const ProtectedRouteWrapper = ({ allowedRoles, children }) => {
-  // If we're not enforcing protection, render the children directly
-  if (!ENFORCE_ROUTE_PROTECTION) {
-    return children;
-  }
+// // Modified ProtectedRouteWrapper to honor the flag
+// const ProtectedRouteWrapper = ({ allowedRoles, children }) => {
+//   // If we're not enforcing protection, render the children directly
+//   if (!ENFORCE_ROUTE_PROTECTION) {
+//     return children;
+//   }
 
-  // Otherwise use the original ProtectedRoute component
-  return (
-    <ProtectedRoute allowedRoles={allowedRoles}>{children}</ProtectedRoute>
-  );
-};
+//   // Otherwise use the original ProtectedRoute component
+//   return (
+//     <ProtectedRoute allowedRoles={allowedRoles}>{children}</ProtectedRoute>
+//   );
+// };
 
 // LoginRouteWrapper: restricts login route to only valid roles
 const LoginRouteWrapper = () => {
@@ -78,16 +78,49 @@ const LoginRouteWrapper = () => {
   return <LoginPage />;
 };
 
+// Replace the TokenWrapper with this improved version
+const TokenWrapper = ({ children }) => {
+  const { user } = useAuth();
+  
+  // If we're not enforcing protection, skip the token check
+  if (!ENFORCE_ROUTE_PROTECTION) {
+    return children;
+  }
+
+  if (!user || !user.token) {
+    return <Navigate to="/login/user" replace />;
+  }
+
+  return children;
+};
+
+// Modified ProtectedRouteWrapper to honor the flag and use context
+const ProtectedRouteWrapper = ({ allowedRoles, children }) => {
+  // If we're not enforcing protection, render the children directly
+  if (!ENFORCE_ROUTE_PROTECTION) {
+    return children;
+  }
+
+  // Otherwise use the improved ProtectedRoute component
+  return (
+    <ProtectedRoute allowedRoles={allowedRoles}>{children}</ProtectedRoute>
+  );
+};
+
 // Redirect to appropriate dashboard based on role
 const RedirectDashboard = () => {
+  const { user } = useAuth();
+  
   // If protection is disabled, default to user dashboard
   if (!ENFORCE_ROUTE_PROTECTION) {
     return <Navigate to="/user/dashboard" replace />;
   }
 
-  const role = sessionStorage.getItem("role");
+  if (!user) {
+    return <Navigate to="/login/user" replace />;
+  }
 
-  switch (role) {
+  switch (user.role) {
     case "user":
       return <Navigate to="/user/dashboard" replace />;
     case "superadmin":

@@ -6,6 +6,7 @@ import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { User, ChevronDown } from "lucide-react";
 import { useNavigate, useParams, Navigate } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -18,22 +19,18 @@ export default function LoginPage() {
   const { showError } = useNotification();
   const params = useParams();
   const navigate = useNavigate();
+  const { user, loginUser } = useAuth();
 
-  // Set initial role from URL params
   useEffect(() => {
     if (params.role) {
       setSelectedRole(params.role);
     }
   }, [params.role]);
 
-  useEffect(() => {
-    const token = sessionStorage.getItem("token");
-    const role = sessionStorage.getItem("role");
-  
-    if (token && role) {
-      navigate(`/${role}/dashboard`, { replace: true });
-    }
-  }, [navigate]);
+  // Redirect if already logged in
+  if (user && user.token) {
+    return <Navigate to={`/${user.role}/dashboard`} replace />;
+  }
   
   const handleRoleSelect = (role) => {
     setSelectedRole(role);
@@ -41,37 +38,41 @@ export default function LoginPage() {
     navigate(`/login/${role}`);
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setIsLoading(true);
-  let response;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    let response;
 
-  try {
-    const currentRole = selectedRole || params.role;
-    
-    if (currentRole === "superadmin")
-      response = await signinSuperadmin(email, password);
-    else if (currentRole === "user" || currentRole === "pseudouser")
-      response = await signinUser(email, password);
+    try {
+      const currentRole = selectedRole || params.role;
+      
+      if (currentRole === "superadmin")
+        response = await signinSuperadmin(email, password);
+      else if (currentRole === "user" || currentRole === "psudosuperadmin")
+        response = await signinUser(email, password);
 
-    if (!response?.success) {
-      showError("Login failed. Please check your credentials.");
+      if (!response?.success) {
+        showError("Login failed. Please check your credentials.");
+        setIsLoading(false);
+        return;
+      }
+      
+      // Use context to save user data
+      loginUser({
+        email,
+        token: response?.data?.token,
+        role: response?.data?.role
+      });
+      
+      navigate(`/${response?.data?.role}/dashboard`, { replace: true });
+    } catch (error) {
+      console.error("Login error:", error);
+      showError("An unexpected error occurred during login.");
       setIsLoading(false);
-      return;
     }
-    
-    sessionStorage.setItem("token", response?.data?.token);
-    sessionStorage.setItem("role", response?.data?.role);
-    
-    navigate(`/${response?.data?.role}/dashboard`, { replace: true });
-  } catch (error) {
-    console.error("Login error:", error);
-    showError("An unexpected error occurred during login.");
-    setIsLoading(false);
-  }
-};
+  };
 
-
+  // Rest of your component remains the same...
   const roleDisplay = {
     superadmin: "Super Admin",
     user: "User",
