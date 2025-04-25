@@ -288,11 +288,11 @@ function Forms() {
   };
 
   return (
-    <div className="h-screen flex flex-col">
-      <ResizablePanelGroup direction="horizontal" className="flex-grow gap-2">
+    <div className="h-screen flex ">
+      
         {/* Sidebar */}
-        <ResizablePanel defaultSize={20} className="max-h-full ">
-          <div className="h-full overflow-y-auto p-4  border-gray-200 bg-white rounded-xl">
+       
+          <div className="h-full overflow-y-auto p-4 mr-2.5  border-gray-200 bg-white rounded-xl w-[30%]">
             <nav className="space-y-1">
               {categories.map((category, catIndex) => {
                 const isActiveCategory = selectedCategory === catIndex;
@@ -339,10 +339,10 @@ function Forms() {
               })}
             </nav>
           </div>
-        </ResizablePanel>
+        
 
-        <ResizableHandle className={"bg-gray-400 h-24 justify-self-center self-center w-1 rounded-full"}/>
-
+       
+          <ResizablePanelGroup direction="horizontal" className="flex-grow gap-2">
         {/* Main content - Form Panel */}
         <ResizablePanel defaultSize={50} className="max-h-full">
           <div className="h-full flex flex-col bg-white rounded-xl">
