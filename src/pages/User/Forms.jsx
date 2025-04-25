@@ -20,6 +20,7 @@ import facultyData from "../../constant/invoices.json";
 import { useFormSubmission } from '../../Apis/FormSubmission/FormSubmission';
 import SubmittedReportsTable from '@/components/Drafts/DraftsTable';
 import { Eye, PanelRightOpen } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 function Forms() {
   const formData = data;
@@ -30,7 +31,8 @@ function Forms() {
   const [formValues, setFormValues] = useState({});
   const { formSubmit } = useFormSubmission()
   const [popUpShow, setPopUpShow] = useState(false)
-  const [isCollapsed, setIsCollapsed] = useState(false); // State to manage collapse
+  const [isCollapsed, setIsCollapsed] = useState(false); 
+  const navigate= useNavigate()
 
   const handleToggleSidebar = () => {
     setIsCollapsed((prev) => !prev);
@@ -298,7 +300,7 @@ function Forms() {
   };
 
   return (
-    <div className="h-[88vh] flex flex-col ">
+    <div className="h-[80vh] flex flex-col ">
 
       <div className='h-[100%] flex'>
         {/* Sidebar */}
@@ -400,7 +402,7 @@ function Forms() {
       <div className='flex w-full justify-end mt-8'>
         <div
           className='bg-[#002946] flex items-center gap-2 px-6 py-3 text-[1.2rem] mb-4 text-white font-semibold rounded-2xl shadow-md hover:shadow-lg cursor-pointer transition-all duration-300 hover:bg-[#002946a2] transform hover:scale-105'
-          onClick={() => setPopUpShow(true)}
+          onClick={() => {navigate('previewsubmit')}}
         >
           <Eye />
           Preview & Submit

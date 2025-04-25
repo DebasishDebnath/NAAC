@@ -31,6 +31,7 @@ import { NotificationProvider } from "./hooks/useHttp.jsx";
 import SubmittedReports from "./pages/User/SubmittedReports.jsx";
 import Notificatons from "./pages/User/Notificatons.jsx";
 import Manage from "./pages/PsudoSuperadmin/Manage/Manage.jsx";
+import PreviewSubmit from "./pages/User/PreviewSubmit.jsx";
 
 // Flag to control route protection
 // When set to true: Protected routes are enforced (normal security behavior)
@@ -159,6 +160,8 @@ function App() {
                   <Route path="profile" element={<Profile />} />
                   <Route path="notifications" element={<Notificatons />} />
                   <Route path="reports/drafts" element={<Drafts />} />
+                  <Route path="forms/previewsubmit" element={<PreviewSubmit />} />
+
                   <Route
                     path="reports/reviewed"
                     element={<SubmittedReports />}
@@ -189,6 +192,7 @@ function App() {
                   <Route path="users/user" element={<User />} />
                   <Route path="users/add-email" element={<AddEmails />} />
                   <Route path="users/pseudo-user" element={<PsudoUser />} />
+
 
                   <Route
                     path="pseudosuperadmin"

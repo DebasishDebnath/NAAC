@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Search, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import TableComp from '../Table/TableComp';
 
 const reports = [
     {
         facultyId: "FAC001",
         category: "Category I",
         tableName: "Teaching",
-        status: "Pending",
+        status: "Draft",
         date: "2025-04-20",
         reportId: "REP001"
     },
@@ -16,7 +17,7 @@ const reports = [
         facultyId: "FAC002",
         category: "Category II",
         tableName: "Journal Publications",
-        status: "Accepted",
+        status: "Draft",
         date: "2025-04-18",
         reportId: "REP002"
     },
@@ -24,7 +25,7 @@ const reports = [
         facultyId: "FAC003",
         category: "Category II",
         tableName: "Patent Status",
-        status: "Pending",
+        status: "Draft",
         date: "2025-04-22",
         reportId: "REP003"
     },
@@ -32,7 +33,7 @@ const reports = [
         facultyId: "FAC004",
         category: "Category I",
         tableName: "Duties",
-        status: "Rejected",
+        status: "Draft",
         date: "2025-04-19",
         reportId: "REP004"
     },
@@ -40,7 +41,7 @@ const reports = [
         facultyId: "FAC005",
         category: "Category II",
         tableName: "E-Content (developed in 4 quadrants) Per Module",
-        status: "Pending",
+        status: "Draft",
         date: "2025-04-21",
         reportId: "REP005"
     }
@@ -87,6 +88,15 @@ export default function DraftTable() {
         e.preventDefault();
         filterReports();
     };
+
+    const handleDelete = (reportId) => {
+        const confirmed = window.confirm("Are you sure you want to delete this report?");
+        if (confirmed) {
+            const updatedReports = filteredReports.filter(r => r.reportId !== reportId);
+            setFilteredReports(updatedReports);
+        }
+    };
+    
 
     // Function to get badge color based on category
     const getBadgeColor = (category) => {
@@ -215,7 +225,7 @@ export default function DraftTable() {
                         <div className="flex flex-col items-center justify-center h-full md:flex-row gap-4 mt-4">
                             {/* Category Dropdown */}
                             <select
-                                className="border border-gray-300 rounded-md px-4 py-2 shadow-sm focus:ring-2 focus:ring-[#002946]"
+                                className="border border-gray-300 rounded-md px-4 p-1 shadow-sm focus:ring-2 focus:ring-[#002946]"
                                 value={selectedCategory}
                                 onChange={(e) => {
                                     setSelectedCategory(e.target.value);
@@ -230,7 +240,7 @@ export default function DraftTable() {
                             {/* Sub-report Dropdown */}
                             {selectedCategory && (
                                 <select
-                                    className="border border-gray-300 rounded-md px-4 py-2 shadow-sm focus:ring-2 focus:ring-[#002946]"
+                                    className="border border-gray-300 min-w-[800px] rounded-md px-4 p-1 shadow-sm focus:ring-2 focus:ring-[#002946]"
                                     value={selectedSubReport}
                                     onChange={(e) => setSelectedSubReport(e.target.value)}
                                 >
@@ -245,36 +255,8 @@ export default function DraftTable() {
                 </div>
             </div>
 
-            <div className="overflow-x-auto">
-                <table className="w-full min-w-[600px] table-auto bg-gray-50 rounded-lg shadow-md">
-                    <thead className="text-white" style={{ backgroundColor: '#002946' }}>
-                        <tr>
-                            <th className="px-4 py-3 text-center first:rounded-tl-xl first:rounded-bl-xl">Report ID</th>
-                            <th className="px-4 py-3 text-center">Category</th>
-                            <th className="px-4 py-3 text-center">Title</th>
-                            <th className="px-4 py-3 text-center">Status</th>
-                            <th className="px-4 py-3 text-center last:rounded-tr-xl last:rounded-br-xl">Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredReports.length > 0 ? (
-                            filteredReports.map((report, index) => (
-                                <tr key={index} className="hover:bg-gray-100 transition duration-300">
-                                    <td className="px-4 py-3 text-center">{report.reportId}</td>
-                                    <td className="px-4 py-3 text-center">{report.category}</td>
-                                    <td className="px-4 py-3 text-center">{report.tableName}</td>
-                                    <td className="px-4 py-3 text-center">{getStatusBadge(report.status)}</td>
-                                    <td className="px-4 py-3 text-center">{report.date}</td>
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan="5" className="text-center py-4">No reports found</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
+            <TableComp reports={filteredReports} onDelete={handleDelete} />
+
         </div>
 
     );

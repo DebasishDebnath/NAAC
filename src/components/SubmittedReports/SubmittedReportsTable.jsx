@@ -179,7 +179,7 @@ const SubmittedReportsTable = () => {
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-6">
         <form onSubmit={handleSearch} className="relative w-full md:max-w-md">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <Search className="h-4 w-4 text-gray-400" />
+            <Search className="h-4 w-4 " />
           </div>
           <Input
             className="pl-10 pr-24 py-3 w-full bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#002946]"
@@ -188,14 +188,14 @@ const SubmittedReportsTable = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <Button
-            className="absolute right-0 top-0 bottom-0 bg-[#002946] text-white rounded-lg shadow-md hover:bg-[#003b61] transition duration-300 ease-in-out"
+            className="absolute right-0 top-[2px] bottom-0 bg-[#002946] text-white rounded-lg shadow-md hover:bg-[#003b61] transition duration-300 ease-in-out"
             type="submit"
           >
             Search
           </Button>
         </form>
 
-        <div className="flex gap-4 items-start md:items-center">
+        <div className="flex gap-4 items-start  md:items-center">
           <Button
             variant="outline"
             className="flex items-center gap-2 bg-[#787878] text-white rounded-lg py-2 px-4 hover:bg-[#666666] transition duration-200 ease-in-out"
@@ -206,10 +206,11 @@ const SubmittedReportsTable = () => {
           </Button>
 
           {showFilters && (
-            <div className="flex flex-col items-center justify-center h-full md:flex-row gap-4 mt-4">
+            <div className="flex flex-col md:flex-row gap-4 mt-4 justify-center items-center w-full">
+
               {/* Category Dropdown */}
               <select
-                className="border border-gray-300 rounded-md px-4 py-2 shadow-sm focus:ring-2 focus:ring-[#002946]"
+                className="border border-gray-300 rounded-md px-4 py-1 shadow-sm focus:ring-2 focus:ring-[#002946]"
                 value={selectedCategory}
                 onChange={(e) => {
                   setSelectedCategory(e.target.value);
@@ -224,7 +225,7 @@ const SubmittedReportsTable = () => {
               {/* Sub-report Dropdown */}
               {selectedCategory && (
                 <select
-                  className="border border-gray-300 rounded-md px-4 py-2 shadow-sm focus:ring-2 focus:ring-[#002946]"
+                  className="border border-gray-300  min-w-[800px] rounded-md px-4 py-1 shadow-sm focus:ring-2 focus:ring-[#002946]"
                   value={selectedSubReport}
                   onChange={(e) => setSelectedSubReport(e.target.value)}
                 >
