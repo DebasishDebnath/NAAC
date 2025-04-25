@@ -1,7 +1,7 @@
-import * as React from "react"
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
-import { cn } from "@/lib/utils"
-
+// Table component with base styling
 function Table({
   className,
   ...props
@@ -10,12 +10,14 @@ function Table({
     <div data-slot="table-container" className="relative w-full overflow-x-auto">
       <table
         data-slot="table"
-        className={cn("w-full caption-bottom text-sm", className)}
-        {...props} />
+        className={cn("w-full caption-bottom text-sm text-gray-700 shadow-lg rounded-lg", className)}
+        {...props}
+      />
     </div>
   );
 }
 
+// TableHeader with sleek borders and hover effect
 function TableHeader({
   className,
   ...props
@@ -23,11 +25,13 @@ function TableHeader({
   return (
     <thead
       data-slot="table-header"
-      className={cn("[&_tr]:border-b ", className)}
-      {...props} />
+      className={cn("bg-gradient-to-r from-indigo-500 via-indigo-600 to-indigo-700 text-white", className)}
+      {...props}
+    />
   );
 }
 
+// TableBody with smooth row transitions
 function TableBody({
   className,
   ...props
@@ -36,10 +40,12 @@ function TableBody({
     <tbody
       data-slot="table-body"
       className={cn("[&_tr:last-child]:border-0", className)}
-      {...props} />
+      {...props}
+    />
   );
 }
 
+// TableFooter with gradient and a soft background
 function TableFooter({
   className,
   ...props
@@ -48,13 +54,15 @@ function TableFooter({
     <tfoot
       data-slot="table-footer"
       className={cn(
-        "bg-neutral-100/50 border-t font-medium [&>tr]:last:border-b-0 dark:bg-neutral-800/50",
+        "bg-gradient-to-r from-indigo-100 to-indigo-200 border-t font-medium",
         className
       )}
-      {...props} />
+      {...props}
+    />
   );
 }
 
+// TableRow with hover effect and subtle transition
 function TableRow({
   className,
   ...props
@@ -63,13 +71,15 @@ function TableRow({
     <tr
       data-slot="table-row"
       className={cn(
-        " data-[state=selected]:bg-neutral-100 !rounded-[20px] border-b transition-colors ",
+        "transition-colors hover:bg-indigo-50 cursor-pointer rounded-xl border-b border-gray-200",
         className
       )}
-      {...props} />
+      {...props}
+    />
   );
 }
 
+// TableHead with improved font and padding for better readability
 function TableHead({
   className,
   ...props
@@ -78,13 +88,15 @@ function TableHead({
     <th
       data-slot="table-head"
       className={cn(
-        "text-neutral-950 h-10 px-2 text-left align-middle font-medium whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] dark:text-neutral-50",
+        "text-neutral-950 text-lg font-semibold p-4 text-left align-middle whitespace-nowrap",
         className
       )}
-      {...props} />
+      {...props}
+    />
   );
 }
 
+// TableCell with added padding and soft borders for visual flow
 function TableCell({
   className,
   ...props
@@ -93,13 +105,15 @@ function TableCell({
     <td
       data-slot="table-cell"
       className={cn(
-        "p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
+        "p-4 align-middle whitespace-nowrap border-t border-b border-gray-100",
         className
       )}
-      {...props} />
+      {...props}
+    />
   );
 }
 
+// TableCaption with subtle text styling and spacing
 function TableCaption({
   className,
   ...props
@@ -107,8 +121,9 @@ function TableCaption({
   return (
     <caption
       data-slot="table-caption"
-      className={cn("text-neutral-500 mt-4 text-sm dark:text-neutral-400", className)}
-      {...props} />
+      className={cn("text-gray-600 mt-4 text-sm italic", className)}
+      {...props}
+    />
   );
 }
 
@@ -121,4 +136,4 @@ export {
   TableRow,
   TableCell,
   TableCaption,
-}
+};

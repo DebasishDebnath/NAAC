@@ -21,6 +21,7 @@ import { useFormSubmission } from '../../Apis/FormSubmission/FormSubmission';
 import SubmittedReportsTable from '@/components/Drafts/DraftsTable';
 import { Eye, PanelRightOpen } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import ReportsAccordion from '@/components/ui/ReportsAccordion';
 
 function Forms() {
   const formData = data;
@@ -171,21 +172,21 @@ function Forms() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md transition-all duration-200 focus:ring-2 focus:ring-blue-400"
                   placeholder={field.placeholder}
                   value={formValues[fieldKey] || ''}
-                  min={field.min}
-                  max={field.max}
-                  onChange={(e) => {
-                    const val = Number(e.target.value);
+                  // min={field.min}
+                  // max={field.max}
+                  // onChange={(e) => {
+                  //   const val = Number(e.target.value);
 
-                    if (field.min !== undefined && val < field.min) {
-                      enqueueSnackbar(`Value should not be less than ${field.min}`, { variant: 'warning' });
-                      handleInputChange(fieldKey, field.min);
-                    } else if (field.max !== undefined && val > field.max) {
-                      enqueueSnackbar(`Value should not exceed ${field.max}`, { variant: 'warning' });
-                      handleInputChange(fieldKey, field.max);
-                    } else {
-                      handleInputChange(fieldKey, val);
-                    }
-                  }}
+                  //   if (field.min !== undefined && val < field.min) {
+                  //     enqueueSnackbar(`Value should not be less than ${field.min}`, { variant: 'warning' });
+                  //     handleInputChange(fieldKey, field.min);
+                  //   } else if (field.max !== undefined && val > field.max) {
+                  //     enqueueSnackbar(`Value should not exceed ${field.max}`, { variant: 'warning' });
+                  //     handleInputChange(fieldKey, field.max);
+                  //   } else {
+                  //     handleInputChange(fieldKey, val);
+                  //   }
+                  // }}
                 />
               )}
 
@@ -326,7 +327,7 @@ function Forms() {
                       ? 'bg-[#002946] text-white'
                       : isActiveCategory
                         ? 'bg-[#002946] text-[#fff]'
-                        : 'hover:bg-gray-200'
+                        : 'hover:bg-[#676767a6] bg-[#676767] text-white'
                       } rounded-md cursor-pointer mb-1 gap-3`}
                     onClick={() => handleCategorySelect(catIndex)}
                   >
@@ -391,8 +392,7 @@ function Forms() {
           <ResizablePanel defaultSize={30} className="max-h-full">
             <div className="h-full overflow-y-auto bg-white rounded-xl">
 
-
-              <SubmittedReportsTable />
+            <SubmittedReportsTable/>
             </div>
           </ResizablePanel>
         </ResizablePanelGroup>
