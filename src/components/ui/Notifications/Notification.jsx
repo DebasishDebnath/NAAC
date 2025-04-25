@@ -1,8 +1,8 @@
 import React from "react";
 
-const Notification = ({ title, message, time }) => {
+const Notification = ({ title, message, time,bgcolor="bg-white" }) => {
   return (
-    <div className="bg-white rounded-xl  p-4 mb-4 w-full transition-all hover:shadow-lg cursor-pointer">
+    <div className={`${bgcolor} rounded-xl  p-4  w-full transition-all hover:shadow-lg cursor-pointer`}>
       <div className="flex justify-between items-start">
         <div>
           <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
