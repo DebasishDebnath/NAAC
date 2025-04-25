@@ -2,13 +2,23 @@ import { Button } from "@/components/ui/button";
 import people from "../../../constant/people.json";
 import { MailIcon, BriefcaseIcon } from "lucide-react";
 import { TiPlus } from "react-icons/ti";
+import { useState } from "react";
+import AddPseudoUser from "./AddPseudoUser";
 function PsudoUser() {
+  const [addpseduUser, setAddpseduUser] = useState(false);
+  const [onclose, setOnclose] = useState();
+  const handleAdduserOpen = () => {
+    setAddpseduUser(true);
+  };
   return (
     <>
       <div className="flex items-center justify-end">
-        <div className="bg-black gap-1 text-white space-x-4 flex justify-center py-2 rounded-3xl cursor-pointer w-[160px]">
+        <div
+          className="bg-black gap-1 text-white space-x-4 flex justify-center py-2 rounded-3xl cursor-pointer w-[160px]"
+          onClick={handleAdduserOpen}
+        >
           <div className="flex items-center justify-center">
-            <TiPlus size={20}/>
+            <TiPlus size={20} />
           </div>
           Add Psedu User
         </div>
@@ -44,6 +54,9 @@ function PsudoUser() {
             </div>
           ))}
         </div>
+        {addpseduUser && (
+          <AddPseudoUser onClose={() => setAddpseduUser(false)} />
+        )}
       </div>
     </>
   );
