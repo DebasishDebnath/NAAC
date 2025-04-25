@@ -137,7 +137,7 @@ function App() {
                         <Layout
                           menus={["Home", "Forms", "Reports"]}
                           submenu={{
-                            Reports: ["Drafts", "Submitted Reports"],
+                            Reports: ["Drafts", "Reviewed", "Pending"],
                           }}
                         >
                           <Routes>
