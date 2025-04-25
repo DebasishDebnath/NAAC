@@ -40,6 +40,7 @@ function Layout({ menus = [], submenu = {} }) {
     Settings: <Settings size={20} />,
     Help: <HelpCircle size={20} />,
     Users: <UsersRound size={20} />,
+    Dashboard: <House size={20} />,
   };
 
   const role = sessionStorage.getItem("role") || "User";

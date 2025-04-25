@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Search, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import TableComp from '../Table/TableComp';
 
 const reports = [
     {
         facultyId: "FAC001",
         category: "Category I",
         tableName: "Teaching",
-        status: "Pending",
+        status: "Draft",
         date: "2025-04-20",
         reportId: "REP001"
     },
@@ -16,7 +17,7 @@ const reports = [
         facultyId: "FAC002",
         category: "Category II",
         tableName: "Journal Publications",
-        status: "Accepted",
+        status: "Draft",
         date: "2025-04-18",
         reportId: "REP002"
     },
@@ -24,7 +25,7 @@ const reports = [
         facultyId: "FAC003",
         category: "Category II",
         tableName: "Patent Status",
-        status: "Pending",
+        status: "Draft",
         date: "2025-04-22",
         reportId: "REP003"
     },
@@ -32,7 +33,7 @@ const reports = [
         facultyId: "FAC004",
         category: "Category I",
         tableName: "Duties",
-        status: "Rejected",
+        status: "Draft",
         date: "2025-04-19",
         reportId: "REP004"
     },
@@ -40,7 +41,7 @@ const reports = [
         facultyId: "FAC005",
         category: "Category II",
         tableName: "E-Content (developed in 4 quadrants) Per Module",
-        status: "Pending",
+        status: "Draft",
         date: "2025-04-21",
         reportId: "REP005"
     }
@@ -87,6 +88,15 @@ export default function DraftTable() {
         e.preventDefault();
         filterReports();
     };
+
+    const handleDelete = (reportId) => {
+        const confirmed = window.confirm("Are you sure you want to delete this report?");
+        if (confirmed) {
+            const updatedReports = filteredReports.filter(r => r.reportId !== reportId);
+            setFilteredReports(updatedReports);
+        }
+    };
+    
 
     // Function to get badge color based on category
     const getBadgeColor = (category) => {
@@ -180,20 +190,21 @@ export default function DraftTable() {
 
     // Render the component
     return (
-        <div className="max-w-full mx-auto bg-white rounded-lg shadow p-4">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4 gap-4">
+        <div className="max-w-full mx-auto bg-white rounded-lg shadow-lg p-6">
+            <h1 className='flex font-bold text-4xl pb-10 text-[#002946]'>Drafts</h1>
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-6">
                 <form onSubmit={handleSearch} className="relative w-full md:max-w-md">
                     <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                         <Search className="h-4 w-4 text-gray-400" />
                     </div>
                     <Input
-                        className="pl-10 pr-24 py-2 w-full bg-gray-50 border border-gray-300 rounded-lg"
+                        className="pl-10 pr-24 py-3 w-full bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#002946]"
                         placeholder="Search reports..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                     <Button
-                        className="absolute right-0 top-0 bottom-0 bg-[#002946] text-white rounded-[10px]"
+                        className="absolute right-0 top-0 bottom-0 bg-[#002946] text-white rounded-lg shadow-md hover:bg-[#003b61] transition duration-300 ease-in-out"
                         type="submit"
                     >
                         Search
@@ -203,17 +214,18 @@ export default function DraftTable() {
                 <div className="flex gap-4 items-start md:items-center">
                     <Button
                         variant="outline"
-                        className="flex items-center gap-2 bg-[#787878] text-white"
+                        className="flex items-center gap-2 bg-[#787878] text-white rounded-lg py-2 px-4 hover:bg-[#666666] transition duration-200 ease-in-out"
                         onClick={() => setShowFilters(!showFilters)}
                     >
                         <Filter className="h-4 w-4" />
                         <span>Filters</span>
                     </Button>
+
                     {showFilters && (
-                        <div className="flex flex-col md:flex-row gap-4 mt-4">
+                        <div className="flex flex-col items-center justify-center h-full md:flex-row gap-4 mt-4">
                             {/* Category Dropdown */}
                             <select
-                                className="border border-gray-300 rounded-md px-4 py-2"
+                                className="border border-gray-300 rounded-md px-4 p-1 shadow-sm focus:ring-2 focus:ring-[#002946]"
                                 value={selectedCategory}
                                 onChange={(e) => {
                                     setSelectedCategory(e.target.value);
@@ -228,7 +240,7 @@ export default function DraftTable() {
                             {/* Sub-report Dropdown */}
                             {selectedCategory && (
                                 <select
-                                    className="border border-gray-300 rounded-md px-4 py-2"
+                                    className="border border-gray-300 min-w-[800px] rounded-md px-4 p-1 shadow-sm focus:ring-2 focus:ring-[#002946]"
                                     value={selectedSubReport}
                                     onChange={(e) => setSelectedSubReport(e.target.value)}
                                 >
@@ -243,37 +255,9 @@ export default function DraftTable() {
                 </div>
             </div>
 
-            <div className="overflow-x-auto">
-                <table className="w-full min-w-[600px] table-auto">
-                    <thead className="text-white" style={{ backgroundColor: '#002946' }}>
-                        <tr>
-                            <th className="px-4 py-3 text-center first:rounded-tl-xl first:rounded-bl-xl">Report ID</th>
-                            <th className="px-4 py-3 text-center">Category</th>
-                            <th className="px-4 py-3 text-center">Title</th>
-                            <th className="px-4 py-3 text-center">Status</th>
-                            <th className="px-4 py-3 text-center last:rounded-tr-xl last:rounded-br-xl">Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredReports.length > 0 ? (
-                            filteredReports.map((report, index) => (
-                                <tr key={index}>
-                                    <td className="px-4 py-3 text-center">{report.reportId}</td>
-                                    <td className="px-4 py-3 text-center">{report.category}</td>
-                                    <td className="px-4 py-3 text-center">{report.tableName}</td>
-                                    <td className="px-4 py-3 text-center">{getStatusBadge(report.status)}</td>
-                                    <td className="px-4 py-3 text-center">{report.date}</td>
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan="5" className="text-center py-4">No reports found</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
+            <TableComp reports={filteredReports} onDelete={handleDelete} />
 
-            </div>
         </div>
+
     );
 }
