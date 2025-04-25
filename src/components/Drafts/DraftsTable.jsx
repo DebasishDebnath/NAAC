@@ -181,6 +181,7 @@ export default function DraftTable() {
     // Render the component
     return (
         <div className="max-w-full mx-auto bg-white rounded-lg shadow-lg p-6">
+            <h1 className='flex font-bold text-4xl pb-10 text-[#002946]'>Drafts</h1>
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-6">
                 <form onSubmit={handleSearch} className="relative w-full md:max-w-md">
                     <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
