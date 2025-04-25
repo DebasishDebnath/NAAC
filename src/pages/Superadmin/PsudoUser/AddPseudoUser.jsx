@@ -40,9 +40,7 @@ function AddPseudoUser({ onClose }) {
       />
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <DialogPanel className="w-full max-w-[40%] rounded-2xl bg-white p-8 shadow-2xl space-y-6">
-          <h2 className="text-2xl font-bold text-[#03354bde]">
-            Add Pseudo User
-          </h2>
+          <h2 className="text-2xl font-bold text-[#002946]">Add Pseudo User</h2>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Name */}
@@ -127,7 +125,7 @@ function AddPseudoUser({ onClose }) {
               </Button>
               <Button
                 type="submit"
-                className="rounded-xl bg-[#03354bde] hover:bg-[#22343bc9] text-white px-5"
+                className="rounded-xl bg-[#002946] hover:bg-[#22343bc9] text-white px-5"
               >
                 Add User
               </Button>
