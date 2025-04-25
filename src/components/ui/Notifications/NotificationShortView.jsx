@@ -1,32 +1,16 @@
 import React from "react"
+import Notification from "./Notification"
 
 const NotificationShortView = () => {
   return (
-    <div className="absolute top-10 right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-30">
-    <button
-      className="block w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-100"
-      
-    >
-      Profile
-    </button>
-    <button
-      className="block w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-100"
-      
-    >
-  fghfghfgh
-    </button>
-    {/* <button
-      className="block w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-100"
-      onClick={() => navigate(`${getBasePath()}/forgot-password`)}
-    >
-      Forget Password
-    </button> */}
-    <button
-      className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-slate-100"
-     
-    >
-      Logout
-    </button>
+    <div className="absolute top-18 right-28 mt-2  bg-white rounded-md shadow-lg py-1 z-30">
+      <div className="flex flex-col gap-1 p-4">
+        <h2 className="text-lg font-semibold">Notifications</h2>
+        <Notification title="Welcome!" message="Thanks for joining our platform." time="2h ago" bgcolor="bg-[#ddefff]" />
+          <Notification title="Update" message="Your profile has been updated successfully." time="4h ago" bgcolor="bg-[#ddefff]" />
+          <Notification title="Reminder" message="Don't forget your upcoming meeting tomorrow." time="1d ago" />
+          <Notification title="New Feature" message="We've added dark mode to your dashboard!" time="2d ago"  />
+      </div>
   </div>
   )
 }
