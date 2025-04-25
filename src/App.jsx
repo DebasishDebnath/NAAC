@@ -93,7 +93,7 @@ const RedirectDashboard = () => {
     case "superadmin":
       return <Navigate to="/superadmin/dashboard" replace />;
     case "psudosuperadmin":
-      return <Navigate to="/psudo/dashboard" replace />;
+      return <Navigate to="/psudosuperadmin/dashboard" replace />;
     default:
       return <Navigate to="/unauthorized" replace />;
   }
@@ -207,11 +207,11 @@ function App() {
 
                 {/* Psudo-Superadmin Routes */}
                 <Route
-                  path="/psudo"
+                  path="/psudosuperadmin"
                   element={
                     <TokenWrapper>
                       <ProtectedRouteWrapper allowedRoles={["psudosuperadmin"]}>
-                        <Layout menus={["Psudo", "Manage", "Settings"]} />
+                        <Layout menus={["psudosuperadmin", "Manage", "Settings"]} />
                       </ProtectedRouteWrapper>
                     </TokenWrapper>
                   }
