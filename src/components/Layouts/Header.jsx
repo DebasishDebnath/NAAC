@@ -1,5 +1,5 @@
 import React, { memo, useState } from "react";
-import { Menu, ChevronDown } from "lucide-react";
+import { Menu, ChevronDown, PanelRightOpen } from "lucide-react";
 import Dropdown from "./Sidebar/Dropdown";
 import { IoMdNotifications } from "react-icons/io";
 import NotificationShortView from "../ui/Notifications/NotificationShortView";
@@ -12,13 +12,13 @@ const Header = memo(({ toggleSidebar, toggleDropdown, showDropdown }) => {
      
     }, []);
   return (
-    <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-md border-b border-slate-200">
+    <header className="">
       <div className="flex items-center justify-between px-6 py-4">
         <button
           className="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
           onClick={toggleSidebar}
         >
-          <Menu className="w-5 h-5 text-slate-700" />
+          <PanelRightOpen className="w-5 h-5 text-slate-700" />
         </button>
 
 

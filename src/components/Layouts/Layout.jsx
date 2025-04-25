@@ -40,6 +40,7 @@ function Layout({ menus = [], submenu = {} }) {
     Settings: <Settings size={20} />,
     Help: <HelpCircle size={20} />,
     Users: <UsersRound size={20} />,
+    Dashboard: <House size={20} />,
   };
 
   const role = sessionStorage.getItem("role") || "User";
@@ -205,7 +206,7 @@ function Layout({ menus = [], submenu = {} }) {
   };
 
   return (
-    <div className="flex min-h-screen bg-slate-50 text-slate-800">
+    <div className="flex min-h-screen  text-slate-800 bg-[#e7e7e777]">
       {/* Sidebar */}
       <div ref={dropdownRef}>
         <Sidebar

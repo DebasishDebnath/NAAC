@@ -1,47 +1,84 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSuperadminApi } from "../Apis/Authentication/SigninSuperadmin";
 import { useUserApi } from "../Apis/Authentication/SigninUser";
 import { useNotification } from "../hooks/useHttp";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
-import { User } from "lucide-react";
-import { useNavigate, useParams } from "react-router-dom";
+import { User, ChevronDown } from "lucide-react";
+import { useNavigate, useParams, Navigate } from "react-router-dom";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedRole, setSelectedRole] = useState("");
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const { signinSuperadmin } = useSuperadminApi();
   const { signinUser } = useUserApi();
   const { showError } = useNotification();
   const params = useParams();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    let response;
-
-    try {
-      if (params.role === "superadmin")
-        response = await signinSuperadmin(email, password);
-      else if (params.role === "user")
-        response = await signinUser(email, password);
-
-      if (!response?.success) {
-        showError("Login failed. Please check your credentials.");
-        return;
-      }
-
-      sessionStorage.setItem("role", response?.data?.role);
-      navigate(`/${response?.data?.role}/dashboard`);
-    } catch (error) {
-      console.error("Login error:", error);
-      showError("An unexpected error occurred during login.");
-    } finally {
-      setIsLoading(false);
+  // Set initial role from URL params
+  useEffect(() => {
+    if (params.role) {
+      setSelectedRole(params.role);
     }
+  }, [params.role]);
+
+  useEffect(() => {
+    const token = sessionStorage.getItem("token");
+    const role = sessionStorage.getItem("role");
+  
+    if (token && role) {
+      navigate(`/${role}/dashboard`, { replace: true });
+    }
+  }, [navigate]);
+  
+  const handleRoleSelect = (role) => {
+    setSelectedRole(role);
+    setDropdownOpen(false);
+    navigate(`/login/${role}`);
   };
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setIsLoading(true);
+  let response;
+
+  try {
+    const currentRole = selectedRole || params.role;
+    
+    if (currentRole === "superadmin")
+      response = await signinSuperadmin(email, password);
+    else if (currentRole === "user" || currentRole === "pseudouser")
+      response = await signinUser(email, password);
+
+    if (!response?.success) {
+      showError("Login failed. Please check your credentials.");
+      setIsLoading(false);
+      return;
+    }
+    
+    sessionStorage.setItem("token", response?.data?.token);
+    sessionStorage.setItem("role", response?.data?.role);
+    
+    navigate(`/${response?.data?.role}/dashboard`, { replace: true });
+  } catch (error) {
+    console.error("Login error:", error);
+    showError("An unexpected error occurred during login.");
+    setIsLoading(false);
+  }
+};
+
+
+  const roleDisplay = {
+    superadmin: "Super Admin",
+    user: "User",
+    psudosuperadmin: "Pseudo User"
+  };
+
+  const currentRoleDisplay = roleDisplay[selectedRole || params.role] || "Select Role";
 
   return (
     <div
@@ -51,7 +88,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         <div
           className="rounded-lg overflow-hidden"
-          style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--shadow-xl)" }} // Solid color
+          style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--shadow-xl)" }}
         >
           <div
             className="p-8 text-center"
@@ -59,14 +96,59 @@ export default function LoginPage() {
               backgroundColor: "var(--card-header)",
             }}
           >
+            {/* Role dropdown */}
+            <div className="relative mb-4 flex justify-end">
+              <button
+                type="button"
+                className="flex items-center justify-between w-auto px-4 py-2 text-sm font-medium text-black bg-[#fff] rounded-md hover:bg-[#fafafa] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+              >
+                {currentRoleDisplay}
+                <ChevronDown className="w-4 h-4 ml-2" />
+              </button>
+              
+              {dropdownOpen && (
+                <div className="absolute z-10 w-full mt-1 bg-white rounded-md shadow-lg">
+                  <ul className="py-1">
+                    <li>
+                      <button
+                        className="block w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-100"
+                        onClick={() => handleRoleSelect("superadmin")}
+                      >
+                        Super Admin
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="block w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-100"
+                        onClick={() => handleRoleSelect("user")}
+                      >
+                        User
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="block w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-100"
+                        onClick={() => handleRoleSelect("psudosuperadmin")}
+                      >
+                        Pseudo User
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
+
             <div
               className="mb-4 inline-flex items-center justify-center w-16 h-16 rounded-full backdrop-blur-sm"
               style={{ background: "rgba(255, 255, 255, 0.2)" }}
             >
               <User className="text-white" />
             </div>
+            
+            
             <h2 className="text-2xl font-bold text-white mb-1">
-              {params.role.charAt(0).toUpperCase() + params.role.slice(1)} Login
+              {currentRoleDisplay} Login
             </h2>
             <p className="text-blue-100">
               Enter your credentials to access the dashboard
@@ -121,7 +203,7 @@ export default function LoginPage() {
 
               <Button
                 type="submit"
-                disabled={isLoading}
+                disabled={isLoading || !selectedRole}
                 className="w-full"
                 style={{
                   backgroundColor: "#2563eb", 
@@ -164,7 +246,7 @@ export default function LoginPage() {
             style={{ borderColor: "var(--color-border)", backgroundColor: "#f9fafb" }}
           >
             <p className="text-gray-600">
-              Don’t have an account?{" "}
+              Don't have an account?{" "}
               <a href="#" className="text-blue-600 hover:text-blue-500 font-medium">
                 Contact admin
               </a>

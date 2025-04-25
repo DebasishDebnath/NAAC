@@ -4,6 +4,7 @@ import { useSnackbar } from 'notistack';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/ResizablePanels';
+import squareSvg from '../../Assets/square.svg'
 import {
   Table,
   TableBody,
@@ -18,6 +19,7 @@ import {
 import facultyData from "../../constant/invoices.json";
 import { useFormSubmission } from '../../Apis/FormSubmission/FormSubmission';
 import SubmittedReportsTable from '@/components/Drafts/DraftsTable';
+import { Eye, PanelRightOpen } from 'lucide-react';
 
 function Forms() {
   const formData = data;
@@ -28,6 +30,14 @@ function Forms() {
   const [formValues, setFormValues] = useState({});
   const { formSubmit } = useFormSubmission()
   const [popUpShow, setPopUpShow] = useState(false)
+  const [isCollapsed, setIsCollapsed] = useState(false); // State to manage collapse
+
+  const handleToggleSidebar = () => {
+    setIsCollapsed((prev) => !prev);
+  };
+
+
+
 
   // Format categories with fallback names
   const categories = formData.form.map((category) => ({
@@ -288,92 +298,115 @@ function Forms() {
   };
 
   return (
-    <div className="h-screen flex flex-col">
-      <ResizablePanelGroup direction="horizontal" className="flex-grow">
+    <div className="h-[88vh] flex flex-col ">
+
+      <div className='h-[100%] flex'>
         {/* Sidebar */}
-        <ResizablePanel defaultSize={20} className="max-h-full">
-          <div className="h-full overflow-y-auto p-4 border-r border-gray-200">
-            <nav className="space-y-1">
-              {categories.map((category, catIndex) => {
-                const isActiveCategory = selectedCategory === catIndex;
-                const isSingleForm = category.subItems.length === 1;
+        <div className={`h-full pt-12 relative overflow-y-auto p-4 mr-2.5 border-gray-200 bg-white rounded-xl transition-all duration-300 ${isCollapsed ? "w-[15%]" : "w-[30%]"
+          }`}
+        >
+          <div
+            onClick={handleToggleSidebar}
+            className="absolute top-2 right-4 cursor-pointer"
+          >
+            <PanelRightOpen size={24} />
+          </div>
+          <nav className="space-y-1">
+            {categories.map((category, catIndex) => {
+              const isActiveCategory = selectedCategory === catIndex;
+              const isSingleForm = category.subItems.length === 1;
 
-                return (
-                  <div key={catIndex}>
-                    {/* Category Header */}
-                    <div
-                      className={`flex items-center px-3 py-2 transition-all duration-200 ${isSingleForm && isActiveCategory
-                        ? 'bg-blue-100 text-blue-600'
-                        : isActiveCategory
-                          ? 'bg-gray-100'
-                          : 'hover:bg-gray-200'
-                        } rounded-md cursor-pointer mb-1`}
-                      onClick={() => handleCategorySelect(catIndex)}
-                    >
-                      <span className="font-medium">{category.name}</span>
-                    </div>
-
-                    {/* Subcategories: Show only if more than one */}
-                    {isActiveCategory && category.subItems.length > 1 && category.subItems.map((subItem, subIndex) => (
-                      <div key={subIndex} className='flex items-center'>
-                        {selectedSubcategory !== subIndex &&
-                          <div className='h-full min-w-[10px] border-gray-400 border-[1px]'></div>
-                        }
-                        <div
-                          className={`flex items-center px-3 py-2 ml-4 text-sm transition-colors duration-150 ${selectedSubcategory === subIndex
-                            ? 'bg-blue-100 text-blue-600'
-                            : 'text-gray-700 hover:bg-gray-50'
-                            } rounded-md cursor-pointer relative`}
-                          onClick={() => handleSubcategorySelect(subIndex)}
-                        >
-                          <span>{subItem}
-                            {selectedSubcategory !== subIndex &&
-                              <div className='text-[#fff] bg-slate-400 px-2 rounded-full absolute top-2 -right-5'>{3}</div>
-                            }
-                          </span>
-                        </div>
-                      </div>
-                    ))}
+              return (
+                <div key={catIndex}>
+                  {/* Category Header */}
+                  <div
+                    className={`flex items-center px-3 py-2 transition-all duration-200 ${isSingleForm && isActiveCategory
+                      ? 'bg-[#002946] text-white'
+                      : isActiveCategory
+                        ? 'bg-[#002946] text-[#fff]'
+                        : 'hover:bg-gray-200'
+                      } rounded-md cursor-pointer mb-1 gap-3`}
+                    onClick={() => handleCategorySelect(catIndex)}
+                  >
+                    <img src={squareSvg} alt="" className='w-4 h-4'/>
+                    <span className="font-medium">{category.name}</span>
                   </div>
-                );
-              })}
-            </nav>
-          </div>
-        </ResizablePanel>
 
-        <ResizableHandle />
+                  {/* Subcategories: Show only if more than one */}
+                  {isActiveCategory && category.subItems.length > 1 && category.subItems.map((subItem, subIndex) => (
+                    <div key={subIndex} className='flex items-center ml-4 w-full'>
+                      <div
+                        className={`flex justify-between items-center text-[#002946] text-[15px] font-bold px-3 py-2 ml-4 text-sm transition-colors duration-150 ${selectedSubcategory === subIndex
+                            ? 'font-[#002946] bg-[#00294634]'
+                            : 'text-[#676767] hover:bg-gray-50'
+                          } rounded-md cursor-pointer relative w-full`}
+                        onClick={() => handleSubcategorySelect(subIndex)}
+                      >
+                        {/* Left side: dot + name */}
+                        <div className='flex items-center gap-2'>
+                          {selectedSubcategory !== subIndex && (
+                            <div className='h-[6px] w-[6px] bg-[#676767] border border-gray-400 rounded-full'></div>
+                          )}
+                          <span>{subItem}</span>
+                        </div>
 
-        {/* Main content - Form Panel */}
-        <ResizablePanel defaultSize={50} className="max-h-full">
-          <div className="h-full flex flex-col">
-            <div className="p-6 border-b">
-              <h1 className="text-2xl font-bold mb-1">Academic Performance Indicators</h1>
-              <p className="text-gray-500">Manage your academic activities and achievements.</p>
-            </div>
-            <div className="flex-grow overflow-y-auto p-6">
-              {renderFormFields()}
-            </div>
-          </div>
-        </ResizablePanel>
+                        {/* Right side: number */}
+                        {selectedSubcategory !== subIndex && (
+                          <div className='text-white bg-slate-400 px-2 rounded-full min-w-[16px] h-[16px] flex justify-center items-center text-xs ml-4'>
+                            3
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
 
-        <ResizableHandle />
 
-        {/* Table Panel */}
-        <ResizablePanel defaultSize={30} className="max-h-full">
-          <div className="h-full overflow-y-auto">
-            <div className='flex w-full justify-end'>
-              <div
-                className='bg-blue-400 px-5 py-1 text-[1.2rem] mb-4 text-white font-bold rounded shadow-md hover:shadow-lg cursor-pointer transition-all duration-300 hover:bg-blue-500 transform hover:scale-105'
-                onClick={() => setPopUpShow(true)}
-              >
-                Preview & Submit
+                </div>
+              );
+            })}
+          </nav>
+        </div>
+
+
+
+        <ResizablePanelGroup direction="horizontal" className="flex-grow gap-2">
+          {/* Main content - Form Panel */}
+          <ResizablePanel defaultSize={50} className="max-h-full">
+            <div className="h-full flex flex-col bg-white rounded-xl">
+              <div className="p-6 border-b">
+                <h1 className="text-2xl font-bold mb-1">Academic Performance Indicators</h1>
+                <p className="text-gray-500">Manage your academic activities and achievements.</p>
+              </div>
+              <div className="flex-grow overflow-y-auto p-6">
+                {renderFormFields()}
               </div>
             </div>
+          </ResizablePanel>
 
-            <SubmittedReportsTable />
-          </div>
-        </ResizablePanel>
-      </ResizablePanelGroup>
+          <ResizableHandle className={"bg-gray-400 h-24 justify-self-center self-center w-1 rounded-full"} />
+
+          {/* Table Panel */}
+          <ResizablePanel defaultSize={30} className="max-h-full">
+            <div className="h-full overflow-y-auto bg-white rounded-xl">
+
+
+              <SubmittedReportsTable />
+            </div>
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      </div>
+
+
+      <div className='flex w-full justify-end mt-8'>
+        <div
+          className='bg-[#002946] flex items-center gap-2 px-6 py-3 text-[1.2rem] mb-4 text-white font-semibold rounded-2xl shadow-md hover:shadow-lg cursor-pointer transition-all duration-300 hover:bg-[#002946a2] transform hover:scale-105'
+          onClick={() => setPopUpShow(true)}
+        >
+          <Eye />
+          Preview & Submit
+        </div>
+      </div>
+
 
       {/* Modal Popup */}
       {popUpShow && (
@@ -391,7 +424,6 @@ function Forms() {
         </div>
       )}
 
-      {/* Add global styles for animations */}
       <style jsx global>{`
         @keyframes modalFadeIn {
           from {
