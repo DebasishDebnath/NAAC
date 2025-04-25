@@ -158,6 +158,8 @@ function App() {
                   <Route path="profile" element={<Profile />} />
                   <Route path="notifications" element={<Notificatons />} />
                   <Route path="reports/drafts" element={<Drafts />} />
+                  <Route path="forms/previewsubmit" element={<PsudoUser />} />
+
                   <Route
                     path="reports/reviewed"
                     element={<SubmittedReports />}
@@ -188,6 +190,7 @@ function App() {
                   <Route path="users/user" element={<User />} />
                   <Route path="users/add-email" element={<AddEmails />} />
                   <Route path="users/pseudo-user" element={<PsudoUser />} />
+
 
                   <Route
                     path="pseudosuperadmin"
