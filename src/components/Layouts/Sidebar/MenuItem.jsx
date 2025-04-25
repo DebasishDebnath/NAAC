@@ -31,14 +31,14 @@ const MenuItem = memo(
     return (
       <button
         className={`flex items-center justify-between w-full text-left py-2 px-3 rounded-md text-sm font-medium transition-all duration-200 ${
-          isActiveStyle ? "bg-blue-600 text-white" : "hover:bg-blue-100"
+          isActiveStyle ? "bg-[#94DCFF] text-black" : "text-white hover:bg-[#94dbff9d] hover:text-black"
         }`}
         onClick={handleClick}
       >
         <div className="flex items-center gap-3">
           <div
-            className={`w-6 h-6 flex items-center justify-center ${
-              isActiveStyle ? "text-white" : "text-slate-700"
+            className={`w-6 h-6 flex items-center justify-center hover:text-black ${
+              isActiveStyle ? "text-black" : "text-white"
             }`}
           >
             {icon}
@@ -46,7 +46,7 @@ const MenuItem = memo(
           <span>{menu}</span>
         </div>
         {hasSubmenu && (
-          <span className={`ml-auto text-xs ${isActiveStyle ? "text-white" : "text-slate-500"}`}>
+          <span className={`ml-auto text-xs ${isActiveStyle ? "text-black" : "text-white"}`}>
             {isSubmenuOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
           </span>
         )}

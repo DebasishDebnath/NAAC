@@ -22,15 +22,16 @@ const Sidebar = ({
 }) => {
   
   const renderExpandedSidebar = () => (
-    <div className="h-full flex flex-col justify-between">
+    <div className="h-full flex flex-col justify-between bg-sidebar"
+    >
       <div className="p-4">
-        <div className="flex items-center gap-3 mb-6 pl-2">
-          <div className="bg-gradient-to-br from-blue-500 to-blue-700 text-white p-2 rounded-lg shadow-md">
+        <div className="flex flex-col items-center gap-3 mb-6 pl-2">
+          <div className="text-white w-full flex justify-center">
             ⌘
           </div>
           <div>
-            <h1 className="text-lg font-semibold">IEM UEM Group</h1>
-            <p className="text-xs text-slate-500">API Project</p>
+            <div className="text-lg font-bold text-white w-full flex justify-between items-center">IEM UEM Group</div>
+            {/* <p className="text-xs text-slate-500">API Project</p> */}
           </div>
         </div>
 
@@ -49,7 +50,7 @@ const Sidebar = ({
               />
 
               {submenu[menu] && openSubmenus[menu] && (
-                <div className="mt-1 space-y-1 mb-1 bg-slate-200 rounded-md py-1">
+                <div className="mt-1 space-y-1 mb-1 bg-[#b7d7e786] rounded-md py-1 ">
                   {submenu[menu].map((sub, subIdx) => (
                     <SubmenuItem
                       key={subIdx}
@@ -66,11 +67,11 @@ const Sidebar = ({
         </nav>
       </div>
 
-      <ProfileSection
+      {/* <ProfileSection
         role={role}
         onClick={toggleBelowDropdown}
         showDropdown={showBelowDropdown}
-      />
+      /> */}
     </div>
   );
 
@@ -109,9 +110,9 @@ const Sidebar = ({
     <div
       className={`fixed transition-all duration-300 ease-in-out ${
         isSidebarOpen
-          ? "w-64 h-screen shadow-md"
+          ? "w-64 h-[calc(100vh-2rem)] my-4 ml-4 rounded-xl shadow-lg "
           : "w-16 h-[calc(100vh-2rem)] my-4 ml-4 rounded-xl shadow-lg"
-      } bg-white overflow-hidden z-30`}
+      } bg-dark overflow-hidden z-30 bg-sidebar`}
     >
       {isSidebarOpen ? renderExpandedSidebar() : renderCollapsedSidebar()}
     </div>

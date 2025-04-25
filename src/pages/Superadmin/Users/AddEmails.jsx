@@ -45,7 +45,7 @@ export default function ImprovedEmailList() {
       <div className="w-full mb-6">
         <div className="flex items-center mb-1">
           <Mail className="text-gray-500 mr-2" size={20} />
-          <label className="font-medium text-gray-700">Add New Email</label>
+          <label className="flex font-medium text-gray-700">Add New Email <div className='text-red-500 ml-1'>*</div></label>
         </div>
 
         <div className="flex flex-col sm:flex-row w-full gap-2">
@@ -78,7 +78,7 @@ export default function ImprovedEmailList() {
 
       <div className="w-full mb-6">
         <div className="relative">
-          <Search className="absolute left-3 top-3 text-gray-400" size={18} />
+          <Search className="absolute left-3 top-4 text-gray-400" size={18} />
           <input
             type="text"
             placeholder="Search emails..."
