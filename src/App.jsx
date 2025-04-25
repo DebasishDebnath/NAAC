@@ -30,6 +30,7 @@ import Drafts from "./pages/User/Drafts.jsx";
 import { NotificationProvider } from "./hooks/useHttp.jsx";
 import SubmittedReports from "./pages/User/SubmittedReports.jsx";
 import Notificatons from "./pages/User/Notificatons.jsx";
+import Manage from "./pages/PsudoSuperadmin/Manage/Manage.jsx";
 import PreviewSubmit from "./pages/User/PreviewSubmit.jsx";
 
 // Flag to control route protection
@@ -223,6 +224,14 @@ function App() {
                   <Route
                     path="dashboard"
                     element={<div>Psudo Superadmin Dashboard</div>}
+                  />
+                  <Route
+                    path="manage"
+                    element={
+                      <div>
+                        <Manage />
+                      </div>
+                    }
                   />
                   <Route
                     path="panel"
