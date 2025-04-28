@@ -18,7 +18,7 @@ import {
 
 import facultyData from "../../constant/invoices.json";
 import { useFormSubmission } from '../../Apis/FormSubmission/FormSubmission';
-import SubmittedReportsTable from '@/components/Drafts/DraftsTable';
+import SubmittedReportsTable from '@/components/Drafts/SideDraft';
 import { Eye, PanelRightOpen } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import ReportsAccordion from '@/components/ui/ReportsAccordion';
@@ -34,6 +34,8 @@ function Forms() {
   const { formSubmit } = useFormSubmission()
   const [popUpShow, setPopUpShow] = useState(false)
   const [isCollapsed, setIsCollapsed] = useState(false); 
+  const [endPointGet, setEndPointGet]= useState("CategoryI/teaching_duties")
+  const [reports, setReports]= useState()
   const {fetchDraft}= useUserDraft()
   const navigate= useNavigate()
 
@@ -43,6 +45,9 @@ function Forms() {
 
 
 
+  useEffect(()=>{
+    console.log('selectedCategory',selectedCategory, selectedSubcategory)
+  },[selectedCategory, selectedSubcategory])
 
   // Format categories with fallback names
   const categories = formData.form.map((category) => ({
@@ -51,13 +56,6 @@ function Forms() {
   }));
 
 
-  useEffect(()=>{
-    const helloWorld=async()=>{
-      const response= await fetchDraft('CategoryI/teaching_duties')
-      console.log('CategoryI/teaching_duties', response)
-    }
-    helloWorld()
-  },[])
   // Automatically select first form if only one exists
   useEffect(() => {
     const selectedCategoryForms = formData.form[selectedCategory]?.forms || [];
@@ -99,6 +97,21 @@ function Forms() {
       [backendFieldName]: value
     }));
   };
+
+  useEffect(()=>{
+    const categoryData = formData.form[selectedCategory];
+    const selectedForm = categoryData?.forms[selectedSubcategory];
+    setEndPointGet(selectedForm.endpoint)
+  },[selectedCategory, selectedSubcategory])
+
+  useEffect(()=>{
+    console.log('endPointGet', endPointGet)
+    const helloWorld=async()=>{
+      const response= await fetchDraft(endPointGet)
+      setReports(response?.data)
+    }
+    helloWorld()
+  },[endPointGet])
 
   // Handle form submission
   const handleSubmit = async () => {
@@ -402,7 +415,7 @@ function Forms() {
           <ResizablePanel defaultSize={30} className="max-h-full">
             <div className="h-full overflow-y-auto bg-white rounded-xl">
 
-            <SubmittedReportsTable/>
+            <SubmittedReportsTable reports={reports || []} />
             </div>
           </ResizablePanel>
         </ResizablePanelGroup>
