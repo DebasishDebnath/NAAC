@@ -1,22 +1,31 @@
-import React, { memo } from "react";
+import React, { memo, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { User, Bell, Mail, LogOut } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 const Dropdown = memo(() => {
   const navigate = useNavigate();
   const location = useLocation();
   const role = sessionStorage.getItem("role") || "user";
-  
+  const token = sessionStorage.getItem("token") || null;
+  const {logout}= useAuth()
+
+
   const getBasePath = () => {
     const parts = location.pathname.split("/");
     return parts.length >= 2 ? `/${parts[1]}` : "/";
   };
   
+  useEffect(() => {
+    if (!token) {
+      navigate(`/login/${role.toLowerCase()}`);
+      return;
+    }
+  }, [token, role]);
   const handleLogout = () => {
-    const cachedRole = sessionStorage.getItem("role") || "user";
-    sessionStorage.clear();
-    console.log("clickeddd");
-    navigate(`/login/${cachedRole.toLowerCase()}`);
+    logout();
+    // console.log(`/login/${role.toLowerCase()}`)
+    navigate(`/login/${role.toLowerCase()}`);
   };
 
   return (
