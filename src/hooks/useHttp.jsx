@@ -2,6 +2,7 @@ import { createContext, useContext, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import axios from "axios";
+import { X } from "lucide-react"; // Lucide close icon
 
 const NotificationContext = createContext();
 export const useNotification = () => useContext(NotificationContext);
@@ -13,13 +14,11 @@ export const useHttp = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // const baseURL = "http://192.168.90.24:8000";
-  // const baseURL = "http://192.168.1.167:8000";
-  const baseURL = "https://dev2025naacbackend.iemamerica.com";
+  // const baseURL = "https://dev2025naacbackend.iemamerica.com";
+  const baseURL = "http://192.168.1.176:8000";
 
 
   const handleResponse = async (response) => {
-    // Default message if none is provided
     let message =
       response.data?.message ||
       (response.data?.success === true
@@ -42,7 +41,6 @@ export const useHttp = () => {
       return null;
     }
 
-    // Always show notification for every response
     let variant = "info";
 
     if (response.data?.success === true) {
@@ -229,6 +227,23 @@ export const NotificationProvider = ({ children }) => {
         vertical: "top",
         horizontal: "right",
       },
+      action: (key) => (
+        <button
+          onClick={() => closeSnackbar(key)}
+          style={{
+            background: "transparent",
+            border: "none",
+            color: "inherit",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            padding: "0.25rem",
+          }}
+          aria-label="close"
+        >
+          <X size={18} />
+        </button>
+      ),
     });
   };
 

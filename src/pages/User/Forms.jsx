@@ -18,10 +18,11 @@ import {
 
 import facultyData from "../../constant/invoices.json";
 import { useFormSubmission } from '../../Apis/FormSubmission/FormSubmission';
-import SubmittedReportsTable from '@/components/Drafts/DraftsTable';
+import SubmittedReportsTable from '@/components/Drafts/SideDraft';
 import { Eye, PanelRightOpen } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import ReportsAccordion from '@/components/ui/ReportsAccordion';
+import { useUserDraft } from '@/Apis/Drafts/UserDrafts';
 
 function Forms() {
   const formData = data;
@@ -33,6 +34,9 @@ function Forms() {
   const { formSubmit } = useFormSubmission()
   const [popUpShow, setPopUpShow] = useState(false)
   const [isCollapsed, setIsCollapsed] = useState(false); 
+  const [endPointGet, setEndPointGet]= useState("CategoryI/teaching_duties")
+  const [reports, setReports]= useState()
+  const {fetchDraft}= useUserDraft()
   const navigate= useNavigate()
 
   const handleToggleSidebar = () => {
@@ -41,12 +45,16 @@ function Forms() {
 
 
 
+  useEffect(()=>{
+    console.log('selectedCategory',selectedCategory, selectedSubcategory)
+  },[selectedCategory, selectedSubcategory])
 
   // Format categories with fallback names
   const categories = formData.form.map((category) => ({
     name: category.name || category.type || "Untitled Category",
     subItems: category.forms.map(form => form.tableName || "Untitled Form")
   }));
+
 
   // Automatically select first form if only one exists
   useEffect(() => {
@@ -89,6 +97,23 @@ function Forms() {
       [backendFieldName]: value
     }));
   };
+
+  useEffect(()=>{
+    const categoryData = formData.form[selectedCategory];
+    const selectedForm = categoryData?.forms[selectedSubcategory];
+    setEndPointGet(selectedForm.endpoint)
+  },[selectedCategory, selectedSubcategory])
+
+  useEffect(()=>{
+    console.log('endPointGet', endPointGet)
+    const helloWorld=async()=>{
+      const response= await fetchDraft(endPointGet)
+      if(endPointGet===undefined)
+        setReports([])
+      setReports([response?.data])
+    }
+    helloWorld()
+  },[endPointGet])
 
   // Handle form submission
   const handleSubmit = async () => {
@@ -174,19 +199,13 @@ function Forms() {
                   value={formValues[fieldKey] || ''}
                   // min={field.min}
                   // max={field.max}
-                  // onChange={(e) => {
-                  //   const val = Number(e.target.value);
+                  onChange={(e) => {
+                    const val = Number(e.target.value);
 
-                  //   if (field.min !== undefined && val < field.min) {
-                  //     enqueueSnackbar(`Value should not be less than ${field.min}`, { variant: 'warning' });
-                  //     handleInputChange(fieldKey, field.min);
-                  //   } else if (field.max !== undefined && val > field.max) {
-                  //     enqueueSnackbar(`Value should not exceed ${field.max}`, { variant: 'warning' });
-                  //     handleInputChange(fieldKey, field.max);
-                  //   } else {
-                  //     handleInputChange(fieldKey, val);
-                  //   }
-                  // }}
+                   
+                      handleInputChange(fieldKey, val);
+                    
+                  }}
                 />
               )}
 
@@ -392,7 +411,7 @@ function Forms() {
           <ResizablePanel defaultSize={30} className="max-h-full">
             <div className="h-full overflow-y-auto bg-white rounded-xl">
 
-            <SubmittedReportsTable/>
+            <SubmittedReportsTable reports={reports || [{}]} />
             </div>
           </ResizablePanel>
         </ResizablePanelGroup>
