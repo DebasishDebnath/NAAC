@@ -1,5 +1,5 @@
 import React, { memo, useState, useRef, useEffect, useCallback } from "react";
-import { Menu, ChevronDown, PanelRightOpen } from "lucide-react";
+import { ChevronDown, PanelRightOpen } from "lucide-react";
 import Dropdown from "./Sidebar/Dropdown";
 import { IoMdNotifications } from "react-icons/io";
 import NotificationShortView from "../ui/Notifications/NotificationShortView";
@@ -7,7 +7,9 @@ import NotificationShortView from "../ui/Notifications/NotificationShortView";
 const Header = memo(({ toggleSidebar, toggleDropdown, showDropdown }) => {
   const [notificationDropdown, setNotificationDropdown] = useState(false);
   const notificationRef = useRef(null);
+  const notificationDropdownRef = useRef(null);
   const profileRef = useRef(null);
+  const profileDropdownRef = useRef(null);
 
   const toggleNotificationDropdown = useCallback(() => {
     setNotificationDropdown((prev) => !prev);
@@ -15,15 +17,25 @@ const Header = memo(({ toggleSidebar, toggleDropdown, showDropdown }) => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
+      // Check if click is outside notification icon and notification dropdown
       if (
         notificationRef.current &&
         !notificationRef.current.contains(event.target) &&
-        profileRef.current &&
-        !profileRef.current.contains(event.target)
+        notificationDropdownRef.current &&
+        !notificationDropdownRef.current.contains(event.target)
       ) {
         setNotificationDropdown(false);
+      }
+
+      // Check if click is outside profile icon and profile dropdown
+      if (
+        profileRef.current &&
+        !profileRef.current.contains(event.target) &&
+        profileDropdownRef.current &&
+        !profileDropdownRef.current.contains(event.target)
+      ) {
         if (showDropdown) {
-          toggleDropdown(); // This will close the profile dropdown if open
+          toggleDropdown(); // Close profile dropdown
         }
       }
     };
@@ -65,18 +77,25 @@ const Header = memo(({ toggleSidebar, toggleDropdown, showDropdown }) => {
             </div>
             <ChevronDown
               size={16}
-              className={`text-slate-400 transform transition-transform ${
-                showDropdown ? "rotate-180" : ""
-              }`}
+              className={`text-slate-400 transform transition-transform ${showDropdown ? "rotate-180" : ""
+                }`}
             />
           </div>
         </div>
 
         {/* Notification dropdown */}
-        {notificationDropdown && <NotificationShortView />}
+        {notificationDropdown && (
+          <div ref={notificationDropdownRef} className="absolute top-0 right-0 w-[500px]">
+            <NotificationShortView />
+          </div>
+        )}
 
         {/* Profile dropdown */}
-        {showDropdown && <Dropdown />}
+        {showDropdown && (
+          <div ref={profileDropdownRef} className="absolute  top-0 right-6">
+            <Dropdown />
+          </div>
+        )}
       </div>
     </header>
   );
