@@ -5,7 +5,7 @@ import {
   useReactTable,
   getSortedRowModel,
 } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -16,19 +16,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 const statusColors = {
-  active: "bg-green-100 text-green-800",
-  pending: "bg-yellow-100 text-yellow-800",
-  inactive: "bg-red-100 text-red-800",
+  active: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+  pending:
+    "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
+  inactive: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
 };
 
 const data = [
@@ -39,7 +32,7 @@ const data = [
     email: "john@example.com",
     date: "2025-04-20",
     status: "active",
-    role: "Proffesor",
+    role: "professor",
   },
   {
     id: "2",
@@ -68,13 +61,13 @@ const columns = [
       <Button
         variant="ghost"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        className="text-blue-600 hover:text-blue-800"
+        className="text-base font-semibold text-white "
       >
         Score <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
     cell: ({ row }) => (
-      <div className="font-semibold items-center justify-center text-start ml-5 text-indigo-700">
+      <div className="font-semibold text-indigo-700  text-center">
         {row.getValue("score")}
       </div>
     ),
@@ -83,14 +76,15 @@ const columns = [
     accessorKey: "name",
     header: "Name",
     cell: ({ row }) => (
-      <div className="font-medium text-gray-800">{row.getValue("name")}</div>
+      <div className="font-semibold text-black">{row.getValue("name")}</div>
     ),
   },
+
   {
     accessorKey: "email",
     header: "Email",
     cell: ({ row }) => (
-      <div className="lowercase text-blue-500 underline">
+      <div className="text-blue-500 underline lowercase dark:text-blue-400">
         {row.getValue("email")}
       </div>
     ),
@@ -99,7 +93,9 @@ const columns = [
     accessorKey: "date",
     header: "Date",
     cell: ({ row }) => (
-      <div className="text-gray-600">{row.getValue("date")}</div>
+      <div className="text-gray-600 dark:text-gray-400">
+        {row.getValue("date")}
+      </div>
     ),
   },
   {
@@ -120,39 +116,10 @@ const columns = [
     accessorKey: "role",
     header: "Role",
     cell: ({ row }) => (
-      <span className="capitalize bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs">
+      <span className="capitalize bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300 px-2 py-1 rounded-full text-xs">
         {row.getValue("role")}
       </span>
     ),
-  },
-  {
-    id: "actions",
-    cell: ({ row }) => {
-      const user = row.original;
-      // return (
-      //   <DropdownMenu>
-      //     <DropdownMenuTrigger asChild>
-      //       <Button
-      //         variant="ghost"
-      //         className="h-8 w-8 p-0 text-gray-500 hover:text-gray-800"
-      //       >
-      //         <MoreHorizontal />
-      //       </Button>
-      //     </DropdownMenuTrigger>
-      //     <DropdownMenuContent align="end">
-      //       <DropdownMenuLabel>Actions</DropdownMenuLabel>
-      //       <DropdownMenuItem
-      //         onClick={() => navigator.clipboard.writeText(user.id)}
-      //       >
-      //         Copy ID
-      //       </DropdownMenuItem>
-      //       <DropdownMenuSeparator />
-      //       <DropdownMenuItem>View Profile</DropdownMenuItem>
-      //       <DropdownMenuItem>Send Email</DropdownMenuItem>
-      //     </DropdownMenuContent>
-      //   </DropdownMenu>
-      // );
-    },
   },
 ];
 
@@ -169,15 +136,18 @@ export default function UserTable() {
   });
 
   return (
-    <div className="w-full overflow-auto rounded-lg border border-gray-200 dark:border-gray-600 shadow-md text-black dark:text-white bg-white dark:bg-zinc-800">
+    <div className="w-full overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700 shadow-lg bg-white text-black dark:text-black">
       <Table>
-        <TableHeader className="bg-[#002946] dark:bg-zinc-700 ">
+        <TableHeader className="bg-[#002946] ">
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
+            <TableRow
+              key={headerGroup.id}
+              className="hover:bg-transparent " // <- No hover effect on header
+            >
               {headerGroup.headers.map((header) => (
                 <TableHead
                   key={header.id}
-                  className="text-sm font-bold text-white dark:text-white"
+                  className="text-sm font-bold text-white dark:text-gray-300"
                 >
                   {header.isPlaceholder
                     ? null
@@ -190,19 +160,27 @@ export default function UserTable() {
             </TableRow>
           ))}
         </TableHeader>
+
         <TableBody>
           {table.getRowModel().rows.length ? (
             table.getRowModel().rows.map((row, index) => (
               <TableRow
                 key={row.id}
-                className={
-                  index % 2 === 0
-                    ? "bg-white dark:bg-zinc-800"
-                    : "bg-gray-50 dark:bg-zinc-700 hover:bg-gray-100 dark:hover:bg-zinc-600"
-                }
+                className={`
+                  ${
+                    index % 2 === 0
+                      ? "bg-white dark:text-black"
+                      : "bg-gray-50 dark:text-black"
+                  }
+                  hover:bg-blue-50 
+                  transition-colors duration-200 cursor-pointer 
+                `}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id} className="text-sm py-3 px-2">
+                  <TableCell
+                    key={cell.id}
+                    className="text-sm py-4 px-4 whitespace-nowrap text-black"
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
@@ -210,7 +188,10 @@ export default function UserTable() {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="text-center py-4">
+              <TableCell
+                colSpan={columns.length}
+                className="text-center py-8 text-gray-500 dark:text-black"
+              >
                 No data available.
               </TableCell>
             </TableRow>
