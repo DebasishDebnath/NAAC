@@ -1,9 +1,11 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
   
   // Initialize user from session storage on app load
   useEffect(() => {
@@ -22,12 +24,14 @@ export const AuthProvider = ({ children }) => {
     setUser(userData);
   };
   
-  const logout = () => {
-    // Clear session storage
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("role");
+  const logout = (role) => {
+    // const finalRole = role || sessionStorage.getItem("role") || "user";
+    window.location.href = `/login/${role.toLowerCase()}`;
+    sessionStorage.clear();
     setUser(null);
+    // navigate(`/login/${finalRole.toLowerCase()}`);
   };
+  
 
   return (
     <AuthContext.Provider value={{ user, loginUser, logout }}>
