@@ -196,14 +196,14 @@ const SubmittedReportsTable = () => {
         </form>
 
         <div className="flex gap-4 items-start  md:items-center">
-          <Button
+          {/* <Button
             variant="outline"
             className="flex items-center gap-2 bg-[#787878] text-white rounded-lg py-2 px-4 hover:bg-[#666666] transition duration-200 ease-in-out"
             onClick={() => setShowFilters(!showFilters)}
           >
             <Filter className="h-4 w-4" />
             <span>Filters</span>
-          </Button>
+          </Button> */}
 
           {showFilters && (
             <div className="flex flex-col md:flex-row gap-4 mt-4 justify-center items-center w-full">
