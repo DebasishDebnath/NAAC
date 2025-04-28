@@ -23,10 +23,11 @@ const Dropdown = memo(() => {
     }
   }, [token, role]);
   const handleLogout = () => {
-    logout();
-    // console.log(`/login/${role.toLowerCase()}`)
-    navigate(`/login/${role.toLowerCase()}`);
+    const routeRole = sessionStorage.getItem("role") || "user";
+    logout(routeRole);
   };
+  
+  
 
   return (
     <div className="absolute right-0 top-[70px] mt-2 w-64 bg-white shadow-lg rounded-lg border border-slate-200 py-2 overflow-hidden z-50">
