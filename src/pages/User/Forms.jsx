@@ -22,6 +22,7 @@ import SubmittedReportsTable from '@/components/Drafts/DraftsTable';
 import { Eye, PanelRightOpen } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import ReportsAccordion from '@/components/ui/ReportsAccordion';
+import { useUserDraft } from '@/Apis/Drafts/UserDrafts';
 
 function Forms() {
   const formData = data;
@@ -33,6 +34,7 @@ function Forms() {
   const { formSubmit } = useFormSubmission()
   const [popUpShow, setPopUpShow] = useState(false)
   const [isCollapsed, setIsCollapsed] = useState(false); 
+  const {fetchDraft}= useUserDraft()
   const navigate= useNavigate()
 
   const handleToggleSidebar = () => {
@@ -48,6 +50,14 @@ function Forms() {
     subItems: category.forms.map(form => form.tableName || "Untitled Form")
   }));
 
+
+  useEffect(()=>{
+    const helloWorld=async()=>{
+      const response= await fetchDraft('CategoryI/teaching_duties')
+      console.log('CategoryI/teaching_duties', response)
+    }
+    helloWorld()
+  },[])
   // Automatically select first form if only one exists
   useEffect(() => {
     const selectedCategoryForms = formData.form[selectedCategory]?.forms || [];

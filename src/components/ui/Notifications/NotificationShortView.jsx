@@ -2,6 +2,8 @@ import React from "react"
 import Notification from "./Notification"
 
 const NotificationShortView = () => {
+  
+
   return (
     <div className="absolute top-18 right-28 mt-2  bg-white rounded-md shadow-lg py-1 z-30">
       <div className="flex flex-col gap-1 p-4">
