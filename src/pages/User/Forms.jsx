@@ -108,7 +108,9 @@ function Forms() {
     console.log('endPointGet', endPointGet)
     const helloWorld=async()=>{
       const response= await fetchDraft(endPointGet)
-      setReports(response?.data)
+      if(endPointGet===undefined)
+        setReports([])
+      setReports([response?.data])
     }
     helloWorld()
   },[endPointGet])
@@ -197,19 +199,13 @@ function Forms() {
                   value={formValues[fieldKey] || ''}
                   // min={field.min}
                   // max={field.max}
-                  // onChange={(e) => {
-                  //   const val = Number(e.target.value);
+                  onChange={(e) => {
+                    const val = Number(e.target.value);
 
-                  //   if (field.min !== undefined && val < field.min) {
-                  //     enqueueSnackbar(`Value should not be less than ${field.min}`, { variant: 'warning' });
-                  //     handleInputChange(fieldKey, field.min);
-                  //   } else if (field.max !== undefined && val > field.max) {
-                  //     enqueueSnackbar(`Value should not exceed ${field.max}`, { variant: 'warning' });
-                  //     handleInputChange(fieldKey, field.max);
-                  //   } else {
-                  //     handleInputChange(fieldKey, val);
-                  //   }
-                  // }}
+                   
+                      handleInputChange(fieldKey, val);
+                    
+                  }}
                 />
               )}
 
@@ -415,7 +411,7 @@ function Forms() {
           <ResizablePanel defaultSize={30} className="max-h-full">
             <div className="h-full overflow-y-auto bg-white rounded-xl">
 
-            <SubmittedReportsTable reports={reports || []} />
+            <SubmittedReportsTable reports={reports || [{}]} />
             </div>
           </ResizablePanel>
         </ResizablePanelGroup>

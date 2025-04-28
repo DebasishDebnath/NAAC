@@ -2,6 +2,7 @@ import React from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
 const TableComp = ({ reports = [], onDelete }) => {
+  // Early return if there are no reports
   if (!reports || reports.length === 0) {
     return (
       <div className="text-center py-4 text-gray-600">
@@ -13,8 +14,10 @@ const TableComp = ({ reports = [], onDelete }) => {
   // Fields to exclude
   const excludedFields = ['_id', 'Created_by', 'CreatedAt', 'UpdatedAt', '__v'];
 
-  // Filter out excluded fields from the reports
-  const columns = Object.keys(reports[0]).filter((col) => !excludedFields.includes(col));
+  // Safely check for reports[0] and filter out the excluded fields
+  const columns = reports.length > 0 && reports[0] !== undefined 
+    ? Object.keys(reports[0]).filter((col) => !excludedFields.includes(col)) 
+    : [];
 
   const getStatusBadge = (status) => {
     const badgeBase = "flex items-center justify-center gap-2 px-3 py-1 rounded-full";
@@ -74,50 +77,64 @@ const TableComp = ({ reports = [], onDelete }) => {
   return (
     <div className="overflow-x-auto">
       <table className="w-full min-w-[600px] table-auto bg-gray-50 rounded-lg shadow-md">
-        <thead className="text-white" style={{ backgroundColor: '#002946' }}>
-          <tr>
-            {columns.map((col, idx) => (
-              <th
-                key={col}
-                className={`px-4 py-3 text-center ${idx === 0 ? 'first:rounded-tl-xl first:rounded-bl-xl' : ''} ${idx === columns.length - 1 ? 'last:rounded-tr-xl last:rounded-br-xl' : ''}`}
-              >
-                {col.charAt(0).toUpperCase() + col.slice(1)}
-              </th>
-            ))}
-            <th className="px-4 py-3 text-center">Actions</th>
-          </tr>
-        </thead>
-
-        <tbody className="overflow-hidden rounded-b-xl">
-          {reports?.map((report, index) => (
-            <tr key={index} className="hover:bg-gray-100 transition duration-200">
-              {columns.map((col) => (
-                <td key={col} className="px-4 py-3 text-center">
-                  {col.toLowerCase() === 'status'
-                    ? getStatusBadge(report[col])
-                    : report[col]}
-                </td>
+        {/* Conditionally render the table header */}
+        {columns.length > 0 && (
+          <thead className="text-white" style={{ backgroundColor: '#002946' }}>
+            <tr>
+              {columns.map((col, idx) => (
+                <th
+                  key={col}
+                  className={`px-4 py-3 text-center ${idx === 0 ? 'first:rounded-tl-xl first:rounded-bl-xl' : ''} ${idx === columns.length - 1 ? 'last:rounded-tr-xl last:rounded-br-xl' : ''}`}
+                >
+                  {col.charAt(0).toUpperCase() + col.slice(1)}
+                </th>
               ))}
-              <td className="px-4 py-3 text-center">
-                <div className="flex justify-center gap-3">
-                  <button
-                    className="text-indigo-600 hover:text-indigo-800 transition-transform hover:scale-110"
-                    title="Edit"
-                  >
-                    <FaEdit />
-                  </button>
-                  <button
-                    onClick={() => onDelete?.(report.reportId)}
-                    className="text-red-600 hover:text-red-800 transition-transform hover:scale-110"
-                    title="Delete"
-                  >
-                    <FaTrash />
-                  </button>
-                </div>
+              <th className="px-4 py-3 text-center">Actions</th>
+            </tr>
+          </thead>
+        )}
+
+        {/* Conditionally render the table rows */}
+        {columns.length > 0 ? (
+          <tbody className="overflow-hidden rounded-b-xl">
+            {reports.map((report, index) => (
+              <tr key={index} className="hover:bg-gray-100 transition duration-200">
+                {columns.map((col) => (
+                  <td key={col} className="px-4 py-3 text-center">
+                    {col.toLowerCase() === 'status'
+                      ? getStatusBadge(report[col])
+                      : report[col]}
+                  </td>
+                ))}
+                <td className="px-4 py-3 text-center">
+                  <div className="flex justify-center gap-3">
+                    <button
+                      className="text-indigo-600 hover:text-indigo-800 transition-transform hover:scale-110"
+                      title="Edit"
+                    >
+                      <FaEdit />
+                    </button>
+                    <button
+                      onClick={() => onDelete?.(report.reportId)}
+                      className="text-red-600 hover:text-red-800 transition-transform hover:scale-110"
+                      title="Delete"
+                    >
+                      <FaTrash />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        ) : (
+          <tbody>
+            <tr>
+              <td colSpan={columns.length + 1} className="text-center py-4 text-gray-600">
+                No records available
               </td>
             </tr>
-          ))}
-        </tbody>
+          </tbody>
+        )}
       </table>
     </div>
   );
