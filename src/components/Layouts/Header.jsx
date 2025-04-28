@@ -86,7 +86,7 @@ const Header = memo(({ toggleSidebar, toggleDropdown, showDropdown }) => {
         {/* Notification dropdown */}
         {notificationDropdown && (
           <div ref={notificationDropdownRef} className="absolute top-0 right-0 w-[500px]">
-            <NotificationShortView />
+            <NotificationShortView toggleNotificationDropdown={toggleNotificationDropdown}/>
           </div>
         )}
 
