@@ -36,7 +36,7 @@ import PreviewSubmit from "./pages/User/PreviewSubmit.jsx";
 // Flag to control route protection
 // When set to true: Protected routes are enforced (normal security behavior)
 // When set to false: All routes are accessible without authentication/authorization
-const ENFORCE_ROUTE_PROTECTION = false;
+const ENFORCE_ROUTE_PROTECTION = true;
 
 // Allowed login roles
 const allowedRoles = ["user", "superadmin", "psudosuperadmin"];

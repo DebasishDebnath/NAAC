@@ -17,7 +17,6 @@ export const useHttp = () => {
   const baseURL = "https://dev2025naacbackend.iemamerica.com";
   // const baseURL = "http://192.168.1.176:8000";
 
-
   const handleResponse = async (response) => {
     let message =
       response.data?.message ||
@@ -87,7 +86,6 @@ export const useHttp = () => {
       const headers = {
         Authorization: `Bearer ${token}`,
       };
-
       if (!isFormData) {
         headers["Content-Type"] = "application/json";
       }
