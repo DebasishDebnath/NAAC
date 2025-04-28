@@ -1,4 +1,5 @@
 import TableComp from '@/components/Table/TableComp';
+import ReportsAccordion from '@/components/ui/ReportsAccordion';
 import React, { useState } from 'react';
 
 function PreviewSubmit() {
@@ -72,7 +73,7 @@ function PreviewSubmit() {
             </button>
             </div>
             
-            <TableComp reports={filteredReports} onDelete={handleDelete} />
+            <ReportsAccordion />
 
             {/* Submit Button */}
         </div>
