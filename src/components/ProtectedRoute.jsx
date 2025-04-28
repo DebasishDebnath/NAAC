@@ -1,23 +1,21 @@
-import { Navigate, useLocation } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { Navigate, useParams } from "react-router-dom";
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
-  const { user } = useAuth();
-  const location = useLocation();
+  const { role: routeRole } = useParams();
 
-  // Store the location they were trying to access for redirect after login
-  const fromLocation = location.pathname;
+  const token = sessionStorage.getItem("token");
+  const storedRole = sessionStorage.getItem("role");
 
-  // Check if user is authenticated
-  if (!user || !user.token) {
-    // Redirect to login without hardcoding the role
-    // Using the general login path, the login page can determine appropriate role
-    return <Navigate to="/login" state={{ from: fromLocation }} replace />;
+  // If no token or no role, redirect to login
+  if (!token || !storedRole) {
+    return <Navigate to="/login/user" />;
   }
 
-  // Check if user has the required role to access this route
-  if (allowedRoles && !allowedRoles.includes(user.role)) {
-    return <Navigate to="/unauthorized" replace />;
+  
+
+  // If user role doesn't match the role in the URL, redirect
+  if (routeRole && user.role !== routeRole) {
+    return <Navigate to="/unauthorized" />;
   }
 
   return children;

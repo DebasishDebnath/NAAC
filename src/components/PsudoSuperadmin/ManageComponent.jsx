@@ -44,8 +44,8 @@ const mockData = [
 
 const statusColor = {
   Pending: "bg-yellow-100 text-yellow-800",
-  Pending: "bg-green-100 text-green-800",
-  Pending: "bg-red-100 text-red-800",
+  // Pending: "bg-green-100 text-green-800",
+  // Pending: "bg-red-100 text-red-800",
 };
 
 export default function ManageComponent() {

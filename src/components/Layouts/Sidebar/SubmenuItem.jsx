@@ -5,7 +5,7 @@ import React, { memo } from "react";
 const SubmenuItem = memo(({ subItem, isActive, onClick }) => {
   const iconMap = {
     Drafts: <NotepadTextDashed />,
-    Reviewed: <MessageSquareCode />,
+    Submissions: <MessageSquareCode />,
     Pending: <CircleAlert />
   };
 
