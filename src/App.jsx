@@ -173,7 +173,7 @@ function App() {
                         <Layout
                           menus={["Home", "Forms", "Reports"]}
                           submenu={{
-                            Reports: ["Drafts", "Reviewed"],
+                            Reports: ["Drafts", "Submissions"],
                           }}
                         >
                           <Routes>
@@ -197,7 +197,7 @@ function App() {
                   <Route path="forms/previewsubmit" element={<PreviewSubmit />} />
 
                   <Route
-                    path="reports/reviewed"
+                    path="reports/submissions"
                     element={<SubmittedReports />}
                   />
 
