@@ -36,7 +36,7 @@ import PreviewSubmit from "./pages/User/PreviewSubmit.jsx";
 // Flag to control route protection
 // When set to true: Protected routes are enforced (normal security behavior)
 // When set to false: All routes are accessible without authentication/authorization
-const ENFORCE_ROUTE_PROTECTION = false;
+const ENFORCE_ROUTE_PROTECTION = true;
 
 // Allowed login roles
 const allowedRoles = ["user", "superadmin", "psudosuperadmin"];
@@ -52,8 +52,10 @@ const TokenWrapper = ({ children }) => {
   const role = sessionStorage.getItem("role");
 
   if (!token || !role) {
-    return <Navigate to="/login/user" replace />;
+    // const lastRole = sessionStorage.getItem("role") || "user";
+    return <Navigate to={`/login/${role}`} replace />;
   }
+  
 
   return children;
 };
@@ -70,10 +72,15 @@ const ProtectedRouteWrapper = ({ allowedRoles, children }) => {
     <ProtectedRoute allowedRoles={allowedRoles}>{children}</ProtectedRoute>
   );
 };
-
-// LoginRouteWrapper: restricts login route to only valid roles
-const LoginRouteWrapper = () => {
+const LoginWrapper = () => {
   const { role } = useParams();
+  console.log("role1: ", role);
+  return <LoginRouteWrapper role={role} />;
+};
+// LoginRouteWrapper: restricts login route to only valid roles
+const LoginRouteWrapper = ({ role }) => {
+  console.log("role2: ", role);
+
   if (!allowedRoles.includes(role)) {
     return <NotFound />;
   }
@@ -103,21 +110,24 @@ const RedirectDashboard = () => {
 
 function App() {
   return (
+            <Router>
     <AuthProvider>
       <ThemeProvider>
         <SnackbarProvider maxSnack={3}>
           <NotificationProvider>
-            <Router>
               <Routes>
                 {/* Public Routes */}
-                <Route path="/login/:role" element={<LoginRouteWrapper />} />
+                <Route path="/login/:role" element={<LoginWrapper />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/unauthorized" element={<Unauthorized />} />
 
                 {/* Root redirect */}
                 <Route
                   path="/"
-                  element={<Navigate to="/login/user" replace />}
+                  element={<Navigate
+                    to={`/login/${sessionStorage.getItem("role") || "user"}`}
+                    replace
+                  />}
                 />
 
                 {/* Dashboard redirect */}
@@ -159,6 +169,7 @@ function App() {
                   <Route path="reports" element={<Reports />} />
                   <Route path="profile" element={<Profile />} />
                   <Route path="notifications" element={<Notificatons />} />
+                  <Route path="notifications/:id" element={<Notificatons />} />
                   <Route path="reports/drafts" element={<Drafts />} />
                   <Route path="forms/previewsubmit" element={<PreviewSubmit />} />
 
@@ -244,11 +255,11 @@ function App() {
                 {/* Catch-all route */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
-            </Router>
           </NotificationProvider>
         </SnackbarProvider>
       </ThemeProvider>
     </AuthProvider>
+            </Router>
   );
 }
 
