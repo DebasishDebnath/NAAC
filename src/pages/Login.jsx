@@ -99,14 +99,14 @@ export default function LoginPage() {
           >
             {/* Role dropdown */}
             <div className="relative mb-4 flex justify-end">
-              <button
+              {/* <button
                 type="button"
                 className="flex items-center justify-between w-auto px-4 py-2 text-sm font-medium text-black bg-[#fff] rounded-md hover:bg-[#fafafa] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 onClick={() => setDropdownOpen(!dropdownOpen)}
               >
                 {currentRoleDisplay}
                 <ChevronDown className="w-4 h-4 ml-2" />
-              </button>
+              </button> */}
               
               {dropdownOpen && (
                 <div className="absolute z-10 w-full mt-1 bg-white rounded-md shadow-lg">
