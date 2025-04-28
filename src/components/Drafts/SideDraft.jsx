@@ -34,7 +34,7 @@ const subReportOptions = {
   ],
 };
 
-export default function SideDraft({ reports }) {
+export default function SideDraft({ reports, onEdit }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredReports, setFilteredReports] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
@@ -162,7 +162,7 @@ export default function SideDraft({ reports }) {
         </div>
       </div>
 
-      <TableComp reports={filteredReports} onDelete={handleDelete} />
+      <TableComp reports={filteredReports} onDelete={handleDelete} onEdit={onEdit} />
     </div>
   );
 }
