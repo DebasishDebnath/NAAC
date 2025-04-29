@@ -12,6 +12,9 @@ export default function ImprovedEmailList() {
 
   const { addEmailsuperadmin } = addEmail();
   const { fetchEmailsuperadmin } = fetchEmails();
+useEffect(() => {
+ console.log(emails)
+}, [emails])
 
   useEffect(() => {
     const fetchEmailsList = async () => {
@@ -19,27 +22,12 @@ export default function ImprovedEmailList() {
         setLoading(true);
         const response = await fetchEmailsuperadmin();
         
-        if (response.success) {
-          // Log the response to check the structure
-          console.log("Fetched email data:", response.data);
+      
+        
           
           // Check if response.data is an array and has the expected structure
-          if (Array.isArray(response.data) && response.data.length > 0) {
-            // Extract the email addresses from the data array
-            // Make sure you're accessing the correct property
-            const emailList = response.data.map(item => {
-              // Check if the item has an email property or if it's directly the email
-              return item.email || item;
-            });
-            
-            setEmails(emailList);
-          } else {
-            setEmails([]);
-            console.warn("Empty or invalid data structure received");
-          }
-        } else {
-          setError(response.message || "Failed to fetch emails");
-        }
+          setEmails(response)
+        
       } catch (error) {
         console.error("Error fetching emails:", error);
         setError("An error occurred while fetching emails");

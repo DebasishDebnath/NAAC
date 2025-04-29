@@ -12,15 +12,15 @@ export const fetchEmails = () => {
     try {
       // Make GET request to fetch the email list
       const response = await getReq("api/v2/superAdmin/emaillist", token, {});
-      console.log("Fetched emails response:", response);
+      // console.log("Fetched emails response:", response);
 
       if (response && response.data && response.data.token) {
         sessionStorage.setItem("token", response.data.token); // Update token if necessary
       }
 
-      if (response.success && response.data && response.data.emails) {
-        console.log("Fetched emails:", response.data.emails);
-        return response.data.emails; // Assuming `response.data.emails` contains the list of emails
+      if (response.success && response.data) {
+        // console.log("Fetched emails:", response.data);
+        return response.data; // Assuming `response.data.emails` contains the list of emails
       } else {
         showError(
           "Failed to fetch emails: " + (response.message || "Unknown error")
