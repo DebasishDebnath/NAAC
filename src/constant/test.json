@@ -40,14 +40,14 @@
       "forms": [
         {
           "tableName": "Journal Publications",
-          "endpoint": "CategoryII/journal_publication",
-          "backend_table_name": "",
+          "endpoint": "CategoryII/journal_publications",
+          "backend_table_name": "journal_publications",
           "tableData": [
             {
               "fieldName": "Category",
               "backend_field_name": "Category",
               "fieldType": "Options",
-              "options": [
+              "options": [ "Select Option",
                 "Single Author",
                 "Two Author",
                 "First/Principal/Corresponding Author (More than 2)",
@@ -84,7 +84,7 @@
               "fieldName": "Type of Journal",
               "backend_field_name": "Type_of_Journal",
               "fieldType": "Options",
-              "options": ["National", "International"],
+              "options": [ "Select Option","National", "International"],
               "required": true,
               "value": ""
             },
@@ -110,15 +110,13 @@
               "fieldType": "Number",
               "required": true,
               "placeholder": "Enter Impact Factor",
-              "value": "",
-              "min": 0,
-              "max": 80
+              "value": ""
             },
             {
               "fieldName": "Quartile of Scopus Journal",
               "backend_field_name": "Scopus_Index",
               "fieldType": "Options",
-              "options": ["Q1", "Q2", "Q3", "Q4", "Non Applicable"],
+              "options": [ "Select Option","Q1", "Q2", "Q3", "Q4", "Non Applicable"],
               "required": true,
               "value": ""
             },
@@ -134,14 +132,14 @@
         },
         {
           "tableName": "Books Publication",
-          "endpoint": "CategoryII/bookpublication",
-          "backend_table_name": "",
+          "endpoint": "CategoryII/books",
+          "backend_table_name": "books",
           "tableData": [
             {
               "fieldName": "Category",
               "backend_field_name": "Category",
               "fieldType": "Options",
-              "options": [
+              "options": [ "Select Option",
                 "Single Author",
                 "Two Author",
                 "First/Principal/Corresponding Author (More than 2)",
@@ -186,7 +184,7 @@
               "fieldName": "Type of Publication",
               "backend_field_name": "Type_of_Publication",
               "fieldType": "Options",
-              "options": ["National", "International"],
+              "options": [ "Select Option","National", "International"],
               "required": true,
               "value": ""
             },
@@ -202,14 +200,14 @@
         },
         {
           "tableName": "Books Chapter / Conference Proceedings",
-          "endpoint": "CategoryII/bookchapter_conference",
-          "backend_table_name": "",
+          "endpoint": "CategoryII/book_chapter_conference",
+          "backend_table_name": "book_chapter_conference",
           "tableData": [
             {
               "fieldName": "Status of Authors",
               "backend_field_name": "Status_of_authors",
               "fieldType": "Options",
-              "options": [
+              "options": [ "Select Option",
                 "Single Author",
                 "Two Author",
                 "First/Principal/Corresponding Author (More than 2)",
@@ -270,14 +268,14 @@
         },
         {
           "tableName": "Editor of Book",
-          "endpoint": "CategoryII/editorbook",
-          "backend_table_name": "",
+          "endpoint": "CategoryII/editor_books",
+          "backend_table_name": "editor_books",
           "tableData": [
             {
               "fieldName": "Type",
               "backend_field_name": "Type",
               "fieldType": "Options",
-              "options": ["National", "International"],
+              "options": [ "Select Option","National", "International"],
               "required": true,
               "value": ""
             },
@@ -317,14 +315,14 @@
         },
         {
           "tableName": "Translation Work",
-          "endpoint": "CategoryII/translation_work",
-          "backend_table_name": "",
+          "endpoint": "CategoryII/works",
+          "backend_table_name": "works",
           "tableData": [
             {
               "fieldName": "Number of Authors",
               "backend_field_name": "Number_of_author",
               "fieldType": "Options",
-              "options": [
+              "options": [ "Select Option",
                 "Single Author",
                 "Two Author",
                 "First/Principal/Corresponding Author (More than 2)",
@@ -362,7 +360,7 @@
         {
           "tableName": "Consultancy",
           "endpoint": "CategoryII/consultancy",
-          "backend_table_name": "",
+          "backend_table_name": "consultancy",
           "tableData": [
             {
               "fieldName": "Name of the Consultancy Project",
@@ -418,8 +416,8 @@
         },
         {
           "tableName": "Patent Status",
-          "endpoint": "CategoryII/patent_status",
-          "backend_table_name": "",
+          "endpoint": "CategoryII/statuses",
+          "backend_table_name": "statuses",
           "tableData": [
             {
               "fieldName": "Application No",
@@ -449,7 +447,7 @@
               "fieldName": "Status",
               "backend_field_name": "Status",
               "fieldType": "Options",
-              "options": ["Published", "Granted"],
+              "options": [ "Select Option","Published", "Granted"],
               "required": true,
               "value": ""
             },
@@ -481,7 +479,7 @@
               "fieldName": "Applicant",
               "backend_field_name": "Applicant",
               "fieldType": "Options",
-              "options": ["Self", "IEM"],
+              "options": [ "Select Option","Self", "IEM"],
               "required": true,
               "value": ""
             }
@@ -489,14 +487,14 @@
         },
         {
           "tableName": "Research Project",
-          "endpoint": "CategoryII/research_project",
-          "backend_table_name": "",
+          "endpoint": "CategoryII/research",
+          "backend_table_name": "research",
           "tableData": [
             {
               "fieldName": "Status of Investigator",
               "backend_field_name": "Status_of_Investigator",
               "fieldType": "Options",
-              "options": [
+              "options": [ "Select Option",
                 "Single Investigator",
                 "Principal Investigator in Joint Project",
                 "Co-Investigator in Joint Project"
@@ -508,7 +506,7 @@
               "fieldName": "Status",
               "backend_field_name": "Status",
               "fieldType": "Options",
-              "options": [
+              "options": [ "Select Option",
                 "Ongoing (more than 10 lakhs)",
                 "Ongoing (less than 10 lakhs)",
                 "Completed (more than 10 lakhs)",
@@ -529,7 +527,7 @@
               "fieldName": "Category",
               "backend_field_name": "Category",
               "fieldType": "Options",
-              "options": [
+              "options": [ "Select Option",
                 "Gov",
                 "Non-Gov",
                 "In-House (Self)",
@@ -589,7 +587,7 @@
               "fieldName": "International/National",
               "backend_field_name": "Type_of_Fellowship",
               "fieldType": "Options",
-              "options": ["National", "International"],
+              "options": [ "Select Option","National", "International"],
               "required": true,
               "value": ""
             },
@@ -621,14 +619,14 @@
         },
         {
           "tableName": "Event Organiser / Participation",
-          "endpoint": "CategoryII/eventorgpart",
-          "backend_table_name": "",
+          "endpoint": "CategoryII/event_org_parts",
+          "backend_table_name": "event_org_parts",
           "tableData": [
             {
               "fieldName": "Type of Event",
               "backend_field_name": "Type_of_Event",
               "fieldType": "Options",
-              "options": [
+              "options": [ "Select Option",
                 "Faculty Development Programme(Institutional)",
                 "Faculty Development Programme(Govt Enterprise - e.g ATAL, AICTE, NPTEL etc.)",
                 "Workshop",
@@ -662,7 +660,7 @@
               "fieldName": "Job Responsibility / Responsibilities beared in the event",
               "backend_field_name": "Role",
               "fieldType": "Options",
-              "options": [
+              "options": [ "Select Option",
                 "Resource Person",
                 "Coordinator",
                 "Participant",
@@ -685,8 +683,8 @@
         },
         {
           "tableName": "Development of Innovative Pedagogy",
-          "endpoint": "CategoryII/developmentinnovativepedagogy",
-          "backend_table_name": "",
+          "endpoint": "CategoryII/pedogogies",
+          "backend_table_name": "pedogogies",
           "tableData": [
             {
               "fieldName": "Description",
@@ -716,8 +714,8 @@
         },
         {
           "tableName": "Design of New Curriculam and Courses (ICT Based)",
-          "endpoint": "CategoryII/designnewcurricula",
-          "backend_table_name": "",
+          "endpoint": "CategoryII/curriculas",
+          "backend_table_name": "curriculas",
           "tableData": [
             {
               "fieldName": "Description",
@@ -747,8 +745,8 @@
         },
         {
           "tableName": "Development of Complete MOOC's in 4 Quadrant (4 Credit Course)",
-          "endpoint": "CategoryII/moocs_development",
-          "backend_table_name": "",
+          "endpoint": "CategoryII/MOOCsDevelopment",
+          "backend_table_name": "MOOCsDevelopment",
           "tableData": [
             {
               "fieldName": "Description",
@@ -762,7 +760,7 @@
               "fieldName": "Credit Score",
               "backend_field_name": "CreditScore",
               "fieldType": "Options",
-              "options": ["1", "2", "3", "4"],
+              "options": [ "Select Option","1", "2", "3", "4"],
               "required": true,
               "value": ""
             },
@@ -778,8 +776,8 @@
         },
         {
           "tableName": "MOOCs (development in 4 quadrant) per module / lecture",
-          "endpoint": "CategoryII/moocs_content_writer",
-          "backend_table_name": "moocs_content_writer",
+          "endpoint": "CategoryII/MOOCsContentWriter",
+          "backend_table_name": "MOOCsContentWriter",
           "tableData": [
             {
               "fieldName": "Description",
@@ -801,8 +799,8 @@
         },
         {
           "tableName": "Content Writer/Subject Matter Expert for each Module of MOOCs (At Least One Quadrant)",
-          "endpoint": "CategoryII/moocs_module",
-          "backend_table_name": "moocs_module",
+          "endpoint": "CategoryII/MOOCsModule",
+          "backend_table_name": "MOOCsModule",
           "tableData": [
             {
               "fieldName": "Description",
@@ -824,8 +822,8 @@
         },
         {
           "tableName": "Course Coordinator for MOOCs",
-          "endpoint": "CategoryII/moocs_course_coordinator",
-          "backend_table_name": "moocs_course_coordinator",
+          "endpoint": "CategoryII/MOOCsCourseCoordinator",
+          "backend_table_name": "MOOCsCourseCoordinator",
           "tableData": [
             {
               "fieldName": "Description",
@@ -839,7 +837,7 @@
               "fieldName": "Credit Score",
               "backend_field_name": "CreditScore",
               "fieldType": "Options",
-              "options": ["1", "2", "3", "4"],
+              "options": [ "Select Option","1", "2", "3", "4"],
               "required": true,
               "value": ""
             },
@@ -855,8 +853,8 @@
         },
         {
           "tableName": "Development of E-Content in 4 quadrants for a Complete Course / E-Book",
-          "endpoint": "CategoryII/econtentcourse",
-          "backend_table_name": "econtentcourse",
+          "endpoint": "CategoryII/e_content_items",
+          "backend_table_name": "e_content_items",
           "tableData": [
             {
               "fieldName": "Description",
@@ -864,6 +862,14 @@
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Description",
+              "value": ""
+            },
+            {
+              "fieldName": "Quadrant",
+              "backend_field_name": "Quadrant",
+              "fieldType": "Text",
+              "required": true,
+              "placeholder": "Enter Quadrant",
               "value": ""
             },
             {
@@ -878,8 +884,8 @@
         },
         {
           "tableName": "E-Content (developed in 4 quadrants) Per Module",
-          "endpoint": "CategoryII/econtentmodule",
-          "backend_table_name": "econtentmodule",
+          "endpoint": "CategoryII/e_content_modules",
+          "backend_table_name": "e_content_modules",
           "tableData": [
             {
               "fieldName": "Description",
@@ -887,6 +893,14 @@
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Description",
+              "value": ""
+            },
+            {
+              "fieldName": "Quadrant",
+              "backend_field_name": "Quadrant",
+              "fieldType": "Text",
+              "required": true,
+              "placeholder": "Enter Quadrant",
               "value": ""
             },
             {
@@ -901,8 +915,8 @@
         },
         {
           "tableName": "Editor of E-Content for Complete Course / E-Book",
-          "endpoint": "CategoryII/econtentcourse",
-          "backend_table_name": "econtentcourse",
+          "endpoint": "CategoryII/e_content_items",
+          "backend_table_name": "e_content_items",
           "tableData": [
             {
               "fieldName": "Description",
@@ -910,6 +924,14 @@
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Description",
+              "value": ""
+            },
+            {
+              "fieldName": "Quadrant",
+              "backend_field_name": "Quadrant",
+              "fieldType": "Text",
+              "required": true,
+              "placeholder": "Enter Quadrant",
               "value": ""
             },
             {
@@ -925,7 +947,7 @@
         {
           "tableName": "Status as Guide - Ph.D. Guidance (Degree Awarded)",
           "endpoint": "CategoryII/phd_guidance",
-          "backend_table_name": "phd_guidance",
+          "backend_table_name": "Phd_guidence",
           "tableData": [
             {
               "fieldName": "Name of Student",
@@ -963,7 +985,7 @@
               "fieldName": "Guidance (Awarded)",
               "backend_field_name": "Guidance_type",
               "fieldType": "Options",
-              "options": [
+              "options": [ "Select Option",
                 "Single Supervisor",
                 "Supervisor in Joint Guidance",
                 "Co-Supervisor in Joint Guidance"
@@ -1022,7 +1044,7 @@
               "fieldName": "Guidance (Submitted)",
               "backend_field_name": "Guidance_type",
               "fieldType": "Options",
-              "options": [
+              "options": [ "Select Option",
                 "Single Supervisor",
                 "Supervisor in Joint Guidance",
                 "Co-Supervisor in Joint Guidance"
@@ -1034,7 +1056,7 @@
               "fieldName": "Status",
               "backend_field_name": "status",
               "fieldType": "Options",
-              "options": ["Select Option"],
+              "options": [ "Select Option","Select Option"],
               "required": true,
               "value": ""
             },
@@ -1051,7 +1073,7 @@
         {
           "tableName": "M.Phil./P.G Dissertation Guidance",
           "endpoint": "CategoryII/dissertation",
-          "backend_table_name": "dissertation",
+          "backend_table_name": "Dissertation",
           "tableData": [
             {
               "fieldName": "Name of Student",
@@ -1081,7 +1103,7 @@
               "fieldName": "Dissertation",
               "backend_field_name": "Dissertation",
               "fieldType": "Options",
-              "options": [
+              "options": [ "Select Option",
                 "Single Supervisor",
                 "Supervisor in Joint Guidance",
                 "Co-Supervisor in Joint Guidance"
@@ -1101,8 +1123,8 @@
         },
         {
           "tableName": "Online AI Courses",
-          "endpoint": "CategoryII/online_course",
-          "backend_table_name": "online_course",
+          "endpoint": "CategoryII/OnlineCourse",
+          "backend_table_name": "OnlineCourse",
           "tableData": [
             {
               "fieldName": "Name of Course",
@@ -1140,14 +1162,14 @@
         },
         {
           "tableName": "Policy Document (International Body / Organisation / Central Govt. or state Govt.)",
-          "endpoint": "CategoryII/policy_document",
-          "backend_table_name": "policy_document",
+          "endpoint": "CategoryII/PolicyDocument",
+          "backend_table_name": "PolicyDocument",
           "tableData": [
             {
               "fieldName": "Status",
               "backend_field_name": "Status",
               "fieldType": "Options",
-              "options": ["International", "National", "State"],
+              "options": [ "Select Option","International", "National", "State"],
               "required": true,
               "value": ""
             },

@@ -38,7 +38,7 @@ function Forms() {
   const [reports, setReports] = useState();
   const { fetchDraft } = useUserDraft();
   const navigate = useNavigate();
-  
+
   // Add new state for storing the report being edited
   const [editingReportId, setEditingReportId] = useState(null);
   // Add a flag to prevent form reset when editing
@@ -70,7 +70,7 @@ function Forms() {
   useEffect(() => {
     // Skip initialization if we're currently editing
     if (isEditing) return;
-    
+
     const categoryData = formData.form[selectedCategory];
     const selectedForm = categoryData?.forms[selectedSubcategory];
 
@@ -117,14 +117,18 @@ function Forms() {
 
   useEffect(() => {
     console.log('endPointGet', endPointGet);
-  
+
     const fetchReports = async () => {
+      const categoryData = formData.form[selectedCategory];
+
+      const selectedForm = categoryData?.forms[selectedSubcategory];
+
       if (endPointGet) {
         const response = await fetchDraft(endPointGet);
-        
+
         if (response?.data) {
           // Check if response.data is an object and convert to array if needed
-          const data = Array.isArray(response.data) ? response.data : [response.data];
+          const data = Array.isArray(response.data[selectedForm?.backend_table_name]) ? response.data[selectedForm?.backend_table_name] : [response.data];
           setReports(data);
         } else {
           setReports([]);
@@ -133,10 +137,10 @@ function Forms() {
         setReports([]);
       }
     };
-  
+
     fetchReports();
   }, [endPointGet]);
-  
+
 
   // Handle form submission
   const handleSubmit = async () => {
@@ -180,14 +184,14 @@ function Forms() {
       // Submit the form
       enqueueSnackbar(editingReportId ? "Report updated successfully" : "Form submitted successfully", { variant: 'success' });
       setPopUpShow(false);
-      
+
       // Reset the editing state
       setEditingReportId(null);
       setIsEditing(false);
-      
+
       // Refresh the reports list
       fetchReports();
-      
+
       // Reset form values
       const initialValues = {};
       selectedForm.tableData.forEach(field => {
@@ -201,10 +205,13 @@ function Forms() {
 
   // Function to fetch reports
   const fetchReports = async () => {
+    const categoryData = formData.form[selectedCategory];
+    const selectedForm = categoryData?.forms[selectedSubcategory];
+
     if (endPointGet) {
       const response = await fetchDraft(endPointGet);
       if (response?.data) {
-        setReports([response.data]);
+        setReports(response.data[selectedForm?.backend_table_name]);
       } else {
         setReports([]);
       }
@@ -213,43 +220,43 @@ function Forms() {
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(editingReportId)
-  },[editingReportId])
+  }, [editingReportId])
 
   // Handle edit button click from TableComp
   const handleEdit = (report) => {
     console.log("Editing report:", report);
-    
+
     // Set the editing flags first
     setIsEditing(true);
     setEditingReportId(report?._id);
-    
+
     // Populate form values with the report data
     const newFormValues = {};
-    
+
     // Get all fields from the current form
     const categoryData = formData.form[selectedCategory];
     const selectedForm = categoryData?.forms[selectedSubcategory];
-    
+
     if (selectedForm) {
       // Initialize with defaults or values from the report
       selectedForm.tableData.forEach(field => {
         if (field.backend_field_name) {
           // Set the values from the report if they exist, otherwise use defaults
-          const value = report[field.backend_field_name] !== undefined ? 
-            report[field.backend_field_name] : 
+          const value = report[field.backend_field_name] !== undefined ?
+            report[field.backend_field_name] :
             field.value || '';
-          
+
           newFormValues[field.backend_field_name] = value;
-          
+
           // Also update the date picker if it's a date field
           if (field.fieldType === "Date" && report[field.backend_field_name]) {
             try {
               const dateValue = new Date(report[field.backend_field_name]);
-              setFormDates(prev => ({ 
-                ...prev, 
-                [field.backend_field_name]: dateValue 
+              setFormDates(prev => ({
+                ...prev,
+                [field.backend_field_name]: dateValue
               }));
             } catch (e) {
               console.error("Failed to parse date:", e);
@@ -257,7 +264,7 @@ function Forms() {
           }
         }
       });
-      
+
       // Update the form values state
       setFormValues(newFormValues);
     }
@@ -266,11 +273,11 @@ function Forms() {
   const cancelEditing = () => {
     setEditingReportId(null);
     setIsEditing(false);
-    
+
     // Reset form values
     const categoryData = formData.form[selectedCategory];
     const selectedForm = categoryData?.forms[selectedSubcategory];
-    
+
     if (selectedForm) {
       const initialValues = {};
       selectedForm.tableData.forEach(field => {
@@ -302,7 +309,7 @@ function Forms() {
               <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
                 Editing Report ID: {editingReportId}
               </span>
-              <button 
+              <button
                 onClick={cancelEditing}
                 className="text-sm text-gray-600 hover:text-gray-900"
               >
@@ -402,7 +409,7 @@ function Forms() {
           >
             {editingReportId ? 'Update' : 'Submit'}
           </button>
-          
+
           {editingReportId && (
             <button
               className="px-4 py-2 ml-2 bg-gray-200 text-gray-800 font-medium rounded-md hover:bg-gray-300 transition"
@@ -447,7 +454,7 @@ function Forms() {
                       } rounded-md cursor-pointer mb-1 gap-3`}
                     onClick={() => handleCategorySelect(catIndex)}
                   >
-                    <img src={squareSvg} alt="" className='w-4 h-4'/>
+                    <img src={squareSvg} alt="" className='w-4 h-4' />
                     <span className="font-medium">{category.name}</span>
                   </div>
 
@@ -456,8 +463,8 @@ function Forms() {
                     <div key={subIndex} className='flex items-center ml-4 w-full'>
                       <div
                         className={`flex justify-between items-center text-[#002946] text-[15px] font-bold px-3 py-2 ml-4 text-sm transition-colors duration-150 ${selectedSubcategory === subIndex
-                            ? 'font-[#002946] bg-[#00294634]'
-                            : 'text-[#676767] hover:bg-gray-50'
+                          ? 'font-[#002946] bg-[#00294634]'
+                          : 'text-[#676767] hover:bg-gray-50'
                           } rounded-md cursor-pointer relative w-full`}
                         onClick={() => handleSubcategorySelect(subIndex)}
                       >
@@ -486,8 +493,8 @@ function Forms() {
 
         <ResizablePanelGroup direction="horizontal" className="flex-grow gap-2">
           {/* Main content - Form Panel */}
-          <ResizablePanel defaultSize={50} className="max-h-full">
-            <div className="h-full flex flex-col bg-white rounded-xl">
+          <ResizablePanel defaultSize={22} className="max-h-full">
+            <div className="h-full  flex flex-col bg-white rounded-xl">
               <div className="p-6 border-b">
                 <h1 className="text-2xl font-bold mb-1">Academic Performance Indicators</h1>
                 <p className="text-gray-500">Manage your academic activities and achievements.</p>
@@ -501,18 +508,22 @@ function Forms() {
           <ResizableHandle className={"bg-gray-400 h-24 justify-self-center self-center w-1 rounded-full"} />
 
           {/* Table Panel */}
-          <ResizablePanel defaultSize={30} className="max-h-full">
+          <ResizablePanel
+            defaultSize={20}
+            className="max-h-full max-w-full md:max-w-[calc(100vw-800px)] overflow-auto"
+          >
             <div className="h-full overflow-y-auto bg-white rounded-xl">
               <SubmittedReportsTable reports={reports || [{}]} onEdit={handleEdit} />
             </div>
           </ResizablePanel>
+
         </ResizablePanelGroup>
       </div>
 
       <div className='flex w-full justify-end mt-8'>
         <div
           className='bg-[#002946] flex items-center gap-2 px-6 py-3 text-[1.2rem] mb-4 text-white font-semibold rounded-2xl shadow-md hover:shadow-lg cursor-pointer transition-all duration-300 hover:bg-[#002946a2] transform hover:scale-105'
-          onClick={() => {navigate('previewsubmit')}}
+          onClick={() => { navigate('previewsubmit') }}
         >
           <Eye />
           Preview & Submit
