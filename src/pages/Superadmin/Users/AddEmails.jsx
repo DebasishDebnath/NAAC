@@ -12,22 +12,18 @@ export default function ImprovedEmailList() {
 
   const { addEmailsuperadmin } = addEmail();
   const { fetchEmailsuperadmin } = fetchEmails();
-useEffect(() => {
- console.log(emails)
-}, [emails])
+  useEffect(() => {
+    console.log(emails);
+  }, [emails]);
 
   useEffect(() => {
     const fetchEmailsList = async () => {
       try {
         setLoading(true);
         const response = await fetchEmailsuperadmin();
-        
-      
-        
-          
-          // Check if response.data is an array and has the expected structure
-          setEmails(response)
-        
+
+        // Check if response.data is an array and has the expected structure
+        setEmails(response);
       } catch (error) {
         console.error("Error fetching emails:", error);
         setError("An error occurred while fetching emails");
