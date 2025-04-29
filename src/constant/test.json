@@ -10,7 +10,7 @@
           "tableData": [
             {
               "fieldName": "Direct Teaching",
-              "backend_field_name":"direct_teaching",
+              "backend_field_name": "direct_teaching",
               "fieldType": "Number",
               "required": true,
               "placeholder": "Enter Hours",
@@ -18,10 +18,10 @@
               "min": 0,
               "max": 80
             },
-            
+
             {
               "fieldName": "Examination duties (question paper setting, invigilation, evaluation of answer scripts) as per allotment",
-              "backend_field_name":"examination_duties",
+              "backend_field_name": "examination_duties",
               "fieldType": "Number",
               "required": true,
               "placeholder": "Enter Hours",
@@ -29,28 +29,36 @@
               "min": 0,
               "max": 80
             }
-            
           ]
         }
       ]
     },
     {
-      "type": "CategoryII",
+      "type": "Category II",
       "min": 2,
       "max": 15,
       "forms": [
         {
           "tableName": "Journal Publications",
+          "endpoint": "CategoryII/journal_publications",
+          "backend_table_name": "journal_publications",
           "tableData": [
             {
               "fieldName": "Category",
+              "backend_field_name": "Category",
               "fieldType": "Options",
-              "options": ["Select Option"],
+              "options": [ "Select Option",
+                "Single Author",
+                "Two Author",
+                "First/Principal/Corresponding Author (More than 2)",
+                "Joint Author (More than 2 Authors)"
+              ],
               "required": true,
               "value": ""
             },
             {
               "fieldName": "Journal Name",
+              "backend_field_name": "Journal_Name",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Journal Name",
@@ -58,6 +66,7 @@
             },
             {
               "fieldName": "Paper Title",
+              "backend_field_name": "Paper_Title",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Paper Title",
@@ -65,20 +74,23 @@
             },
             {
               "fieldName": "Category of Journal",
-              "fieldType": "Options",
-              "options": ["Select Option"],
+              "backend_field_name": "Category_of_Journal",
+              "fieldType": "Text",
               "required": true,
+              "placeholder": "Enter Category of Journal",
               "value": ""
             },
             {
               "fieldName": "Type of Journal",
+              "backend_field_name": "Type_of_Journal",
               "fieldType": "Options",
-              "options": ["Select Option"],
+              "options": [ "Select Option","National", "International"],
               "required": true,
               "value": ""
             },
             {
               "fieldName": "Month and Year of Publication",
+              "backend_field_name": "Publication_Date",
               "fieldType": "Date",
               "required": true,
               "placeholder": "Eg: Jan, 2024",
@@ -86,6 +98,7 @@
             },
             {
               "fieldName": "ISSN",
+              "backend_field_name": "ISSN",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter ISSN",
@@ -93,20 +106,23 @@
             },
             {
               "fieldName": "Impact Factor",
-              "fieldType": "Options",
-              "options": ["Select Option"],
+              "backend_field_name": "Impact_Factor",
+              "fieldType": "Number",
               "required": true,
+              "placeholder": "Enter Impact Factor",
               "value": ""
             },
             {
               "fieldName": "Quartile of Scopus Journal",
+              "backend_field_name": "Scopus_Index",
               "fieldType": "Options",
-              "options": ["Select Option"],
+              "options": [ "Select Option","Q1", "Q2", "Q3", "Q4", "Non Applicable"],
               "required": true,
               "value": ""
             },
             {
               "fieldName": "Drive Link to the Certificate",
+              "backend_field_name": "drive_link",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Link",
@@ -116,16 +132,25 @@
         },
         {
           "tableName": "Books Publication",
+          "endpoint": "CategoryII/books",
+          "backend_table_name": "books",
           "tableData": [
             {
               "fieldName": "Category",
+              "backend_field_name": "Category",
               "fieldType": "Options",
-              "options": ["Select Option"],
+              "options": [ "Select Option",
+                "Single Author",
+                "Two Author",
+                "First/Principal/Corresponding Author (More than 2)",
+                "Joint Author (More than 2 Authors)"
+              ],
               "required": true,
               "value": ""
             },
             {
               "fieldName": "Title of the Book",
+              "backend_field_name": "Book_Title",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Title of the Book",
@@ -133,6 +158,7 @@
             },
             {
               "fieldName": "Publisher Name",
+              "backend_field_name": "Publisher_name",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Publisher Name",
@@ -140,6 +166,7 @@
             },
             {
               "fieldName": "Month and Year of Publication",
+              "backend_field_name": "Publication_Date",
               "fieldType": "Date",
               "required": true,
               "placeholder": "Eg: Jan, 2024",
@@ -147,6 +174,7 @@
             },
             {
               "fieldName": "ISBN/Others",
+              "backend_field_name": "ISBN",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter ISBN or Other Info",
@@ -154,13 +182,15 @@
             },
             {
               "fieldName": "Type of Publication",
+              "backend_field_name": "Type_of_Publication",
               "fieldType": "Options",
-              "options": ["Select Option"],
+              "options": [ "Select Option","National", "International"],
               "required": true,
               "value": ""
             },
             {
               "fieldName": "Drive Link to the Certificate",
+              "backend_field_name": "drive_link",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Link",
@@ -170,16 +200,25 @@
         },
         {
           "tableName": "Books Chapter / Conference Proceedings",
+          "endpoint": "CategoryII/book_chapter_conference",
+          "backend_table_name": "book_chapter_conference",
           "tableData": [
             {
               "fieldName": "Status of Authors",
+              "backend_field_name": "Status_of_authors",
               "fieldType": "Options",
-              "options": ["Select Option"],
+              "options": [ "Select Option",
+                "Single Author",
+                "Two Author",
+                "First/Principal/Corresponding Author (More than 2)",
+                "Joint Author (More than 2 Authors)"
+              ],
               "required": true,
               "value": ""
             },
             {
               "fieldName": "Name of the Paper",
+              "backend_field_name": "Paper_Name",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Name of the Paper",
@@ -187,6 +226,7 @@
             },
             {
               "fieldName": "Conference Name (if Book Chapter, write N/A)",
+              "backend_field_name": "Conference_Name",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Conference Name or N/A",
@@ -194,6 +234,7 @@
             },
             {
               "fieldName": "Book Title",
+              "backend_field_name": "Book_Title",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Book Title",
@@ -201,6 +242,7 @@
             },
             {
               "fieldName": "Publisher",
+              "backend_field_name": "Publisher",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Publisher",
@@ -208,6 +250,7 @@
             },
             {
               "fieldName": "Year",
+              "backend_field_name": "Year",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Year",
@@ -215,6 +258,7 @@
             },
             {
               "fieldName": "Drive Link to the Certificate",
+              "backend_field_name": "Drive_link",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Link",
@@ -224,16 +268,20 @@
         },
         {
           "tableName": "Editor of Book",
+          "endpoint": "CategoryII/editor_books",
+          "backend_table_name": "editor_books",
           "tableData": [
             {
               "fieldName": "Type",
+              "backend_field_name": "Type",
               "fieldType": "Options",
-              "options": ["Select Option"],
+              "options": [ "Select Option","National", "International"],
               "required": true,
               "value": ""
             },
             {
               "fieldName": "Name of Editors",
+              "backend_field_name": "Name_of_Editors",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Name of Editors",
@@ -241,6 +289,7 @@
             },
             {
               "fieldName": "Book Title",
+              "backend_field_name": "Book_Title",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Book Title",
@@ -248,6 +297,7 @@
             },
             {
               "fieldName": "Publishers",
+              "backend_field_name": "Publishers",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Publisher Name",
@@ -255,6 +305,7 @@
             },
             {
               "fieldName": "Drive Link to the Certificate",
+              "backend_field_name": "Drive_Link_to_Certificate",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Link",
@@ -264,16 +315,25 @@
         },
         {
           "tableName": "Translation Work",
+          "endpoint": "CategoryII/works",
+          "backend_table_name": "works",
           "tableData": [
             {
               "fieldName": "Number of Authors",
+              "backend_field_name": "Number_of_author",
               "fieldType": "Options",
-              "options": ["Select Option"],
+              "options": [ "Select Option",
+                "Single Author",
+                "Two Author",
+                "First/Principal/Corresponding Author (More than 2)",
+                "Joint Author (More than 2 Authors)"
+              ],
               "required": true,
               "value": ""
             },
             {
               "fieldName": "Title of the Book",
+              "backend_field_name": "Title_of_the_book",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Title of the Book",
@@ -281,6 +341,7 @@
             },
             {
               "fieldName": "Publisher Name",
+              "backend_field_name": "Publisher_name",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Publisher Name",
@@ -288,6 +349,7 @@
             },
             {
               "fieldName": "Drive Link to the Certificate",
+              "backend_field_name": "Drive_link",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Link",
@@ -297,9 +359,12 @@
         },
         {
           "tableName": "Consultancy",
+          "endpoint": "CategoryII/consultancy",
+          "backend_table_name": "consultancy",
           "tableData": [
             {
               "fieldName": "Name of the Consultancy Project",
+              "backend_field_name": "Name_of_Consultancy_Project",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Name of the Consultancy Project",
@@ -307,6 +372,7 @@
             },
             {
               "fieldName": "Organisation of Consultancy",
+              "backend_field_name": "Organisation_of_Consultancy",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Organisation of Consultancy",
@@ -314,6 +380,7 @@
             },
             {
               "fieldName": "Duration (Eg: Jan, 2024)",
+              "backend_field_name": "Duration",
               "fieldType": "Date",
               "required": true,
               "placeholder": "Enter Duration",
@@ -321,6 +388,7 @@
             },
             {
               "fieldName": "Date (Eg: Jan, 2024)",
+              "backend_field_name": "Date",
               "fieldType": "Date",
               "required": true,
               "placeholder": "Enter Date",
@@ -328,18 +396,32 @@
             },
             {
               "fieldName": "Drive Link to the Certificate",
+              "backend_field_name": "Drive_Link_to_Certificate",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Link",
               "value": ""
+            },
+            {
+              "fieldName": "Amount of Consultation Fees",
+              "backend_field_name": "Amount_of_Consultation_Fees",
+              "fieldType": "Number",
+              "required": true,
+              "placeholder": "Enter Amount of Consultation Fees",
+              "value": "",
+              "min": 0,
+              "max": 80
             }
           ]
         },
         {
           "tableName": "Patent Status",
+          "endpoint": "CategoryII/statuses",
+          "backend_table_name": "statuses",
           "tableData": [
             {
               "fieldName": "Application No",
+              "backend_field_name": "Application_no",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Application No",
@@ -347,6 +429,7 @@
             },
             {
               "fieldName": "Inventors",
+              "backend_field_name": "Inventors",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Inventors",
@@ -354,6 +437,7 @@
             },
             {
               "fieldName": "Title of the Patent",
+              "backend_field_name": "Title_of_the_patent",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Title of the Patent",
@@ -361,13 +445,15 @@
             },
             {
               "fieldName": "Status",
+              "backend_field_name": "Status",
               "fieldType": "Options",
-              "options": ["Select Option"],
+              "options": [ "Select Option","Published", "Granted"],
               "required": true,
               "value": ""
             },
             {
               "fieldName": "Date of Publication / Grant (Eg: Jan, 2024)",
+              "backend_field_name": "Publication_Date",
               "fieldType": "Date",
               "required": true,
               "placeholder": "Enter Date of Publication / Grant",
@@ -375,6 +461,7 @@
             },
             {
               "fieldName": "Country where Patented",
+              "backend_field_name": "Patented_country",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Country where Patented",
@@ -382,32 +469,55 @@
             },
             {
               "fieldName": "Drive Link to the Certificate",
+              "backend_field_name": "drive_link",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Link",
+              "value": ""
+            },
+            {
+              "fieldName": "Applicant",
+              "backend_field_name": "Applicant",
+              "fieldType": "Options",
+              "options": [ "Select Option","Self", "IEM"],
+              "required": true,
               "value": ""
             }
           ]
         },
         {
           "tableName": "Research Project",
+          "endpoint": "CategoryII/research",
+          "backend_table_name": "research",
           "tableData": [
             {
               "fieldName": "Status of Investigator",
+              "backend_field_name": "Status_of_Investigator",
               "fieldType": "Options",
-              "options": ["Select Option"],
+              "options": [ "Select Option",
+                "Single Investigator",
+                "Principal Investigator in Joint Project",
+                "Co-Investigator in Joint Project"
+              ],
               "required": true,
               "value": ""
             },
             {
               "fieldName": "Status",
+              "backend_field_name": "Status",
               "fieldType": "Options",
-              "options": ["Select Option"],
+              "options": [ "Select Option",
+                "Ongoing (more than 10 lakhs)",
+                "Ongoing (less than 10 lakhs)",
+                "Completed (more than 10 lakhs)",
+                "Completed (less than 10 lakhs)"
+              ],
               "required": true,
               "value": ""
             },
             {
               "fieldName": "Title of the Project with name of sponsor (Eg: Application of AI in WSN - DST SERB)",
+              "backend_field_name": "Title_of_the_project",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Title of the Project with name of sponsor",
@@ -415,13 +525,20 @@
             },
             {
               "fieldName": "Category",
+              "backend_field_name": "Category",
               "fieldType": "Options",
-              "options": ["Select Option"],
+              "options": [ "Select Option",
+                "Gov",
+                "Non-Gov",
+                "In-House (Self)",
+                "In-House (Student)"
+              ],
               "required": true,
               "value": ""
             },
             {
               "fieldName": "Fund in Rs.",
+              "backend_field_name": "Fund_in_Rs",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Fund in Rs.",
@@ -429,6 +546,7 @@
             },
             {
               "fieldName": "Duration",
+              "backend_field_name": "Duration",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Duration",
@@ -436,6 +554,7 @@
             },
             {
               "fieldName": "Date of Grant (Eg: Jan, 2024)",
+              "backend_field_name": "Date_of_Grant",
               "fieldType": "Date",
               "required": true,
               "placeholder": "Enter Date of Grant",
@@ -443,6 +562,7 @@
             },
             {
               "fieldName": "Drive Link to the Certificate",
+              "backend_field_name": "Drive_link",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Link",
@@ -452,9 +572,12 @@
         },
         {
           "tableName": "Award/Fellowship",
+          "endpoint": "CategoryII/fellowship",
+          "backend_table_name": "",
           "tableData": [
             {
               "fieldName": "Name of Award/Fellowship",
+              "backend_field_name": "Name_of_Fellowship",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Name of Award/Fellowship",
@@ -462,13 +585,15 @@
             },
             {
               "fieldName": "International/National",
+              "backend_field_name": "Type_of_Fellowship",
               "fieldType": "Options",
-              "options": ["Select Option"],
+              "options": [ "Select Option","National", "International"],
               "required": true,
               "value": ""
             },
             {
               "fieldName": "Name of the Awarding Agency",
+              "backend_field_name": "Name_Award_agency",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Name of the Awarding Agency",
@@ -476,6 +601,7 @@
             },
             {
               "fieldName": "Date (Eg: Jan, 2024)",
+              "backend_field_name": "Date",
               "fieldType": "Date",
               "required": true,
               "placeholder": "Enter Date",
@@ -483,6 +609,7 @@
             },
             {
               "fieldName": "Drive Link to the Certificate",
+              "backend_field_name": "Drive_link",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Link",
@@ -492,16 +619,30 @@
         },
         {
           "tableName": "Event Organiser / Participation",
+          "endpoint": "CategoryII/event_org_parts",
+          "backend_table_name": "event_org_parts",
           "tableData": [
             {
               "fieldName": "Type of Event",
+              "backend_field_name": "Type_of_Event",
               "fieldType": "Options",
-              "options": ["Select Option"],
+              "options": [ "Select Option",
+                "Faculty Development Programme(Institutional)",
+                "Faculty Development Programme(Govt Enterprise - e.g ATAL, AICTE, NPTEL etc.)",
+                "Workshop",
+                "Seminar (International)",
+                "Seminar (Govt./ ATAL/ AICTE..)",
+                "Seminar",
+                "Talk",
+                "Hackathon",
+                "Other Event"
+              ],
               "required": true,
               "value": ""
             },
             {
               "fieldName": "Event Name",
+              "backend_field_name": "Name_of_Event",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Event Name",
@@ -509,6 +650,7 @@
             },
             {
               "fieldName": "Event Duration (Date Range) Eg: 01st Jan, 2024 - 05th Jan, 2024",
+              "backend_field_name": "Event_duration",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Event Duration",
@@ -516,13 +658,22 @@
             },
             {
               "fieldName": "Job Responsibility / Responsibilities beared in the event",
+              "backend_field_name": "Role",
               "fieldType": "Options",
-              "options": ["Select Option"],
+              "options": [ "Select Option",
+                "Resource Person",
+                "Coordinator",
+                "Participant",
+                "Organizer",
+                "Internation Conference Paper Presenter (Individual Presenter only)",
+                "National Conference Paper Presenter (Individual Presenter only)"
+              ],
               "required": true,
               "value": ""
             },
             {
               "fieldName": "Drive Link to the Certificate",
+              "backend_field_name": "Drive_Link_to_Certificate",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Link",
@@ -532,9 +683,12 @@
         },
         {
           "tableName": "Development of Innovative Pedagogy",
+          "endpoint": "CategoryII/pedogogies",
+          "backend_table_name": "pedogogies",
           "tableData": [
             {
               "fieldName": "Description",
+              "backend_field_name": "Description",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Description",
@@ -542,6 +696,7 @@
             },
             {
               "fieldName": "Contributor/Contributors",
+              "backend_field_name": "Contributor_Contributors",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Contributor/Contributors",
@@ -549,6 +704,7 @@
             },
             {
               "fieldName": "Drive Link to the Certificate",
+              "backend_field_name": "Drive_link",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Link",
@@ -558,9 +714,12 @@
         },
         {
           "tableName": "Design of New Curriculam and Courses (ICT Based)",
+          "endpoint": "CategoryII/curriculas",
+          "backend_table_name": "curriculas",
           "tableData": [
             {
               "fieldName": "Description",
+              "backend_field_name": "Description",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Description",
@@ -568,6 +727,7 @@
             },
             {
               "fieldName": "Contributor/Contributors",
+              "backend_field_name": "Contributors",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Contributor/Contributors",
@@ -575,6 +735,7 @@
             },
             {
               "fieldName": "Drive Link to the Certificate",
+              "backend_field_name": "Drive_link",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Link",
@@ -584,9 +745,12 @@
         },
         {
           "tableName": "Development of Complete MOOC's in 4 Quadrant (4 Credit Course)",
+          "endpoint": "CategoryII/MOOCsDevelopment",
+          "backend_table_name": "MOOCsDevelopment",
           "tableData": [
             {
               "fieldName": "Description",
+              "backend_field_name": "Description",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Description",
@@ -594,13 +758,15 @@
             },
             {
               "fieldName": "Credit Score",
+              "backend_field_name": "CreditScore",
               "fieldType": "Options",
-              "options": ["Select Option"],
+              "options": [ "Select Option","1", "2", "3", "4"],
               "required": true,
               "value": ""
             },
             {
               "fieldName": "Drive Link to the Certificate",
+              "backend_field_name": "drive_link",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Link",
@@ -610,9 +776,12 @@
         },
         {
           "tableName": "MOOCs (development in 4 quadrant) per module / lecture",
+          "endpoint": "CategoryII/MOOCsContentWriter",
+          "backend_table_name": "MOOCsContentWriter",
           "tableData": [
             {
               "fieldName": "Description",
+              "backend_field_name": "Description",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Description",
@@ -620,6 +789,7 @@
             },
             {
               "fieldName": "Drive Link to the Certificate",
+              "backend_field_name": "drive_link",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Link",
@@ -629,9 +799,12 @@
         },
         {
           "tableName": "Content Writer/Subject Matter Expert for each Module of MOOCs (At Least One Quadrant)",
+          "endpoint": "CategoryII/MOOCsModule",
+          "backend_table_name": "MOOCsModule",
           "tableData": [
             {
               "fieldName": "Description",
+              "backend_field_name": "Description",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Description",
@@ -639,6 +812,7 @@
             },
             {
               "fieldName": "Drive Link to the Certificate",
+              "backend_field_name": "drive_link",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Link",
@@ -648,9 +822,12 @@
         },
         {
           "tableName": "Course Coordinator for MOOCs",
+          "endpoint": "CategoryII/MOOCsCourseCoordinator",
+          "backend_table_name": "MOOCsCourseCoordinator",
           "tableData": [
             {
               "fieldName": "Description",
+              "backend_field_name": "Description",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Description",
@@ -658,13 +835,15 @@
             },
             {
               "fieldName": "Credit Score",
+              "backend_field_name": "CreditScore",
               "fieldType": "Options",
-              "options": ["Select Option"],
+              "options": [ "Select Option","1", "2", "3", "4"],
               "required": true,
               "value": ""
             },
             {
               "fieldName": "Drive Link to the Certificate",
+              "backend_field_name": "drive_link",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Link",
@@ -674,16 +853,28 @@
         },
         {
           "tableName": "Development of E-Content in 4 quadrants for a Complete Course / E-Book",
+          "endpoint": "CategoryII/e_content_items",
+          "backend_table_name": "e_content_items",
           "tableData": [
             {
               "fieldName": "Description",
+              "backend_field_name": "Description",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Description",
               "value": ""
             },
             {
+              "fieldName": "Quadrant",
+              "backend_field_name": "Quadrant",
+              "fieldType": "Text",
+              "required": true,
+              "placeholder": "Enter Quadrant",
+              "value": ""
+            },
+            {
               "fieldName": "Drive Link to the Certificate",
+              "backend_field_name": "Drive_Link_to_Certificate",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Link",
@@ -693,35 +884,28 @@
         },
         {
           "tableName": "E-Content (developed in 4 quadrants) Per Module",
+          "endpoint": "CategoryII/e_content_modules",
+          "backend_table_name": "e_content_modules",
           "tableData": [
             {
               "fieldName": "Description",
+              "backend_field_name": "Description",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Description",
               "value": ""
             },
             {
-              "fieldName": "Drive Link to the Certificate",
+              "fieldName": "Quadrant",
+              "backend_field_name": "Quadrant",
               "fieldType": "Text",
               "required": true,
-              "placeholder": "Enter Link",
-              "value": ""
-            }
-          ]
-        },
-        {
-          "tableName": "Contribution to development of E-Content module in Complete Course / E-Book (at least one quadrant)",
-          "tableData": [
-            {
-              "fieldName": "Description",
-              "fieldType": "Text",
-              "required": true,
-              "placeholder": "Enter Description",
+              "placeholder": "Enter Quadrant",
               "value": ""
             },
             {
               "fieldName": "Drive Link to the Certificate",
+              "backend_field_name": "Drive_Link_to_Certificate",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Link",
@@ -731,16 +915,28 @@
         },
         {
           "tableName": "Editor of E-Content for Complete Course / E-Book",
+          "endpoint": "CategoryII/e_content_items",
+          "backend_table_name": "e_content_items",
           "tableData": [
             {
               "fieldName": "Description",
+              "backend_field_name": "Description",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Description",
               "value": ""
             },
             {
+              "fieldName": "Quadrant",
+              "backend_field_name": "Quadrant",
+              "fieldType": "Text",
+              "required": true,
+              "placeholder": "Enter Quadrant",
+              "value": ""
+            },
+            {
               "fieldName": "Drive Link to the Certificate",
+              "backend_field_name": "Drive_Link_to_Certificate",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Link",
@@ -750,9 +946,12 @@
         },
         {
           "tableName": "Status as Guide - Ph.D. Guidance (Degree Awarded)",
+          "endpoint": "CategoryII/phd_guidance",
+          "backend_table_name": "Phd_guidence",
           "tableData": [
             {
               "fieldName": "Name of Student",
+              "backend_field_name": "student_name",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Name of Student",
@@ -760,6 +959,7 @@
             },
             {
               "fieldName": "Topic of Research",
+              "backend_field_name": "research_topic",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Topic of Research",
@@ -767,6 +967,7 @@
             },
             {
               "fieldName": "Domain",
+              "backend_field_name": "domain",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Domain",
@@ -774,6 +975,7 @@
             },
             {
               "fieldName": "PhD Award Date (Eg: Jan, 2024)",
+              "backend_field_name": "Phd_award_date",
               "fieldType": "Date",
               "required": true,
               "placeholder": "Enter PhD Award Date",
@@ -781,13 +983,19 @@
             },
             {
               "fieldName": "Guidance (Awarded)",
+              "backend_field_name": "Guidance_type",
               "fieldType": "Options",
-              "options": ["Select Option"],
+              "options": [ "Select Option",
+                "Single Supervisor",
+                "Supervisor in Joint Guidance",
+                "Co-Supervisor in Joint Guidance"
+              ],
               "required": true,
               "value": ""
             },
             {
               "fieldName": "Drive Link to the Certificate",
+              "backend_field_name": "Drive_link",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Link",
@@ -797,9 +1005,12 @@
         },
         {
           "tableName": "Status as Guide - Ph.D. Guidance (for Pursuing Students)",
+          "endpoint": "CategoryII/phd_guidance_student",
+          "backend_table_name": "phd_guidance_student",
           "tableData": [
             {
               "fieldName": "Name of Student",
+              "backend_field_name": "student_name",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Name of Student",
@@ -807,6 +1018,7 @@
             },
             {
               "fieldName": "Topic of Research",
+              "backend_field_name": "research_topic",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Topic of Research",
@@ -814,6 +1026,7 @@
             },
             {
               "fieldName": "Domain",
+              "backend_field_name": "domain",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Domain",
@@ -821,6 +1034,7 @@
             },
             {
               "fieldName": "PhD Award Date (Eg: Jan, 2024)",
+              "backend_field_name": "Phd_award_date",
               "fieldType": "Date",
               "required": true,
               "placeholder": "Enter PhD Award Date",
@@ -828,20 +1042,27 @@
             },
             {
               "fieldName": "Guidance (Submitted)",
+              "backend_field_name": "Guidance_type",
               "fieldType": "Options",
-              "options": ["Select Option"],
+              "options": [ "Select Option",
+                "Single Supervisor",
+                "Supervisor in Joint Guidance",
+                "Co-Supervisor in Joint Guidance"
+              ],
               "required": true,
               "value": ""
             },
             {
               "fieldName": "Status",
+              "backend_field_name": "status",
               "fieldType": "Options",
-              "options": ["Select Option"],
+              "options": [ "Select Option","Select Option"],
               "required": true,
               "value": ""
             },
             {
               "fieldName": "Drive Link to the Certificate",
+              "backend_field_name": "Drive_link",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Link",
@@ -851,9 +1072,12 @@
         },
         {
           "tableName": "M.Phil./P.G Dissertation Guidance",
+          "endpoint": "CategoryII/dissertation",
+          "backend_table_name": "Dissertation",
           "tableData": [
             {
               "fieldName": "Name of Student",
+              "backend_field_name": "Name_of_Student",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Name of Student",
@@ -861,6 +1085,7 @@
             },
             {
               "fieldName": "Topic of Research",
+              "backend_field_name": "Topic_of_Research",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Topic of Research",
@@ -868,6 +1093,7 @@
             },
             {
               "fieldName": "Domain",
+              "backend_field_name": "Domain",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Domain",
@@ -875,13 +1101,19 @@
             },
             {
               "fieldName": "Dissertation",
+              "backend_field_name": "Dissertation",
               "fieldType": "Options",
-              "options": ["Select Option"],
+              "options": [ "Select Option",
+                "Single Supervisor",
+                "Supervisor in Joint Guidance",
+                "Co-Supervisor in Joint Guidance"
+              ],
               "required": true,
               "value": ""
             },
             {
               "fieldName": "Drive Link to the Certificate",
+              "backend_field_name": "Drive_Link_to_Certificate",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Link",
@@ -891,9 +1123,12 @@
         },
         {
           "tableName": "Online AI Courses",
+          "endpoint": "CategoryII/OnlineCourse",
+          "backend_table_name": "OnlineCourse",
           "tableData": [
             {
               "fieldName": "Name of Course",
+              "backend_field_name": "Name_of_Course",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Name of Course",
@@ -901,6 +1136,7 @@
             },
             {
               "fieldName": "Platform",
+              "backend_field_name": "Platform",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Platform",
@@ -908,6 +1144,7 @@
             },
             {
               "fieldName": "Number of Hours",
+              "backend_field_name": "Number_of_Hours",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Number of Hours",
@@ -915,6 +1152,7 @@
             },
             {
               "fieldName": "Drive Link to the Certificate",
+              "backend_field_name": "drive_link",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Link",
@@ -924,16 +1162,20 @@
         },
         {
           "tableName": "Policy Document (International Body / Organisation / Central Govt. or state Govt.)",
+          "endpoint": "CategoryII/PolicyDocument",
+          "backend_table_name": "PolicyDocument",
           "tableData": [
             {
               "fieldName": "Status",
+              "backend_field_name": "Status",
               "fieldType": "Options",
-              "options": ["Select Option"],
+              "options": [ "Select Option","International", "National", "State"],
               "required": true,
               "value": ""
             },
             {
               "fieldName": "Description",
+              "backend_field_name": "Description",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Description",
@@ -941,46 +1183,7 @@
             },
             {
               "fieldName": "Drive Link to the Certificate",
-              "fieldType": "Text",
-              "required": true,
-              "placeholder": "Enter Link",
-              "value": ""
-            }
-          ]
-        },
-        {
-          "tableName": "Invited Lectures / Paper Presentation in Seminars / Full Paper in Conference",
-          "tableData": [
-            {
-              "fieldName": "Title",
-              "fieldType": "Text",
-              "required": true,
-              "placeholder": "Enter Title",
-              "value": ""
-            },
-            {
-              "fieldName": "Date",
-              "fieldType": "Text",
-              "required": true,
-              "placeholder": "Enter Date",
-              "value": ""
-            },
-            {
-              "fieldName": "Category",
-              "fieldType": "Options",
-              "options": ["Select Option"],
-              "required": true,
-              "value": ""
-            },
-            {
-              "fieldName": "Type",
-              "fieldType": "Options",
-              "options": ["Select Option"],
-              "required": true,
-              "value": ""
-            },
-            {
-              "fieldName": "Drive Link to the Certificate",
+              "backend_field_name": "Drive_Link_to_Certificate",
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Link",

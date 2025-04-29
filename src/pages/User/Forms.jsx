@@ -31,30 +31,32 @@ function Forms() {
   const [selectedSubcategory, setSelectedSubcategory] = useState(0);
   const [formDates, setFormDates] = useState({});
   const [formValues, setFormValues] = useState({});
-  const { formSubmit } = useFormSubmission()
-  const [popUpShow, setPopUpShow] = useState(false)
-  const [isCollapsed, setIsCollapsed] = useState(false); 
-  const [endPointGet, setEndPointGet]= useState("CategoryI/teaching_duties")
-  const [reports, setReports]= useState()
-  const {fetchDraft}= useUserDraft()
-  const navigate= useNavigate()
+  const { formSubmit } = useFormSubmission();
+  const [popUpShow, setPopUpShow] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [endPointGet, setEndPointGet] = useState("CategoryI/teaching_duties");
+  const [reports, setReports] = useState();
+  const { fetchDraft } = useUserDraft();
+  const navigate = useNavigate();
+
+  // Add new state for storing the report being edited
+  const [editingReportId, setEditingReportId] = useState(null);
+  // Add a flag to prevent form reset when editing
+  const [isEditing, setIsEditing] = useState(false);
 
   const handleToggleSidebar = () => {
     setIsCollapsed((prev) => !prev);
   };
 
-
-
-  useEffect(()=>{
-    console.log('selectedCategory',selectedCategory, selectedSubcategory)
-  },[selectedCategory, selectedSubcategory])
+  useEffect(() => {
+    console.log('selectedCategory', selectedCategory, selectedSubcategory);
+  }, [selectedCategory, selectedSubcategory]);
 
   // Format categories with fallback names
   const categories = formData.form.map((category) => ({
     name: category.name || category.type || "Untitled Category",
     subItems: category.forms.map(form => form.tableName || "Untitled Form")
   }));
-
 
   // Automatically select first form if only one exists
   useEffect(() => {
@@ -64,8 +66,11 @@ function Forms() {
     }
   }, [selectedCategory]);
 
-  // Initialize form values from the data
+  // Initialize form values from the data - ONLY when not editing
   useEffect(() => {
+    // Skip initialization if we're currently editing
+    if (isEditing) return;
+
     const categoryData = formData.form[selectedCategory];
     const selectedForm = categoryData?.forms[selectedSubcategory];
 
@@ -78,15 +83,21 @@ function Forms() {
       });
       setFormValues(initialValues);
     }
-  }, [selectedCategory, selectedSubcategory]);
+  }, [selectedCategory, selectedSubcategory, isEditing]);
 
   const handleCategorySelect = (catIndex) => {
+    // Reset editing state when changing category
+    setEditingReportId(null);
+    setIsEditing(false);
     setSelectedCategory(catIndex);
     const categoryForms = formData.form[catIndex]?.forms || [];
     setSelectedSubcategory(0); // reset or select only form
   };
 
   const handleSubcategorySelect = (subIndex) => {
+    // Reset editing state when changing subcategory
+    setEditingReportId(null);
+    setIsEditing(false);
     setSelectedSubcategory(subIndex);
   };
 
@@ -98,22 +109,38 @@ function Forms() {
     }));
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     const categoryData = formData.form[selectedCategory];
     const selectedForm = categoryData?.forms[selectedSubcategory];
-    setEndPointGet(selectedForm.endpoint)
-  },[selectedCategory, selectedSubcategory])
+    setEndPointGet(selectedForm?.endpoint);
+  }, [selectedCategory, selectedSubcategory]);
 
-  useEffect(()=>{
-    console.log('endPointGet', endPointGet)
-    const helloWorld=async()=>{
-      const response= await fetchDraft(endPointGet)
-      if(endPointGet===undefined)
-        setReports([])
-      setReports([response?.data])
-    }
-    helloWorld()
-  },[endPointGet])
+  useEffect(() => {
+    console.log('endPointGet', endPointGet);
+
+    const fetchReports = async () => {
+      const categoryData = formData.form[selectedCategory];
+
+      const selectedForm = categoryData?.forms[selectedSubcategory];
+
+      if (endPointGet) {
+        const response = await fetchDraft(endPointGet);
+
+        if (response?.data) {
+          // Check if response.data is an object and convert to array if needed
+          const data = Array.isArray(response.data[selectedForm?.backend_table_name]) ? response.data[selectedForm?.backend_table_name] : [response.data];
+          setReports(data);
+        } else {
+          setReports([]);
+        }
+      } else {
+        setReports([]);
+      }
+    };
+
+    fetchReports();
+  }, [endPointGet]);
+
 
   // Handle form submission
   const handleSubmit = async () => {
@@ -123,19 +150,24 @@ function Forms() {
     const categoryData = formData.form[selectedCategory];
     const selectedForm = categoryData?.forms[selectedSubcategory];
 
+    if (!selectedForm) return;
+
     const backend_table_name = selectedForm.backend_table_name;
     const type = categoryData.type;
     const endpoint = selectedForm.endpoint;
 
-    const data = await formSubmit(formValues, endpoint)
+    console.log('editingReportId', editingReportId)
+
+    // If we're editing, use update endpoint or method
+    const data = await formSubmit(formValues, endpoint, editingReportId);
 
     if (!data?.success) {
       enqueueSnackbar(data.message, { variant: 'error' });
-      return
+      return;
     }
 
-    console.log("data1", data)
-    console.log(backend_table_name, type)
+    console.log("data1", data);
+    console.log(backend_table_name, type);
 
     if (selectedForm) {
       const requiredFields = selectedForm.tableData
@@ -150,8 +182,110 @@ function Forms() {
       }
 
       // Submit the form
-      enqueueSnackbar("Form submitted successfully", { variant: 'success' });
+      enqueueSnackbar(editingReportId ? "Report updated successfully" : "Form submitted successfully", { variant: 'success' });
       setPopUpShow(false);
+
+      // Reset the editing state
+      setEditingReportId(null);
+      setIsEditing(false);
+
+      // Refresh the reports list
+      fetchReports();
+
+      // Reset form values
+      const initialValues = {};
+      selectedForm.tableData.forEach(field => {
+        if (field.backend_field_name) {
+          initialValues[field.backend_field_name] = field.value || '';
+        }
+      });
+      setFormValues(initialValues);
+    }
+  };
+
+  // Function to fetch reports
+  const fetchReports = async () => {
+    const categoryData = formData.form[selectedCategory];
+    const selectedForm = categoryData?.forms[selectedSubcategory];
+
+    if (endPointGet) {
+      const response = await fetchDraft(endPointGet);
+      if (response?.data) {
+        setReports(response.data[selectedForm?.backend_table_name]);
+      } else {
+        setReports([]);
+      }
+    } else {
+      setReports([]);
+    }
+  };
+
+  useEffect(() => {
+    console.log(editingReportId)
+  }, [editingReportId])
+
+  // Handle edit button click from TableComp
+  const handleEdit = (report) => {
+    console.log("Editing report:", report);
+
+    // Set the editing flags first
+    setIsEditing(true);
+    setEditingReportId(report?._id);
+
+    // Populate form values with the report data
+    const newFormValues = {};
+
+    // Get all fields from the current form
+    const categoryData = formData.form[selectedCategory];
+    const selectedForm = categoryData?.forms[selectedSubcategory];
+
+    if (selectedForm) {
+      // Initialize with defaults or values from the report
+      selectedForm.tableData.forEach(field => {
+        if (field.backend_field_name) {
+          // Set the values from the report if they exist, otherwise use defaults
+          const value = report[field.backend_field_name] !== undefined ?
+            report[field.backend_field_name] :
+            field.value || '';
+
+          newFormValues[field.backend_field_name] = value;
+
+          // Also update the date picker if it's a date field
+          if (field.fieldType === "Date" && report[field.backend_field_name]) {
+            try {
+              const dateValue = new Date(report[field.backend_field_name]);
+              setFormDates(prev => ({
+                ...prev,
+                [field.backend_field_name]: dateValue
+              }));
+            } catch (e) {
+              console.error("Failed to parse date:", e);
+            }
+          }
+        }
+      });
+
+      // Update the form values state
+      setFormValues(newFormValues);
+    }
+  };
+
+  const cancelEditing = () => {
+    setEditingReportId(null);
+    setIsEditing(false);
+
+    // Reset form values
+    const categoryData = formData.form[selectedCategory];
+    const selectedForm = categoryData?.forms[selectedSubcategory];
+
+    if (selectedForm) {
+      const initialValues = {};
+      selectedForm.tableData.forEach(field => {
+        if (field.backend_field_name) {
+          initialValues[field.backend_field_name] = field.value || '';
+        }
+      });
+      setFormValues(initialValues);
     }
   };
 
@@ -166,8 +300,23 @@ function Forms() {
     return (
       <div className="space-y-6 transition-all duration-500 ease-in-out">
         <div>
-          <h2 className="text-lg font-medium">{selectedForm.tableName || "Untitled Form"}</h2>
-          <span className='text-gray-500'>Total Submissions: {3}</span>
+          <h2 className="text-lg font-medium">
+            {editingReportId ? `Edit ${selectedForm.tableName || "Form"}` : selectedForm.tableName || "Untitled Form"}
+          </h2>
+          {!editingReportId && <span className='text-gray-500'>Total Submissions: {3}</span>}
+          {editingReportId && (
+            <div className="flex items-center gap-2 mt-1">
+              <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
+                Editing Report ID: {editingReportId}
+              </span>
+              <button
+                onClick={cancelEditing}
+                className="text-sm text-gray-600 hover:text-gray-900"
+              >
+                Cancel Editing
+              </button>
+            </div>
+          )}
         </div>
 
         {formFields.map((field, index) => {
@@ -197,14 +346,9 @@ function Forms() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md transition-all duration-200 focus:ring-2 focus:ring-blue-400"
                   placeholder={field.placeholder}
                   value={formValues[fieldKey] || ''}
-                  // min={field.min}
-                  // max={field.max}
                   onChange={(e) => {
                     const val = Number(e.target.value);
-
-                   
-                      handleInputChange(fieldKey, val);
-                    
+                    handleInputChange(fieldKey, val);
                   }}
                 />
               )}
@@ -260,68 +404,28 @@ function Forms() {
 
         <div className="pt-2 pb-6">
           <button
-            className="px-4 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition"
+            className={`px-4 py-2 ${editingReportId ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700'} text-white font-medium rounded-md transition`}
             onClick={handleSubmit}
           >
-            Submit
+            {editingReportId ? 'Update' : 'Submit'}
           </button>
-        </div>
-      </div>
-    );
-  };
 
-  // New function to render popup content
-  const renderPopupContent = () => {
-    const categoryData = formData.form[selectedCategory];
-    const selectedForm = categoryData?.forms[selectedSubcategory];
-
-    if (!selectedForm) return null;
-
-    return (
-      <div className="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all max-w-4xl w-full">
-        {/* Popup Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4">
-          <div className="flex items-center justify-between">
-            <h3 className="text-xl font-bold text-white">
-              Preview & Submit: {selectedForm.tableName || "Form"}
-            </h3>
+          {editingReportId && (
             <button
-              onClick={() => setPopUpShow(false)}
-              className="text-white hover:text-gray-200 transition-colors"
+              className="px-4 py-2 ml-2 bg-gray-200 text-gray-800 font-medium rounded-md hover:bg-gray-300 transition"
+              onClick={cancelEditing}
             >
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
+              Cancel
             </button>
-          </div>
-        </div>
-
-        <SubmittedReportsTable />
-
-        {/* Popup Footer */}
-        <div className="bg-gray-50 px-6 py-4 flex justify-end gap-3">
-          <button
-            type="button"
-            className="inline-flex justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            onClick={() => setPopUpShow(false)}
-          >
-            Cancel
-          </button>
-          <button
-            type="button"
-            className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 border border-transparent rounded-md shadow-sm hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300 transform hover:scale-105"
-            onClick={handleSubmit}
-          >
-            Submit
-          </button>
+          )}
         </div>
       </div>
     );
   };
+
 
   return (
     <div className="h-[80vh] flex flex-col ">
-
       <div className='h-[100%] flex'>
         {/* Sidebar */}
         <div className={`h-full pt-12 relative overflow-y-auto p-4 mr-2.5 border-gray-200 bg-white rounded-xl transition-all duration-300 ${isCollapsed ? "w-[15%]" : "w-[30%]"
@@ -350,7 +454,7 @@ function Forms() {
                       } rounded-md cursor-pointer mb-1 gap-3`}
                     onClick={() => handleCategorySelect(catIndex)}
                   >
-                    <img src={squareSvg} alt="" className='w-4 h-4'/>
+                    <img src={squareSvg} alt="" className='w-4 h-4' />
                     <span className="font-medium">{category.name}</span>
                   </div>
 
@@ -359,8 +463,8 @@ function Forms() {
                     <div key={subIndex} className='flex items-center ml-4 w-full'>
                       <div
                         className={`flex justify-between items-center text-[#002946] text-[15px] font-bold px-3 py-2 ml-4 text-sm transition-colors duration-150 ${selectedSubcategory === subIndex
-                            ? 'font-[#002946] bg-[#00294634]'
-                            : 'text-[#676767] hover:bg-gray-50'
+                          ? 'font-[#002946] bg-[#00294634]'
+                          : 'text-[#676767] hover:bg-gray-50'
                           } rounded-md cursor-pointer relative w-full`}
                         onClick={() => handleSubcategorySelect(subIndex)}
                       >
@@ -381,20 +485,16 @@ function Forms() {
                       </div>
                     </div>
                   ))}
-
-
                 </div>
               );
             })}
           </nav>
         </div>
 
-
-
         <ResizablePanelGroup direction="horizontal" className="flex-grow gap-2">
           {/* Main content - Form Panel */}
-          <ResizablePanel defaultSize={50} className="max-h-full">
-            <div className="h-full flex flex-col bg-white rounded-xl">
+          <ResizablePanel defaultSize={22} className="max-h-full">
+            <div className="h-full  flex flex-col bg-white rounded-xl">
               <div className="p-6 border-b">
                 <h1 className="text-2xl font-bold mb-1">Academic Performance Indicators</h1>
                 <p className="text-gray-500">Manage your academic activities and achievements.</p>
@@ -408,55 +508,27 @@ function Forms() {
           <ResizableHandle className={"bg-gray-400 h-24 justify-self-center self-center w-1 rounded-full"} />
 
           {/* Table Panel */}
-          <ResizablePanel defaultSize={30} className="max-h-full">
+          <ResizablePanel
+            defaultSize={20}
+            className="max-h-full max-w-full md:max-w-[calc(100vw-800px)] overflow-auto"
+          >
             <div className="h-full overflow-y-auto bg-white rounded-xl">
-
-            <SubmittedReportsTable reports={reports || [{}]} />
+              <SubmittedReportsTable reports={reports || [{}]} onEdit={handleEdit} />
             </div>
           </ResizablePanel>
+
         </ResizablePanelGroup>
       </div>
-
 
       <div className='flex w-full justify-end mt-8'>
         <div
           className='bg-[#002946] flex items-center gap-2 px-6 py-3 text-[1.2rem] mb-4 text-white font-semibold rounded-2xl shadow-md hover:shadow-lg cursor-pointer transition-all duration-300 hover:bg-[#002946a2] transform hover:scale-105'
-          onClick={() => {navigate('previewsubmit')}}
+          onClick={() => { navigate('previewsubmit') }}
         >
           <Eye />
           Preview & Submit
         </div>
       </div>
-
-
-      {/* Modal Popup */}
-      {popUpShow && (
-        <div className="flex bg-[#00000034] backdrop-blur-md fixed justify-center items-center w-full h-full top-[0px] left-0 z-40 alertcontainer font-poppins text-">
-          <div
-            className="inline-block align-bottom sm:align-middle sm:max-w-4xl sm:w-full sm:p-6 transform transition-all ease-in-out duration-300"
-            style={{
-              opacity: 1,
-              transform: 'scale(1)',
-              animation: 'modalFadeIn 0.3s'
-            }}
-          >
-            {renderPopupContent()}
-          </div>
-        </div>
-      )}
-
-      <style jsx global>{`
-        @keyframes modalFadeIn {
-          from {
-            opacity: 0;
-            transform: scale(0.95);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1);
-          }
-        }
-      `}</style>
     </div>
   );
 }

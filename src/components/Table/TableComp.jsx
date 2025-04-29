@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
-const TableComp = ({ reports = [], onDelete }) => {
+const TableComp = ({ reports = [], onDelete, onEdit }) => {
   // Early return if there are no reports
   if (!reports || reports.length === 0) {
     return (
@@ -18,6 +18,18 @@ const TableComp = ({ reports = [], onDelete }) => {
   const columns = reports.length > 0 && reports[0] !== undefined 
     ? Object.keys(reports[0]).filter((col) => !excludedFields.includes(col)) 
     : [];
+
+  // Function to safely render cell values
+  const renderCellValue = (value) => {
+    if (value === null || value === undefined) {
+      return '';
+    }
+    if (typeof value === 'object') {
+      // Convert object to string representation
+      return JSON.stringify(value);
+    }
+    return value;
+  };
 
   const getStatusBadge = (status) => {
     const badgeBase = "flex items-center justify-center gap-2 px-3 py-1 rounded-full";
@@ -103,19 +115,20 @@ const TableComp = ({ reports = [], onDelete }) => {
                   <td key={col} className="px-4 py-3 text-center">
                     {col.toLowerCase() === 'status'
                       ? getStatusBadge(report[col])
-                      : report[col]}
+                      : renderCellValue(report[col])}
                   </td>
                 ))}
                 <td className="px-4 py-3 text-center">
                   <div className="flex justify-center gap-3">
                     <button
+                      onClick={() => onEdit?.(report)}
                       className="text-indigo-600 hover:text-indigo-800 transition-transform hover:scale-110"
                       title="Edit"
                     >
                       <FaEdit />
                     </button>
                     <button
-                      onClick={() => onDelete?.(report.reportId)}
+                      onClick={() => onDelete?.(report.reportId || report._id)}
                       className="text-red-600 hover:text-red-800 transition-transform hover:scale-110"
                       title="Delete"
                     >
