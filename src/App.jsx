@@ -33,6 +33,7 @@ import Notificatons from "./pages/User/Notificatons.jsx";
 import Manage from "./pages/PsudoSuperadmin/Manage/Manage.jsx";
 import PreviewSubmit from "./pages/User/PreviewSubmit.jsx";
 import Requests from "./pages/Superadmin/Requests/Requests.jsx";
+import EachReportTable from "./pages/Superadmin/Reports/EachReportTable.jsx";
 
 // Flag to control route protection
 // When set to true: Protected routes are enforced (normal security behavior)
@@ -56,7 +57,6 @@ const TokenWrapper = ({ children }) => {
     // const lastRole = sessionStorage.getItem("role") || "user";
     return <Navigate to={`/login/${role}`} replace />;
   }
-  
 
   return children;
 };
@@ -111,11 +111,11 @@ const RedirectDashboard = () => {
 
 function App() {
   return (
-            <Router>
-    <AuthProvider>
-      <ThemeProvider>
-        <SnackbarProvider maxSnack={3}>
-          <NotificationProvider>
+    <Router>
+      <AuthProvider>
+        <ThemeProvider>
+          <SnackbarProvider maxSnack={3}>
+            <NotificationProvider>
               <Routes>
                 {/* Public Routes */}
                 <Route path="/login/:role" element={<LoginWrapper />} />
@@ -125,10 +125,12 @@ function App() {
                 {/* Root redirect */}
                 <Route
                   path="/"
-                  element={<Navigate
-                    to={`/login/${sessionStorage.getItem("role") || "user"}`}
-                    replace
-                  />}
+                  element={
+                    <Navigate
+                      to={`/login/${sessionStorage.getItem("role") || "user"}`}
+                      replace
+                    />
+                  }
                 />
 
                 {/* Dashboard redirect */}
@@ -172,8 +174,11 @@ function App() {
                   <Route path="notifications" element={<Notificatons />} />
                   <Route path="notifications/:id" element={<Notificatons />} />
                   <Route path="reports/drafts" element={<Drafts />} />
-                
-                  <Route path="forms/previewsubmit" element={<PreviewSubmit />} />
+
+                  <Route
+                    path="forms/previewsubmit"
+                    element={<PreviewSubmit />}
+                  />
 
                   <Route
                     path="reports/submissions"
@@ -191,7 +196,7 @@ function App() {
                     <TokenWrapper>
                       <ProtectedRouteWrapper allowedRoles={["superadmin"]}>
                         <Layout
-                          menus={["Home", "Users", "Reports","Requests"]}
+                          menus={["Home", "Users", "Reports", "Requests"]}
                           submenu={{
                             Users: ["User", "Pseudo User", "Add Email"],
                           }}
@@ -202,16 +207,14 @@ function App() {
                 >
                   <Route path="dashboard" element={<SuperadminDashboard />} />
                   <Route path="emails" element={<div>SuperAdmin Emails</div>} />
-                  <Route path="requests" element={<Requests/>} />
+                  <Route path="requests" element={<Requests />} />
                   <Route path="users/user" element={<User />} />
                   <Route path="users/add-email" element={<AddEmails />} />
                   <Route path="users/pseudo-user" element={<PsudoUser />} />
 
+                  {/* Add the reports/:userId route here */}
+                  <Route path="reports/:userId" element={<EachReportTable />} />
 
-                  <Route
-                    path="pseudosuperadmin"
-                    element={<div>SuperAdmin PseudoSuperadmin Add</div>}
-                  />
                   <Route
                     path="reports"
                     element={
@@ -258,11 +261,11 @@ function App() {
                 {/* Catch-all route */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
-          </NotificationProvider>
-        </SnackbarProvider>
-      </ThemeProvider>
-    </AuthProvider>
-            </Router>
+            </NotificationProvider>
+          </SnackbarProvider>
+        </ThemeProvider>
+      </AuthProvider>
+    </Router>
   );
 }
 

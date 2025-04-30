@@ -10,7 +10,7 @@ const Header = memo(({ toggleSidebar, toggleDropdown, showDropdown }) => {
   const notificationDropdownRef = useRef(null);
   const profileRef = useRef(null);
   const profileDropdownRef = useRef(null);
-  const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
+  const userDetails = sessionStorage.getItem("userDetails");
 
   const toggleNotificationDropdown = useCallback(() => {
     setNotificationDropdown((prev) => !prev);
