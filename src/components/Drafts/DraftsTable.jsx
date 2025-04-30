@@ -76,12 +76,21 @@ const subReportOptions = {
         "Online AI Courses"],
 };
 
-export default function DraftTable() {
+export default function DraftTable({draftData}) {
+    console.log(draftData?.data)
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredReports, setFilteredReports] = useState(reports); // Initially show all reports
     const [showFilters, setShowFilters] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectedSubReport, setSelectedSubReport] = useState('');
+
+    useEffect(() => {
+        if (draftData?.data) {
+            setFilteredReports(draftData?.data);
+        }
+    }, [draftData]);
+
+    
 
     // Function to handle search
     const handleSearch = (e) => {
@@ -96,14 +105,15 @@ export default function DraftTable() {
             setFilteredReports(updatedReports);
         }
     };
+   
     
 
     // Function to get badge color based on category
     const getBadgeColor = (category) => {
         switch (category) {
-            case 'CategoryI':
+            case 'Category I':
                 return 'bg-blue-100 text-blue-800';
-            case 'CategoryII':
+            case 'Category II':
                 return 'bg-purple-100 text-purple-800';
             default:
                 return 'bg-gray-100 text-gray-800';
@@ -255,7 +265,8 @@ export default function DraftTable() {
                 </div>
             </div>
 
-            <TableComp reports={filteredReports} onDelete={handleDelete} />
+            <TableComp reports={filteredReports} onDelete={handleDelete} getStatusBadge={getStatusBadge} />
+
 
         </div>
 
