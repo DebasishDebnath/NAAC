@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ChevronDown, Edit, Calendar, FileText, User, CheckCircle, Clock } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function ReportsAccordion({ reports }) {
   // Generate subReportOptions dynamically based on what's in the reports
@@ -25,6 +26,7 @@ export default function ReportsAccordion({ reports }) {
   const [openCategory, setOpenCategory] = useState(null);
   const [openTableName, setOpenTableName] = useState(null);
   const [expandedReports, setExpandedReports] = useState({});
+  const navigate= useNavigate()
 
   // Toggle category accordion
   const toggleCategory = (category) => {
@@ -51,6 +53,10 @@ export default function ReportsAccordion({ reports }) {
     event.stopPropagation();
     
     console.log("Editing report:", report);
+
+    sessionStorage.setItem('table_name', report.tableName.split(' ').join('').toLowerCase())
+    navigate('/user/forms')
+    
     
     // In a real application, you would navigate to an edit page or open a modal
     // For example:
