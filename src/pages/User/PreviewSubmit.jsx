@@ -1,8 +1,10 @@
+import useFinalSubmit from '@/Apis/User/FinalSubmit';
 import TableComp from '@/components/Table/TableComp';
 import ReportsAccordion from '@/components/ui/ReportsAccordion';
 import React, { useState } from 'react';
 
 function PreviewSubmit() {
+  const {finalSubmit}= useFinalSubmit()
     const reports = [
         {
           facultyId: "FAC001",
@@ -66,7 +68,7 @@ function PreviewSubmit() {
 
     const handleSubmit = () => {
         // Submit functionality goes here
-        alert("Reports Submitted!");
+        finalSubmit()
     };
 
     return (
