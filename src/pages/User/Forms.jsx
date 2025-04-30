@@ -18,7 +18,7 @@ import {
 
 import facultyData from "../../constant/invoices.json";
 import { useFormSubmission } from '../../Apis/FormSubmission/FormSubmission';
-import SubmittedReportsTable from '@/components/Drafts/SideDraft';
+import UserSideTable from '@/components/Table/UserSideTable';
 import { Eye, PanelRightOpen } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import ReportsAccordion from '@/components/ui/ReportsAccordion';
@@ -513,7 +513,7 @@ function Forms() {
             className="max-h-full max-w-full md:max-w-[calc(100vw-800px)] overflow-auto"
           >
             <div className="h-full overflow-y-auto bg-white rounded-xl">
-              <SubmittedReportsTable reports={reports || [{}]} onEdit={handleEdit} />
+              <UserSideTable reports={reports || [{}]} onEdit={handleEdit} />
             </div>
           </ResizablePanel>
 
