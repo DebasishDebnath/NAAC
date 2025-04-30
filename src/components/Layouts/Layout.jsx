@@ -12,7 +12,7 @@ import {
   UsersRound,
   BookType,
 } from "lucide-react";
-
+import { FiGitPullRequest } from "react-icons/fi";
 import Header from './Header';
 import Footer from './Footer';
 import Sidebar from "./Sidebar";
@@ -40,6 +40,7 @@ function Layout({ menus = [], submenu = {} }) {
     Settings: <Settings size={20} />,
     Help: <HelpCircle size={20} />,
     Users: <UsersRound size={20} />,
+    Requests: <FiGitPullRequest size={20} />,
     Dashboard: <House size={20} />,
   };
 
@@ -157,6 +158,7 @@ function Layout({ menus = [], submenu = {} }) {
           "Pseudo Superadmin Add": `${basePath}/pseudosuperadminadd`,
           Forms: `${basePath}/forms`,
           Reports: `${basePath}/reports`,
+          Requests: `${basePath}/reports`,
           Psudo: `${basePath}/psudo`,
           Manage: `${basePath}/manage`, 
           Settings: `${basePath}/settings`,

@@ -5,17 +5,18 @@ export const UserFetch = () => {
   const { getReq } = useHttp();
   const { showInfo } = useNotification();
 
-  const GetAllsuperadmin = async (email) => {
+  const GetAllsuperadmin = async (email, page = 1, limit = 12) => {
     const token = sessionStorage.getItem("token");
-    console.log("Adding User:", email);
+    console.log("Fetching Users - Page:", page, "Limit:", limit);
 
     try {
-      const response = await getReq("api/v2/superAdmin/getAllUser", token);
-      console.log("Adding User response:", response);
+      const url = `api/v2/superAdmin/getAllUser?page=${page}&limit=${limit}`;
+      const response = await getReq(url, token);
+      console.log("User fetch response:", response);
       return response;
     } catch (error) {
-      console.error("Error getting User:", error);
-      return { success: false, message: "Error getting User" };
+      console.error("Error getting users:", error);
+      return { success: false, message: "Error getting users" };
     }
   };
 
