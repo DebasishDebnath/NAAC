@@ -5,46 +5,54 @@ import React, { useState } from 'react';
 function PreviewSubmit() {
     const reports = [
         {
-            facultyId: "FAC001",
-            category: "Category I",
-            tableName: "Teaching",
-            status: "Draft",
-            date: "2025-04-20",
-            reportId: "REP001"
+          facultyId: "FAC001",
+          category: "Category I",
+          tableName: "Teaching",
+          status: "Drafts",
+          date: "2025-04-20",
+          reportId: "REP001"
         },
         {
-            facultyId: "FAC002",
-            category: "Category II",
-            tableName: "Journal Publications",
-            status: "Draft",
-            date: "2025-04-18",
-            reportId: "REP002"
+          facultyId: "FAC001",
+          category: "Category I",
+          tableName: "Teaching",
+          status: "Drafts",
+          date: "2025-04-20",
+          reportId: "REP001"
         },
         {
-            facultyId: "FAC003",
-            category: "Category II",
-            tableName: "Patent Status",
-            status: "Draft",
-            date: "2025-04-22",
-            reportId: "REP003"
+          facultyId: "FAC002",
+          category: "Category II",
+          tableName: "Journal Publications",
+          status: "Drafts",
+          date: "2025-04-18",
+          reportId: "REP002"
         },
         {
-            facultyId: "FAC004",
-            category: "Category I",
-            tableName: "Duties",
-            status: "Draft",
-            date: "2025-04-19",
-            reportId: "REP004"
+          facultyId: "FAC003",
+          category: "Category II",
+          tableName: "Patent Status",
+          status: "Drafts",
+          date: "2025-04-22",
+          reportId: "REP003"
         },
         {
-            facultyId: "FAC005",
-            category: "Category II",
-            tableName: "E-Content (developed in 4 quadrants) Per Module",
-            status: "Draft",
-            date: "2025-04-21",
-            reportId: "REP005"
+          facultyId: "FAC004",
+          category: "Category I",
+          tableName: "Duties",
+          status: "Drafts",
+          date: "2025-04-19",
+          reportId: "REP004"
+        },
+        {
+          facultyId: "FAC005",
+          category: "Category II",
+          tableName: "E-Content (developed in 4 quadrants) Per Module",
+          status: "Drafts",
+          date: "2025-04-21",
+          reportId: "REP005"
         }
-    ];
+      ];
 
     const [filteredReports, setFilteredReports] = useState(reports); // Initially show all reports
 
@@ -73,7 +81,7 @@ function PreviewSubmit() {
             </button>
             </div>
             
-            <ReportsAccordion />
+            <ReportsAccordion reports={reports}/>
 
             {/* Submit Button */}
         </div>

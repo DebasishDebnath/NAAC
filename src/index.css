@@ -9,6 +9,8 @@
   --primary-foreground: #ffffff;
   --secondary: #64748b;
   --secondary-foreground: #ffffff;
+
+  
   --background: #ffffff;
   --foreground: #111827;
   --muted: #f9fafb;
@@ -30,6 +32,7 @@
   --shadow-xl: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
   --card-header: #2563eb;
   --sidebar-color-grad: linear-gradient(180deg, #002946, #002946f6, #005C8A);
+  --light-gray: #f3f4f6;
 }
 
 /* ====================
@@ -41,6 +44,11 @@
   }
 }
 
+@layer utilities {
+  .common-gray {
+    background-color: var(--light-gray);
+  }
+}
 /* ====================
    Base Layer
 ==================== */

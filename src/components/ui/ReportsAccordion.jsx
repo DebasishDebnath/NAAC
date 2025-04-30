@@ -1,57 +1,8 @@
 import { useState } from 'react';
 import { ChevronDown, Edit } from 'lucide-react';
 
-export default function ReportsAccordion() {
-  const reports = [
-    {
-      facultyId: "FAC001",
-      category: "Category I",
-      tableName: "Teaching",
-      status: "Drafts",
-      date: "2025-04-20",
-      reportId: "REP001"
-    },
-    {
-      facultyId: "FAC001",
-      category: "Category I",
-      tableName: "Teaching",
-      status: "Drafts",
-      date: "2025-04-20",
-      reportId: "REP001"
-    },
-    {
-      facultyId: "FAC002",
-      category: "Category II",
-      tableName: "Journal Publications",
-      status: "Drafts",
-      date: "2025-04-18",
-      reportId: "REP002"
-    },
-    {
-      facultyId: "FAC003",
-      category: "Category II",
-      tableName: "Patent Status",
-      status: "Drafts",
-      date: "2025-04-22",
-      reportId: "REP003"
-    },
-    {
-      facultyId: "FAC004",
-      category: "Category I",
-      tableName: "Duties",
-      status: "Drafts",
-      date: "2025-04-19",
-      reportId: "REP004"
-    },
-    {
-      facultyId: "FAC005",
-      category: "Category II",
-      tableName: "E-Content (developed in 4 quadrants) Per Module",
-      status: "Drafts",
-      date: "2025-04-21",
-      reportId: "REP005"
-    }
-  ];
+export default function ReportsAccordion({reports}) {
+
 
   const subReportOptions = {
     'Category I': ["Teaching", "Duties"],
