@@ -21,7 +21,7 @@ import { AlertCircle, Check, Save, Lock, Mail, MapPin } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "../../components/ui/Alert";
 import { FaEdit, FaUser } from "react-icons/fa";
 import { MdOutlinePassword } from "react-icons/md";
-import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import UseUserUpdatePassword from "@/Apis/User/UpdatePassword";
 import { useSnackbar } from "notistack";
 // Dummy user data
@@ -404,7 +404,7 @@ function Profile() {
               <input
                 type="text"
                 placeholder="Enter First Name"
-                className="border rounded-lg p-2"
+                className="border rounded-lg p-2  cursor-not-allowed"
                 value={profileDetails.firstName}
                 // onChange={(e) =>
                 //   setProfileDetails({ ...profileDetails, firstName: e.target.value })
@@ -416,7 +416,7 @@ function Profile() {
               <input
                 type="text"
                 placeholder="Enter Middle Name"
-                className="border rounded-lg p-2"
+                className="border rounded-lg p-2  cursor-not-allowed"
                 value={profileDetails.middleName}
               />
             </div>
@@ -425,7 +425,7 @@ function Profile() {
               <input
                 type="text"
                 placeholder="Enter Last Name"
-                className="border rounded-lg p-2"
+                className="border rounded-lg p-2  cursor-not-allowed"
                 value={profileDetails.lastName}
               />
             </div>
@@ -434,7 +434,7 @@ function Profile() {
               <input
                 type="email"
                 placeholder="Enter Email"
-                className="border rounded-lg p-2"
+                className="border rounded-lg p-2  cursor-not-allowed"
                 value={profileDetails.email}
               />
             </div>
@@ -443,7 +443,7 @@ function Profile() {
               <input
                 type="text"
                 placeholder="Enter Phone Number"
-                className="border rounded-lg p-2"
+                className="border rounded-lg p-2  cursor-not-allowed"
                 value={profileDetails.phoneNo}
               />
             </div>
@@ -452,7 +452,7 @@ function Profile() {
               <input
                 type="text"
                 placeholder="Enter Designation"
-                className="border rounded-lg p-2"
+                className="border rounded-lg p-2 cursor-not-allowed"
                 value={profileDetails.designation}
               />
             </div>
@@ -461,7 +461,7 @@ function Profile() {
               <input
                 type="text"
                 placeholder="Enter Campus"
-                className="border rounded-lg p-2"
+                className="border rounded-lg p-2  cursor-not-allowed"
                 value={profileDetails.campus}
               />
             </div>
@@ -470,7 +470,7 @@ function Profile() {
               <input
                 type="text"
                 placeholder="Enter Department"
-                className="border rounded-lg p-2"
+                className="border rounded-lg p-2  cursor-not-allowed"
                 value={profileDetails.department}
               />
             </div>
@@ -499,9 +499,9 @@ function Profile() {
                 className="w-full h-full object-cover"
               /> */}
               {/* Edit icon shown on hover */}
-              <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+              {/* <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
                 <FaEdit className="text-white text-3xl" />
-              </div>
+              </div> */}
             </div>
             {/* <button className="bg-[#002946] text-white px-6 py-2 w-[25%] rounded-lg text-lg hover:bg-[#002946cb]">
               Save
@@ -522,7 +522,7 @@ function Profile() {
                 Old Password *
               </label>
               <input
-                type={showOld ? 'text' : 'password'}
+                type={showOld ? "text" : "password"}
                 id="old-password"
                 placeholder="Enter Old Password"
                 className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#002946] transition-all"
@@ -530,11 +530,15 @@ function Profile() {
                 onChange={(e) => setOldPassword(e.target.value)}
               />
               <div
-              className="absolute right-3 top-[45px] cursor-pointer text-gray-500"
-              onClick={() => setShowOld(!showOld)}
-            >
-              {showOld ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
-            </div>
+                className="absolute right-3 top-[45px] cursor-pointer text-gray-500"
+                onClick={() => setShowOld(!showOld)}
+              >
+                {showOld ? (
+                  <AiOutlineEyeInvisible size={20} />
+                ) : (
+                  <AiOutlineEye size={20} />
+                )}
+              </div>
             </div>
 
             <div className="flex flex-col relative">
@@ -542,7 +546,7 @@ function Profile() {
                 New Password *
               </label>
               <input
-                type={showNew ? 'text' : 'password'}
+                type={showNew ? "text" : "password"}
                 id="new-password"
                 placeholder="Enter New Password"
                 className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#002946] transition-all"
@@ -550,11 +554,15 @@ function Profile() {
                 onChange={(e) => setNewPassword(e.target.value)}
               />
               <div
-              className="absolute right-3 top-[45px] cursor-pointer text-gray-500"
-              onClick={() => setShowNew(!showNew)}
-            >
-              {showNew ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
-            </div>
+                className="absolute right-3 top-[45px] cursor-pointer text-gray-500"
+                onClick={() => setShowNew(!showNew)}
+              >
+                {showNew ? (
+                  <AiOutlineEyeInvisible size={20} />
+                ) : (
+                  <AiOutlineEye size={20} />
+                )}
+              </div>
             </div>
 
             <div className="flex flex-col relative">
@@ -565,7 +573,7 @@ function Profile() {
                 Confirm New Password *
               </label>
               <input
-                type={showConfirm ? 'text' : 'password'}
+                type={showConfirm ? "text" : "password"}
                 id="confirm-password"
                 placeholder="Confirm New Password"
                 className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#002946] transition-all"
@@ -573,11 +581,15 @@ function Profile() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
               <div
-              className="absolute right-3 top-[45px] cursor-pointer text-gray-500"
-              onClick={() => setShowConfirm(!showConfirm)}
-            >
-              {showConfirm ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
-            </div>
+                className="absolute right-3 top-[45px] cursor-pointer text-gray-500"
+                onClick={() => setShowConfirm(!showConfirm)}
+              >
+                {showConfirm ? (
+                  <AiOutlineEyeInvisible size={20} />
+                ) : (
+                  <AiOutlineEye size={20} />
+                )}
+              </div>
             </div>
           </div>
 
