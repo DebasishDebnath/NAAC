@@ -27,6 +27,7 @@ export const AuthProvider = ({ children }) => {
   const logout = (role) => {
     // const finalRole = role || sessionStorage.getItem("role") || "user";
     window.location.href = `/login/${role.toLowerCase()}`;
+    localStorage.clear();
     sessionStorage.clear();
     setUser(null);
     // navigate(`/login/${finalRole.toLowerCase()}`);
