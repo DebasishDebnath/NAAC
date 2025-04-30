@@ -32,6 +32,7 @@ import SubmittedReports from "./pages/User/SubmittedReports.jsx";
 import Notificatons from "./pages/User/Notificatons.jsx";
 import Manage from "./pages/PsudoSuperadmin/Manage/Manage.jsx";
 import PreviewSubmit from "./pages/User/PreviewSubmit.jsx";
+import Requests from "./pages/Superadmin/Requests/Requests.jsx";
 
 // Flag to control route protection
 // When set to true: Protected routes are enforced (normal security behavior)
@@ -189,7 +190,7 @@ function App() {
                     <TokenWrapper>
                       <ProtectedRouteWrapper allowedRoles={["superadmin"]}>
                         <Layout
-                          menus={["Home", "Users", "Reports"]}
+                          menus={["Home", "Users", "Reports","Requests"]}
                           submenu={{
                             Users: ["User", "Pseudo User", "Add Email"],
                           }}
@@ -200,6 +201,7 @@ function App() {
                 >
                   <Route path="dashboard" element={<SuperadminDashboard />} />
                   <Route path="emails" element={<div>SuperAdmin Emails</div>} />
+                  <Route path="requests" element={<Requests/>} />
                   <Route path="users/user" element={<User />} />
                   <Route path="users/add-email" element={<AddEmails />} />
                   <Route path="users/pseudo-user" element={<PsudoUser />} />
