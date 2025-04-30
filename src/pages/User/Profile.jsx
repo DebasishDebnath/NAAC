@@ -21,7 +21,9 @@ import { AlertCircle, Check, Save, Lock, Mail, MapPin } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "../../components/ui/Alert";
 import { FaEdit, FaUser } from "react-icons/fa";
 import { MdOutlinePassword } from "react-icons/md";
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import UseUserUpdatePassword from "@/Apis/User/UpdatePassword";
+import { useSnackbar } from "notistack";
 // Dummy user data
 const dummyUser = {
   id: "1",
@@ -39,6 +41,7 @@ const dummyUser = {
 
 function Profile() {
   const [user, setUser] = useState(dummyUser);
+  const { enqueueSnackbar } = useSnackbar();
   const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
   const [profileDetails, setProfileDetails] = useState({
     firstName: "",
@@ -59,10 +62,14 @@ function Profile() {
   const [editedUser, setEditedUser] = useState(user);
   const [successMessage, setSuccessMessage] = useState("");
   const { updatePassword } = UseUserUpdatePassword();
-  
-  const [oldPassword, setOldPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [showOld, setShowOld] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   useEffect(() => {
     let firstName = " ";
@@ -70,7 +77,7 @@ function Profile() {
     let lastName = " ";
     const fullName =
       typeof userDetails?.name === "string" ? userDetails.name.trim() : "";
-    const nameParts = fullName.split(/\s+/); // split on any whitespace
+    const nameParts = fullName.split(/\s+/);
     if (nameParts.length === 1) {
       firstName = nameParts[0];
     } else if (nameParts.length === 2) {
@@ -95,20 +102,25 @@ function Profile() {
 
   const handlePasswordUpdate = async () => {
     if (!oldPassword || !newPassword || !confirmPassword) {
-      alert('Please fill in all fields.');
+      const message = "Please fill in all fields.";
+      enqueueSnackbar(message, { variant: "error" });
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      alert('New Password and Confirm Password do not match.');
+      const message = "New Password and Confirm Password do not match.";
+      enqueueSnackbar(message, { variant: "error" });
       return;
     }
 
     try {
       const response = await updatePassword({ oldPassword, newPassword });
-      alert(response?.message || 'Password updated successfully!');
+      setOldPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      // alert(response?.message || 'Password updated successfully!');
     } catch (error) {
-      alert(error?.response?.data?.message || 'Password update failed.');
+      // alert(error?.response?.data?.message || "Password update failed.");
     }
   };
 
@@ -505,35 +517,47 @@ function Profile() {
 
         <div className="flex gap-6">
           <div className="flex flex-col gap-6 w-[70%]">
-            <div className="flex flex-col">
+            <div className="flex flex-col relative">
               <label htmlFor="old-password" className="font-semibold text-lg">
                 Old Password *
               </label>
               <input
-                type="password"
+                type={showOld ? 'text' : 'password'}
                 id="old-password"
                 placeholder="Enter Old Password"
                 className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#002946] transition-all"
                 value={oldPassword}
                 onChange={(e) => setOldPassword(e.target.value)}
               />
+              <div
+              className="absolute right-3 top-[45px] cursor-pointer text-gray-500"
+              onClick={() => setShowOld(!showOld)}
+            >
+              {showOld ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
+            </div>
             </div>
 
-            <div className="flex flex-col">
+            <div className="flex flex-col relative">
               <label htmlFor="new-password" className="font-semibold text-lg">
                 New Password *
               </label>
               <input
-                type="password"
+                type={showNew ? 'text' : 'password'}
                 id="new-password"
                 placeholder="Enter New Password"
                 className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#002946] transition-all"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
               />
+              <div
+              className="absolute right-3 top-[45px] cursor-pointer text-gray-500"
+              onClick={() => setShowNew(!showNew)}
+            >
+              {showNew ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
+            </div>
             </div>
 
-            <div className="flex flex-col">
+            <div className="flex flex-col relative">
               <label
                 htmlFor="confirm-password"
                 className="font-semibold text-lg"
@@ -541,19 +565,28 @@ function Profile() {
                 Confirm New Password *
               </label>
               <input
-                type="password"
+                type={showConfirm ? 'text' : 'password'}
                 id="confirm-password"
                 placeholder="Confirm New Password"
                 className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#002946] transition-all"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
+              <div
+              className="absolute right-3 top-[45px] cursor-pointer text-gray-500"
+              onClick={() => setShowConfirm(!showConfirm)}
+            >
+              {showConfirm ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
+            </div>
             </div>
           </div>
 
           {/* Right side - Save Button */}
           <div className="flex flex-col justify-end w-[25%] items-end">
-            <button className="bg-[#002946] text-white px-6 py-3 rounded-lg text-lg hover:bg-[#002946cb] transition-all" onClick={handlePasswordUpdate}>
+            <button
+              className="bg-[#002946] text-white px-6 py-3 rounded-lg text-lg hover:bg-[#002946cb] transition-all"
+              onClick={handlePasswordUpdate}
+            >
               Update Password
             </button>
           </div>
