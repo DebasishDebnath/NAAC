@@ -1,8 +1,9 @@
 import DraftsTable from '@/components/Drafts/DraftsTable'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useHttp } from '@/hooks/useHttp'
 
 const Drafts = () => {
+  const [draftData, setDraftData] = useState([])
   const { getReq } = useHttp();
   const accessToken = sessionStorage.getItem("token");
   // console.log(accessToken)
@@ -10,7 +11,8 @@ const Drafts = () => {
     const fetchJournals = async () => {
       try {
         const json = await getReq(`api/v2/user/tempContribution`, accessToken);
-        console.log(json)
+        setDraftData(json?.data)
+        console.log(json?.data)
       } catch (error) {
         console.log("Error fetching journal publication!", error);
       }
@@ -21,7 +23,7 @@ const Drafts = () => {
 
   return (
     <div >
-      <DraftsTable />
+      <DraftsTable draftData={draftData} />
     </div>
   )
 }
