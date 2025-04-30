@@ -167,11 +167,7 @@ export default function UserTable() {
               <TableRow
                 key={row.id}
                 className={`
-                  ${
-                    index % 2 === 0
-                      ? "bg-white dark:text-black"
-                      : "bg-gray-50 dark:text-black"
-                  }
+                  
                   hover:bg-blue-50 
                   transition-colors duration-200 cursor-pointer 
                 `}
