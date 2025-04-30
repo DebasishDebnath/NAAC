@@ -135,13 +135,13 @@ export default function DraftTable({ draftData }) {
                         <Search className="h-4 w-4 text-gray-400" />
                     </div>
                     <Input
-                        className="pl-10 pr-24 py-3 w-full bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#002946]"
+                        className="pl-10 pr-24 py-4 w-full bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#002946]"
                         placeholder="Search reports..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                     <Button
-                        className="absolute right-0 top-0 bottom-0 bg-[#002946] text-white rounded-lg shadow-md hover:bg-[#003b61] transition duration-300 ease-in-out"
+                        className="absolute right-[2px] top-[2px]  bg-[#002946] text-white rounded-lg shadow-md hover:bg-[#003b61] transition duration-300 ease-in-out"
                         type="submit"
                     >
                         Search
