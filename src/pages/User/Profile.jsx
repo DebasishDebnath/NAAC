@@ -21,6 +21,7 @@ import { AlertCircle, Check, Save, Lock, Mail, MapPin } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "../../components/ui/Alert";
 import { FaEdit, FaUser } from "react-icons/fa";
 import { MdOutlinePassword } from "react-icons/md";
+import UseUserUpdatePassword from "@/Apis/User/UpdatePassword";
 // Dummy user data
 const dummyUser = {
   id: "1",
@@ -48,7 +49,7 @@ function Profile() {
     designation: "",
     campus: "",
     department: "",
-  })
+  });
   const [passwords, setPasswords] = useState({
     current: "",
     new: "",
@@ -57,14 +58,19 @@ function Profile() {
   const [isEditing, setIsEditing] = useState(false);
   const [editedUser, setEditedUser] = useState(user);
   const [successMessage, setSuccessMessage] = useState("");
+  const { updatePassword } = UseUserUpdatePassword();
+  
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
-  console.log(userDetails.mobileNo)
   useEffect(() => {
     let firstName = " ";
     let middleName = " ";
     let lastName = " ";
-    const fullName = typeof userDetails?.name === "string" ? userDetails.name.trim() : "";
-  const nameParts = fullName.split(/\s+/); // split on any whitespace
+    const fullName =
+      typeof userDetails?.name === "string" ? userDetails.name.trim() : "";
+    const nameParts = fullName.split(/\s+/); // split on any whitespace
     if (nameParts.length === 1) {
       firstName = nameParts[0];
     } else if (nameParts.length === 2) {
@@ -86,6 +92,25 @@ function Profile() {
       department: userDetails?.department || "",
     });
   }, []);
+
+  const handlePasswordUpdate = async () => {
+    if (!oldPassword || !newPassword || !confirmPassword) {
+      alert('Please fill in all fields.');
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      alert('New Password and Confirm Password do not match.');
+      return;
+    }
+
+    try {
+      const response = await updatePassword({ oldPassword, newPassword });
+      alert(response?.message || 'Password updated successfully!');
+    } catch (error) {
+      alert(error?.response?.data?.message || 'Password update failed.');
+    }
+  };
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -445,7 +470,16 @@ function Profile() {
             <div className="relative w-40 h-40 rounded-full bg-gray-200 overflow-hidden group">
               {/* Profile photo */}
               <div className="w-full h-full object-cover bg-[#002946] text-white flex items-center justify-center text-[4rem] font-bold">
-              {userDetails?.name ? userDetails.name.trim().split(' ').map((n, i, arr) => (i === 0 || i === arr.length - 1) ? n[0] : '').join('').toUpperCase() : ''}
+                {userDetails?.name
+                  ? userDetails.name
+                      .trim()
+                      .split(" ")
+                      .map((n, i, arr) =>
+                        i === 0 || i === arr.length - 1 ? n[0] : ""
+                      )
+                      .join("")
+                      .toUpperCase()
+                  : ""}
               </div>
               {/* <img
                 src="https://via.placeholder.com/150"
@@ -480,6 +514,8 @@ function Profile() {
                 id="old-password"
                 placeholder="Enter Old Password"
                 className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#002946] transition-all"
+                value={oldPassword}
+                onChange={(e) => setOldPassword(e.target.value)}
               />
             </div>
 
@@ -492,6 +528,8 @@ function Profile() {
                 id="new-password"
                 placeholder="Enter New Password"
                 className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#002946] transition-all"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
               />
             </div>
 
@@ -507,13 +545,15 @@ function Profile() {
                 id="confirm-password"
                 placeholder="Confirm New Password"
                 className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#002946] transition-all"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
               />
             </div>
           </div>
 
           {/* Right side - Save Button */}
           <div className="flex flex-col justify-end w-[25%] items-end">
-            <button className="bg-[#002946] text-white px-6 py-3 rounded-lg text-lg hover:bg-[#002946cb] transition-all">
+            <button className="bg-[#002946] text-white px-6 py-3 rounded-lg text-lg hover:bg-[#002946cb] transition-all" onClick={handlePasswordUpdate}>
               Update Password
             </button>
           </div>
