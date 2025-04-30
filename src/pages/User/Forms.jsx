@@ -35,7 +35,7 @@ function Forms() {
   const [popUpShow, setPopUpShow] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [endPointGet, setEndPointGet] = useState("CategoryI/teaching_duties");
-  const [reports, setReports] = useState();
+  const [reports, setReports] = useState([]);
   const { fetchDraft } = useUserDraft();
   const navigate = useNavigate();
 
@@ -43,14 +43,15 @@ function Forms() {
   const [editingReportId, setEditingReportId] = useState(null);
   // Add a flag to prevent form reset when editing
   const [isEditing, setIsEditing] = useState(false);
-
+  // Add a flag to track if initial loading is complete
+  const [initialLoadComplete, setInitialLoadComplete] = useState(false);
 
   const reportOptions = [
     { 'Category I': ["teaching duties"] },
     { 'Category II': [
       "Journal Publications",
-      "Books Publication",
-      "Books Chapter / Conference Proceedings",
+      "book publications",
+      "book chapter conference publications",
       "Editor of Book",
       "Translation Work",
       "Consultancy",
@@ -75,26 +76,35 @@ function Forms() {
     ]}
   ];
 
+  // Improved grabTableIndexFind function with better matching and logging
   const grabTableIndexFind = (input) => {
-    const normalizedInput = input?.replace(/\s+/g, '')?.toLowerCase();
-    console.log('khbbiu2', normalizedInput)
-  
+    // Handle null/undefined input
+    if (!input) {
+      console.log('No table name provided in sessionStorage');
+      return null;
+    }
+    
+    // Normalize the input by removing spaces and converting to lowercase
+    const normalizedInput = input.replace(/\s+/g, '').toLowerCase();
+    console.log('Looking for normalized table name:', normalizedInput);
+    
+    // Loop through categories
     for (let outerIndex = 0; outerIndex < reportOptions.length; outerIndex++) {
       const categoryKey = Object.keys(reportOptions[outerIndex])[0];
       const items = reportOptions[outerIndex][categoryKey];
-  
-    console.log('khbbiu3', categoryKey, items)
-
-
-
+      
+      // Loop through items in category
       for (let innerIndex = 0; innerIndex < items.length; innerIndex++) {
-        const normalizedItem = items[innerIndex].replace(/\s+/g, '')?.toLowerCase();
-        if (normalizedItem === normalizedInput) {
+        const normalizedItem = items[innerIndex].replace(/\s+/g, '').toLowerCase();
+        
+        if (normalizedItem === normalizedInput || normalizedInput.includes(normalizedItem) || normalizedItem.includes(normalizedInput)) {
+          console.log('Found match at:', outerIndex, innerIndex);
           return [outerIndex, innerIndex];
         }
       }
     }
-  
+    
+    console.log('No match found for table name:', input);
     return null; // return null if not found
   };
 
@@ -102,18 +112,89 @@ function Forms() {
     setIsCollapsed((prev) => !prev);
   };
 
-  useEffect(()=>{
-    const input= sessionStorage.getItem('table_name')?.toLocaleLowerCase()
-    const checks= grabTableIndexFind(input);
-    console.log('khbbiu1', checks, input)
-    if(checks!==null){
-      setSelectedCategory(checks[0])
-      setSelectedSubcategory(checks[1])
+  // Enhanced fetchReports function for better error handling and consistency
+  const fetchReports = async () => {
+    // Only attempt to fetch if we have a valid endpoint
+    if (!endPointGet) {
+      console.log('No endpoint available yet');
+      setReports([]);
+      return;
     }
-  },[])
+    
+    const categoryData = formData.form[selectedCategory];
+    const selectedForm = categoryData?.forms[selectedSubcategory];
+    
+    if (!selectedForm) {
+      console.log('No selected form available');
+      setReports([]);
+      return;
+    }
+    
+    try {
+      console.log(`Fetching data from endpoint "${endPointGet}" for table "${selectedForm.backend_table_name}"`);
+      const response = await fetchDraft(endPointGet);
+      
+      if (response?.data && selectedForm?.backend_table_name) {
+        // Get the data from the specific table name
+        const tableData = response.data[selectedForm.backend_table_name];
+        
+        // Handle both array and object responses
+        if (tableData) {
+          const formattedData = Array.isArray(tableData) ? tableData : [tableData];
+          console.log(`Received ${formattedData.length} report(s) for ${selectedForm.tableName}`);
+          setReports(formattedData);
+        } else {
+          console.log('No data found for', selectedForm.backend_table_name);
+          setReports([]);
+        }
+      } else {
+        console.log('Invalid response format or missing table name');
+        setReports([]);
+      }
+    } catch (error) {
+      console.error('Error fetching reports:', error);
+      setReports([]);
+    }
+  };
 
+  // Initial load from sessionStorage - runs only once
   useEffect(() => {
-    console.log('selectedCategory', selectedCategory, selectedSubcategory);
+    const input = sessionStorage.getItem('table_name')?.toLowerCase();
+    const checks = grabTableIndexFind(input);
+    console.log('Initial load from sessionStorage:', checks, input);
+    
+    if (checks !== null) {
+      // Set the category and subcategory
+      setSelectedCategory(checks[0]);
+      setSelectedSubcategory(checks[1]);
+      
+      // // Get the endpoint immediately
+      // const categoryData = formData.form[checks[0]];
+      // const selectedForm = categoryData?.forms[checks[1]];
+      // if (selectedForm?.endpoint) {
+      //   console.log('Setting initial endpoint:', selectedForm.endpoint);
+      //   setEndPointGet(selectedForm.endpoint);
+      // }
+    }
+    
+    // Mark initial load as complete
+    setInitialLoadComplete(true);
+  }, []);
+
+  useEffect(()=>{
+    // Get the endpoint immediately
+    console.log("Initial load from sessionStorage: 186",selectedCategory, selectedSubcategory)
+    const categoryData = formData.form[selectedCategory];
+    const selectedForm = categoryData?.forms[selectedSubcategory];
+    if (selectedForm?.endpoint) {
+      console.log('Setting initial endpoint:', selectedForm.endpoint);
+      setEndPointGet(selectedForm.endpoint);
+    }
+  },[selectedCategory, selectedSubcategory])
+
+  // Log changes to selected category and subcategory
+  useEffect(() => {
+    console.log('Category/Subcategory changed:', selectedCategory, selectedSubcategory);
   }, [selectedCategory, selectedSubcategory]);
 
   // Format categories with fallback names
@@ -125,8 +206,9 @@ function Forms() {
   // Automatically select first form if only one exists
   useEffect(() => {
     const selectedCategoryForms = formData.form[selectedCategory]?.forms || [];
+    console.log('Initial load from sessionStorage:209', selectedCategoryForms)
     if (selectedCategoryForms.length === 1) {
-      setSelectedSubcategory(0);
+      // setSelectedSubcategory(0);
     }
   }, [selectedCategory]);
 
@@ -148,6 +230,26 @@ function Forms() {
       setFormValues(initialValues);
     }
   }, [selectedCategory, selectedSubcategory, isEditing]);
+
+  // Update endpoint when category or subcategory changes
+  useEffect(() => {
+    const categoryData = formData.form[selectedCategory];
+    const selectedForm = categoryData?.forms[selectedSubcategory];
+    
+    if (selectedForm?.endpoint) {
+      console.log('Updating endpoint based on selection:', selectedForm.endpoint);
+      setEndPointGet(selectedForm.endpoint);
+    }
+  }, [selectedCategory, selectedSubcategory]);
+
+  // Fetch reports when endpoint changes
+  useEffect(() => {
+    // Only fetch if we have a valid endpoint and initial load is complete
+    if (endPointGet && initialLoadComplete) {
+      console.log('Fetching reports for endpoint:', endPointGet);
+      fetchReports();
+    }
+  }, [endPointGet, initialLoadComplete]);
 
   const handleCategorySelect = (catIndex) => {
     // Reset editing state when changing category
@@ -173,39 +275,6 @@ function Forms() {
     }));
   };
 
-  useEffect(() => {
-    const categoryData = formData.form[selectedCategory];
-    const selectedForm = categoryData?.forms[selectedSubcategory];
-    setEndPointGet(selectedForm?.endpoint);
-  }, [selectedCategory, selectedSubcategory]);
-
-  useEffect(() => {
-    console.log('endPointGet', endPointGet);
-
-    const fetchReports = async () => {
-      const categoryData = formData.form[selectedCategory];
-
-      const selectedForm = categoryData?.forms[selectedSubcategory];
-
-      if (endPointGet) {
-        const response = await fetchDraft(endPointGet);
-
-        if (response?.data) {
-          // Check if response.data is an object and convert to array if needed
-          const data = Array.isArray(response.data[selectedForm?.backend_table_name]) ? response.data[selectedForm?.backend_table_name] : [response.data];
-          setReports(data);
-        } else {
-          setReports([]);
-        }
-      } else {
-        setReports([]);
-      }
-    };
-
-    fetchReports();
-  }, [endPointGet]);
-
-
   // Handle form submission
   const handleSubmit = async () => {
     console.log("Form Values:", formValues);
@@ -220,7 +289,7 @@ function Forms() {
     const type = categoryData.type;
     const endpoint = selectedForm.endpoint;
 
-    console.log('editingReportId', editingReportId)
+    console.log('Submitting form with endpoint:', endpoint, 'editing ID:', editingReportId);
 
     // If we're editing, use update endpoint or method
     const data = await formSubmit(formValues, endpoint, editingReportId);
@@ -230,8 +299,7 @@ function Forms() {
       return;
     }
 
-    console.log("data1", data);
-    console.log(backend_table_name, type);
+    console.log("Submission response:", data);
 
     if (selectedForm) {
       const requiredFields = selectedForm.tableData
@@ -266,27 +334,6 @@ function Forms() {
       setFormValues(initialValues);
     }
   };
-
-  // Function to fetch reports
-  const fetchReports = async () => {
-    const categoryData = formData.form[selectedCategory];
-    const selectedForm = categoryData?.forms[selectedSubcategory];
-
-    if (endPointGet) {
-      const response = await fetchDraft(endPointGet);
-      if (response?.data) {
-        setReports(response.data[selectedForm?.backend_table_name]);
-      } else {
-        setReports([]);
-      }
-    } else {
-      setReports([]);
-    }
-  };
-
-  useEffect(() => {
-    console.log(editingReportId)
-  }, [editingReportId])
 
   // Handle edit button click from TableComp
   const handleEdit = (report) => {
