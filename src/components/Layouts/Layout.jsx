@@ -26,6 +26,7 @@ function Layout({ menus = [], submenu = {} }) {
     "Psudo",
     "Manage",
     "Settings",
+    "Requests"
   ];
   const menuItems = menus.length > 0 ? menus : defaultMenus;
 
@@ -162,6 +163,7 @@ function Layout({ menus = [], submenu = {} }) {
           Psudo: `${basePath}/psudo`,
           Manage: `${basePath}/manage`, 
           Settings: `${basePath}/settings`,
+          Requests: `${basePath}/requests`
         };
         const route = routeMap[menu] || `${basePath}/dashboard`;
         navigate(route);
