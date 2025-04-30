@@ -44,9 +44,73 @@ function Forms() {
   // Add a flag to prevent form reset when editing
   const [isEditing, setIsEditing] = useState(false);
 
+
+  const reportOptions = [
+    { 'Category I': ["teaching duties"] },
+    { 'Category II': [
+      "Journal Publications",
+      "Books Publication",
+      "Books Chapter / Conference Proceedings",
+      "Editor of Book",
+      "Translation Work",
+      "Consultancy",
+      "Patent Status",
+      "Research Project",
+      "Award/Fellowship",
+      "Event Organiser / Participation",
+      "Development of Innovative Pedagogy",
+      "Design of New Curriculam and Courses (ICT Based)",
+      "Development of Complete MOOC's in 4 Quadrant (4 Credit Course)",
+      "MOOCs (development in 4 quadrant) per module / lecture",
+      "Content Writer/Subject Matter Expert for each Module of MOOCs (At Least One Quadrant)",
+      "Course Coordinator for MOOCs",
+      "Development of E-Content in 4 quadrants for a Complete Course / E-Book",
+      "E-Content (developed in 4 quadrants) Per Module",
+      "Contribution to development of E-Content module in Complete Course / E-Book (at least one quadrant)",
+      "Editor of E-Content for Complete Course / E-Book",
+      "Status as Guide - Ph.D. Guidance (Degree Awarded)",
+      "Status as Guide - Ph.D. Guidance (for Pursuing Students)",
+      "M.Phil./P.G Dissertation Guidance",
+      "Online AI Courses"
+    ]}
+  ];
+
+  const grabTableIndexFind = (input) => {
+    const normalizedInput = input?.replace(/\s+/g, '')?.toLowerCase();
+    console.log('khbbiu2', normalizedInput)
+  
+    for (let outerIndex = 0; outerIndex < reportOptions.length; outerIndex++) {
+      const categoryKey = Object.keys(reportOptions[outerIndex])[0];
+      const items = reportOptions[outerIndex][categoryKey];
+  
+    console.log('khbbiu3', categoryKey, items)
+
+
+
+      for (let innerIndex = 0; innerIndex < items.length; innerIndex++) {
+        const normalizedItem = items[innerIndex].replace(/\s+/g, '')?.toLowerCase();
+        if (normalizedItem === normalizedInput) {
+          return [outerIndex, innerIndex];
+        }
+      }
+    }
+  
+    return null; // return null if not found
+  };
+
   const handleToggleSidebar = () => {
     setIsCollapsed((prev) => !prev);
   };
+
+  useEffect(()=>{
+    const input= sessionStorage.getItem('table_name')?.toLocaleLowerCase()
+    const checks= grabTableIndexFind(input);
+    console.log('khbbiu1', checks, input)
+    if(checks!==null){
+      setSelectedCategory(checks[0])
+      setSelectedSubcategory(checks[1])
+    }
+  },[])
 
   useEffect(() => {
     console.log('selectedCategory', selectedCategory, selectedSubcategory);

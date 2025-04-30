@@ -4,82 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import TableComp from '../Table/TableComp';
 
-const reports = [
-    {
-        facultyId: "FAC001",
-        category: "Category I",
-        tableName: "Teaching",
-        status: "Draft",
-        date: "2025-04-20",
-        reportId: "REP001"
-    },
-    {
-        facultyId: "FAC002",
-        category: "Category II",
-        tableName: "Journal Publications",
-        status: "Draft",
-        date: "2025-04-18",
-        reportId: "REP002"
-    },
-    {
-        facultyId: "FAC003",
-        category: "Category II",
-        tableName: "Patent Status",
-        status: "Draft",
-        date: "2025-04-22",
-        reportId: "REP003"
-    },
-    {
-        facultyId: "FAC004",
-        category: "Category I",
-        tableName: "Duties",
-        status: "Draft",
-        date: "2025-04-19",
-        reportId: "REP004"
-    },
-    {
-        facultyId: "FAC005",
-        category: "Category II",
-        tableName: "E-Content (developed in 4 quadrants) Per Module",
-        status: "Draft",
-        date: "2025-04-21",
-        reportId: "REP005"
-    }
-];
-
-const subReportOptions = {
-    'Category I': ["Teaching",
-        "Duties"],
-    'Category II': ["Journal Publications",
-        "Books Publication",
-        "Books Chapter / Conference Proceedings",
-        "Editor of Book",
-        "Translation Work",
-        "Consultancy",
-        "Patent Status",
-        "Research Project",
-        "Award/Fellowship",
-        "Event Organiser / Participation",
-        "Development of Innovative Pedagogy",
-        "Design of New Curriculam and Courses (ICT Based)",
-        "Development of Complete MOOC's in 4 Quadrant (4 Credit Course)",
-        "MOOCs (development in 4 quadrant) per module / lecture",
-        "Content Writer/Subject Matter Expert for each Module of MOOCs (At Least One Quadrant)",
-        "Course Coordinator for MOOCs",
-        "Development of E-Content in 4 quadrants for a Complete Course / E-Book",
-        "E-Content (developed in 4 quadrants) Per Module",
-        "Contribution to development of E-Content module in Complete Course / E-Book (at least one quadrant)",
-        "Editor of E-Content for Complete Course / E-Book",
-        "Status as Guide - Ph.D. Guidance (Degree Awarded)",
-        "Status as Guide - Ph.D. Guidance (for Pursuing Students)",
-        "M.Phil./P.G Dissertation Guidance",
-        "Online AI Courses"],
-};
-
 export default function DraftTable({ draftData }) {
-    console.log(draftData?.data)
     const [searchTerm, setSearchTerm] = useState('');
-    const [filteredReports, setFilteredReports] = useState(reports); // Initially show all reports
+    const [filteredReports, setFilteredReports] = useState([]);
     const [showFilters, setShowFilters] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectedSubReport, setSelectedSubReport] = useState('');
@@ -90,17 +17,61 @@ export default function DraftTable({ draftData }) {
         }
     }, [draftData]);
 
-
-
     // Function to handle search
     const handleSearch = (e) => {
         e.preventDefault();
         filterReports();
     };
 
- 
+    // Function to normalize model names by replacing spaces with underscores
+    const normalizeModelName = (modelName) => {
+        if (!modelName) return '';
+        return modelName.replace(/ /g, '_').toLowerCase();
+    };
 
+    // Function to filter reports based on search, category, and sub-report
+    const filterReports = () => {
+        if (!draftData?.data) return;
 
+        let results = [...draftData.data];
+
+        // Filter by search term
+        if (searchTerm.trim() !== '') {
+            const term = searchTerm.toLowerCase();
+            const normalizedTerm = normalizeModelName(searchTerm);
+            
+            results = results.filter((report) => {
+                // Normalize model name for comparison if it exists
+                const normalizedModel = report.model ? normalizeModelName(report.model) : '';
+                
+                // Search in multiple fields - adjust these based on your actual data structure
+                return (
+                    (report.title && report.title.toLowerCase().includes(term)) ||
+                    (report.description && report.description.toLowerCase().includes(term)) ||
+                    (report.author && report.author.toLowerCase().includes(term)) ||
+                    (report.reportId && report.reportId.toString().includes(term)) ||
+                    (normalizedModel.includes(normalizedTerm))
+                );
+            });
+        }
+
+        // Filter by category if selected
+        if (selectedCategory) {
+            results = results.filter(report => report.category === selectedCategory);
+        }
+
+        // Filter by sub-report if selected
+        if (selectedSubReport) {
+            results = results.filter(report => report.subReport === selectedSubReport);
+        }
+
+        setFilteredReports(results);
+    };
+
+    // UseEffect to reset reports when searchTerm or filters change
+    useEffect(() => {
+        filterReports();
+    }, [searchTerm, selectedCategory, selectedSubReport]);
 
     // Function to get badge color based on category
     const getBadgeColor = (category) => {
@@ -113,9 +84,6 @@ export default function DraftTable({ draftData }) {
                 return 'bg-gray-100 text-gray-800';
         }
     };
-
-    // Function to filter reports based on search, category, and sub-report
-   
 
     // Function to get status badge
     const getStatusBadge = (status) => {
@@ -157,9 +125,6 @@ export default function DraftTable({ draftData }) {
         }
     };
 
-    // UseEffect to reset reports when searchTerm or filters change
-   
-
     // Render the component
     return (
         <div className="max-w-full mx-auto bg-white rounded-lg shadow-lg p-6">
@@ -184,16 +149,51 @@ export default function DraftTable({ draftData }) {
                 </form>
 
                 <div className="flex gap-4 items-start md:items-center">
-                    
-
-                 
+                    {/* Filter button could be enabled if you want to implement the filter functionality */}
+                    {/* <Button
+                        variant="outline"
+                        className="flex items-center gap-2 border border-gray-300 p-2"
+                        onClick={() => setShowFilters(!showFilters)}
+                    >
+                        <Filter className="h-4 w-4" />
+                        Filters
+                    </Button> */}
                 </div>
             </div>
 
+            {/* Add the filter panel here if you want to implement it */}
+            {/* {showFilters && (
+                <div className="bg-gray-50 p-4 rounded-lg mb-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                            <select
+                                className="w-full p-2 border border-gray-300 rounded-md"
+                                value={selectedCategory}
+                                onChange={(e) => setSelectedCategory(e.target.value)}
+                            >
+                                <option value="">All Categories</option>
+                                <option value="Category I">Category I</option>
+                                <option value="Category II">Category II</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Sub Report</label>
+                            <select
+                                className="w-full p-2 border border-gray-300 rounded-md"
+                                value={selectedSubReport}
+                                onChange={(e) => setSelectedSubReport(e.target.value)}
+                            >
+                                <option value="">All Sub Reports</option>
+                                <option value="SubReport A">SubReport A</option>
+                                <option value="SubReport B">SubReport B</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            )} */}
+
             <TableComp reports={filteredReports} getStatusBadge={getStatusBadge} />
-
-
         </div>
-
     );
 }
