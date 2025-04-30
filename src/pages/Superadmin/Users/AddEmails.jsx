@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Trash2, Search, Mail, Plus } from "lucide-react";
 import { addEmail } from "@/Apis/Superadmin/AddEmail/Addemail";
+import { deleteEmail } from "@/Apis/Superadmin/AddEmail/DeleteEmail";
 import { fetchEmails } from "@/Apis/Superadmin/GetEmail/GetEmail";
 
 export default function ImprovedEmailList() {
@@ -12,6 +13,7 @@ export default function ImprovedEmailList() {
 
   const { addEmailsuperadmin } = addEmail();
   const { fetchEmailsuperadmin } = fetchEmails();
+  const { deleteEmailsuperadmin } = deleteEmail();
   useEffect(() => {
     console.log(emails);
   }, [emails]);
@@ -72,8 +74,26 @@ export default function ImprovedEmailList() {
     }
   };
 
-  const handleDeleteEmail = (emailToDelete) => {
-    setEmails(emails.filter((e) => e !== emailToDelete));
+  const handleDeleteEmail = async (emailToDelete) => {
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await deleteEmailsuperadmin({ email: emailToDelete });
+
+      if (response.success) {
+        setEmails((prevEmails) =>
+          prevEmails.filter((e) => e !== emailToDelete)
+        );
+      } else {
+        setError(response.message || "Failed to delete email");
+      }
+    } catch (error) {
+      console.error("Error deleting email:", error);
+      setError("An error occurred while deleting the email");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const filteredEmails = emails.filter((email) =>
