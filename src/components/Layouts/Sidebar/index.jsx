@@ -3,8 +3,9 @@ import MenuItem from "./MenuItem";
 import SubmenuItem from "./SubmenuItem";
 import IconButton from "./IconButton";
 import ProfileSection from "./ProfileSection";
+import logo from '../../../Assets/images/clg-logos.png'; // adjust path as needed
 
-const Sidebar = ({ 
+const Sidebar = ({
   isSidebarOpen,
   menuItems,
   iconMap,
@@ -18,21 +19,26 @@ const Sidebar = ({
   toggleBelowDropdown,
   showBelowDropdown,
   role,
-  isParentOfActive
+  isParentOfActive,
 }) => {
-  
   const renderExpandedSidebar = () => (
-    <div className="h-full flex flex-col justify-between bg-sidebar"
-    >
+    <div className="h-full flex flex-col justify-between bg-sidebar">
       <div className="p-4">
         <div className="flex flex-col items-center gap-3 mb-6 pl-2">
-          <div className="text-white w-full flex justify-center">
-            ⌘
+          <div className="bg-white rounded-lg h-auto w-full flex justify-center">
+            <img
+              src={logo}
+              alt="website-logo"
+              className="object-contain"
+            />
           </div>
-          <div>
-            <div className="text-lg font-bold text-white w-full flex justify-between items-center">IEM UEM Group</div>
-            {/* <p className="text-xs text-slate-500">API Project</p> */}
+
+          <div className="w-full px-2">
+            <div className="text-[1.5rem] text-center font-bold text-white w-full flex justify-center items-center">
+              IEM-UEM Group
+            </div>
           </div>
+            <hr className="border-t border-gray-400 w-[100%] mx-auto" />
         </div>
 
         <nav className="space-y-1.5">
@@ -94,7 +100,7 @@ const Sidebar = ({
         ))}
       </div>
 
-      <div className="mt-auto">
+      {/* <div className="mt-auto">
         <div
           className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-700 text-white rounded-full flex items-center justify-center font-medium text-sm shadow-sm cursor-pointer"
           title={role}
@@ -102,7 +108,7 @@ const Sidebar = ({
         >
           SN
         </div>
-      </div>
+      </div> */}
     </div>
   );
 

@@ -10,6 +10,7 @@ const Header = memo(({ toggleSidebar, toggleDropdown, showDropdown }) => {
   const notificationDropdownRef = useRef(null);
   const profileRef = useRef(null);
   const profileDropdownRef = useRef(null);
+  const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
 
   const toggleNotificationDropdown = useCallback(() => {
     setNotificationDropdown((prev) => !prev);
@@ -72,8 +73,17 @@ const Header = memo(({ toggleSidebar, toggleDropdown, showDropdown }) => {
             className="flex items-center gap-2 cursor-pointer group"
             onClick={toggleDropdown}
           >
-            <div className="bg-gradient-to-br from-blue-500 to-blue-700 text-white w-8 h-8 rounded-full flex items-center justify-center font-medium text-sm shadow-sm group-hover:shadow transition-shadow">
-              SN
+            <div className="bg-[#004E77] text-white w-11 h-11 rounded-full flex items-center justify-center font-medium text-[18px] shadow-sm group-hover:shadow transition-shadow">
+            {userDetails?.name
+                  ? userDetails.name
+                      .trim()
+                      .split(" ")
+                      .map((n, i, arr) =>
+                        i === 0 || i === arr.length - 1 ? n[0] : ""
+                      )
+                      .join("")
+                      .toUpperCase()
+                  : ""}
             </div>
             <ChevronDown
               size={16}
