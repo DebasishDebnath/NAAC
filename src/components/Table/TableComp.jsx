@@ -1,7 +1,9 @@
 import React from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
-const TableComp = ({ reports , onDelete, onEdit }) => {
+const TableComp = ({ reports }) => {
+  const navigate = useNavigate()
   if (!reports || reports.length === 0) {
     return (
       <div className="text-center py-4 text-gray-600">
@@ -9,7 +11,14 @@ const TableComp = ({ reports , onDelete, onEdit }) => {
       </div>
     );
   }
-  console.log(reports)
+
+  const handleEdit = (report) => {
+    const modelName = report?.model?.replace(/_/g, ' ');
+    sessionStorage.setItem('table_name', modelName);
+    navigate(`/user/forms`)
+
+  }
+
   return (
     <div className="overflow-x-auto">
       <table className="w-full min-w-[600px] table-auto bg-gray-50 rounded-lg shadow-md">
@@ -36,7 +45,7 @@ const TableComp = ({ reports , onDelete, onEdit }) => {
               <td className="px-4 py-3 text-center">
                 <div className="flex justify-center gap-3">
                   <button
-                    onClick={() => onEdit?.(report)}
+                    onClick={()=> handleEdit(report)}
                     className="text-indigo-600 hover:text-indigo-800 transition-transform hover:scale-110"
                     title="Edit"
                   >
