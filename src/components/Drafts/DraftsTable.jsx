@@ -76,7 +76,7 @@ const subReportOptions = {
         "Online AI Courses"],
 };
 
-export default function DraftTable({draftData}) {
+export default function DraftTable({ draftData }) {
     console.log(draftData?.data)
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredReports, setFilteredReports] = useState(reports); // Initially show all reports
@@ -90,7 +90,7 @@ export default function DraftTable({draftData}) {
         }
     }, [draftData]);
 
-    
+
 
     // Function to handle search
     const handleSearch = (e) => {
@@ -98,15 +98,9 @@ export default function DraftTable({draftData}) {
         filterReports();
     };
 
-    const handleDelete = (reportId) => {
-        const confirmed = window.confirm("Are you sure you want to delete this report?");
-        if (confirmed) {
-            const updatedReports = filteredReports.filter(r => r.reportId !== reportId);
-            setFilteredReports(updatedReports);
-        }
-    };
-   
-    
+ 
+
+
 
     // Function to get badge color based on category
     const getBadgeColor = (category) => {
@@ -121,37 +115,7 @@ export default function DraftTable({draftData}) {
     };
 
     // Function to filter reports based on search, category, and sub-report
-    const filterReports = () => {
-        let filtered = reports;
-
-        // Filter by search term
-        if (searchTerm.trim()) {
-            const searchTermLower = searchTerm.toLowerCase();
-            filtered = filtered.filter(report => {
-                return (
-                    report.reportId.toLowerCase().includes(searchTermLower) ||
-                    report.category.toLowerCase().includes(searchTermLower) ||
-                    report.tableName.toLowerCase().includes(searchTermLower) ||
-                    report.status.toLowerCase().includes(searchTermLower) ||
-                    report.date.toLowerCase().includes(searchTermLower)
-                );
-            });
-        }
-
-        // Filter by selected category
-        if (selectedCategory) {
-            filtered = filtered.filter(report => report.category === selectedCategory);
-        }
-
-        // Filter by selected sub-report (compare with the title)
-        if (selectedSubReport) {
-            filtered = filtered.filter(report =>
-                report.tableName.toLowerCase().includes(selectedSubReport.toLowerCase())
-            );
-        }
-
-        setFilteredReports(filtered);
-    };
+   
 
     // Function to get status badge
     const getStatusBadge = (status) => {
@@ -194,9 +158,7 @@ export default function DraftTable({draftData}) {
     };
 
     // UseEffect to reset reports when searchTerm or filters change
-    useEffect(() => {
-        filterReports();
-    }, [searchTerm, selectedCategory, selectedSubReport]);
+   
 
     // Render the component
     return (
@@ -222,50 +184,13 @@ export default function DraftTable({draftData}) {
                 </form>
 
                 <div className="flex gap-4 items-start md:items-center">
-                    <Button
-                        variant="outline"
-                        className="flex items-center gap-2 bg-[#787878] text-white rounded-lg py-2 px-4 hover:bg-[#666666] transition duration-200 ease-in-out"
-                        onClick={() => setShowFilters(!showFilters)}
-                    >
-                        <Filter className="h-4 w-4" />
-                        <span>Filters</span>
-                    </Button>
+                    
 
-                    {showFilters && (
-                        <div className="flex flex-col items-center justify-center h-full md:flex-row gap-4 mt-4">
-                            {/* Category Dropdown */}
-                            <select
-                                className="border border-gray-300 rounded-md px-4 p-1 shadow-sm focus:ring-2 focus:ring-[#002946]"
-                                value={selectedCategory}
-                                onChange={(e) => {
-                                    setSelectedCategory(e.target.value);
-                                    setSelectedSubReport('');
-                                }}
-                            >
-                                <option value="">Select Category</option>
-                                <option value="Category I">Category I</option>
-                                <option value="Category II">Category II</option>
-                            </select>
-
-                            {/* Sub-report Dropdown */}
-                            {selectedCategory && (
-                                <select
-                                    className="border border-gray-300 min-w-[800px] rounded-md px-4 p-1 shadow-sm focus:ring-2 focus:ring-[#002946]"
-                                    value={selectedSubReport}
-                                    onChange={(e) => setSelectedSubReport(e.target.value)}
-                                >
-                                    <option value="">Select Sub-report</option>
-                                    {subReportOptions[selectedCategory].map((sub, index) => (
-                                        <option key={index} value={sub}>{sub}</option>
-                                    ))}
-                                </select>
-                            )}
-                        </div>
-                    )}
+                 
                 </div>
             </div>
 
-            <TableComp reports={filteredReports} onDelete={handleDelete} getStatusBadge={getStatusBadge} />
+            <TableComp reports={filteredReports} getStatusBadge={getStatusBadge} />
 
 
         </div>
