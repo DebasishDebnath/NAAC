@@ -26,6 +26,7 @@ function Layout({ menus = [], submenu = {} }) {
     "Psudo",
     "Manage",
     "Settings",
+    "Requests"
   ];
   const menuItems = menus.length > 0 ? menus : defaultMenus;
 
@@ -139,17 +140,19 @@ function Layout({ menus = [], submenu = {} }) {
   const handleMenuClick = React.useCallback(
     (menu, fromIconButton = false) => {
       setActiveItem(menu);
-      
-      // If this is from an icon button in collapsed mode, we need to ensure submenu opens
+  
+      // Remove "table_name" from session storage when Forms is clicked
+      if (menu === "Forms") {
+        sessionStorage.removeItem("table_name");
+      }
+  
       if (fromIconButton && submenu[menu] && submenu[menu].length > 0) {
         setOpenSubmenus((prev) => ({
           ...prev,
           [menu]: true
         }));
       }
-      
-      // Only navigate if it's not a submenu parent or if explicitly requested
-      // This way clicking on a menu with submenus won't navigate away immediately
+  
       if (!submenu[menu] || submenu[menu].length === 0) {
         const basePath = getBasePath();
         const routeMap = {
@@ -162,16 +165,17 @@ function Layout({ menus = [], submenu = {} }) {
           Psudo: `${basePath}/psudo`,
           Manage: `${basePath}/manage`, 
           Settings: `${basePath}/settings`,
+          Requests: `${basePath}/requests`
         };
         const route = routeMap[menu] || `${basePath}/dashboard`;
         navigate(route);
-        
-        // Clear active submenu when navigating to a parent menu route
+  
         setActiveSubmenuItem("");
       }
     },
     [navigate, getBasePath, submenu]
   );
+  
 
   const handleSubmenuClick = React.useCallback(
     (parentMenu, submenuItem) => {
