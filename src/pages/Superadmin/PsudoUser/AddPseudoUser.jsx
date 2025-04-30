@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { Button } from "@/components/ui/button";
-
+import { useAddPseudoUser } from "../../../Apis/Superadmin/PsudoUser/AddPseudoUser.jsx";
 function AddPseudoUser({ onClose }) {
   const [formData, setFormData] = useState({
     name: "",
@@ -10,26 +10,43 @@ function AddPseudoUser({ onClose }) {
     college: "IEMN",
   });
 
+  const { addPseudoUserSuperadmin } = useAddPseudoUser();
+
+  const collegeMap = {
+    IEMN: "IEM Newtown",
+    IEMS: "IEM Saltlake",
+    UEMJ: "UEM Jaipur",
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const validDomains = ["@iem.edu.in", "@uem.edu.in"];
-    const emailValid = validDomains.some((domain) =>
-      formData.email.endsWith(domain)
-    );
+    // const validDomains = ["@iem.edu.in", "@uem.edu.in"];
+    // const emailValid = validDomains.some((domain) =>
+    //   formData.email.endsWith(domain)
+    // );
 
-    if (!emailValid) {
-      alert("Email must end with @iem.edu.in or @uem.edu.in");
-      return;
+    // if (!emailValid) {
+    //   alert("Email must end with @iem.edu.in or @uem.edu.in");
+    //   return;
+    // }
+
+    const payload = {
+      name: formData.name,
+      email: formData.email,
+      contact: formData.contact,
+      campus: collegeMap[formData.college],
+    };
+
+    const result = await addPseudoUserSuperadmin(payload);
+    if (result) {
+      onClose();
     }
-
-    console.log("Form Submitted: ", formData);
-    onClose();
   };
 
   return (
@@ -57,23 +74,20 @@ function AddPseudoUser({ onClose }) {
               />
             </div>
 
-            {/* Email */}
             <div className="flex flex-col">
               <label className="text-sm font-medium text-gray-700">
                 Email ID <span className="text-red-500">*</span>{" "}
-                <span className="text-xs text-gray-500 ml-1">
+                {/* <span className="text-xs text-gray-500 ml-1">
                   (Only @iem.edu.in / @uem.edu.in)
-                </span>
+                </span> */}
               </label>
-
               <input
                 name="email"
                 type="email"
                 value={formData.email}
                 onChange={handleChange}
                 required
-                pattern=".+@(iem\.edu\.in|uem\.edu\.in)$"
-                title="Email must end with @iem.edu.in or @uem.edu.in"
+               
                 className="mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black transition"
               />
               <div className="text-[10px] text-red-500">
@@ -81,7 +95,6 @@ function AddPseudoUser({ onClose }) {
               </div>
             </div>
 
-            {/* Contact */}
             <div className="flex flex-col">
               <label className="text-sm font-medium text-gray-700">
                 Contact Number <span className="text-red-500">*</span>
@@ -96,7 +109,6 @@ function AddPseudoUser({ onClose }) {
               />
             </div>
 
-            {/* College */}
             <div className="flex flex-col">
               <label className="text-sm font-medium text-gray-700">
                 College <span className="text-red-500">*</span>
@@ -107,13 +119,12 @@ function AddPseudoUser({ onClose }) {
                 onChange={handleChange}
                 className="mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black transition"
               >
-                <option value="IEMN">IEMN</option>
-                <option value="IEMS">IEMS</option>
-                <option value="UEMJ">UEMJ</option>
+                <option value="IEMN">IEM Newtown</option>
+                <option value="IEMS">IEM Saltlake</option>
+                <option value="UEMJ">UEM Jaipur</option>
               </select>
             </div>
 
-            {/* Action buttons */}
             <div className="flex justify-end gap-4 pt-4">
               <Button
                 variant="outline"
