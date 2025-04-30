@@ -31,7 +31,7 @@ const TableComp = ({ reports }) => {
           </tr>
         </thead>
         <tbody className="overflow-hidden rounded-b-xl">
-          {reports.map((report, index) => (
+          {Array.isArray(reports) && reports.map((report, index) => (
             <tr key={index} className="hover:bg-gray-100 transition duration-200">
               <td className="px-4 py-3 text-center capitalize">
                 {report?.model?.replace(/_/g, ' ')}
