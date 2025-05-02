@@ -8,7 +8,7 @@ export const ApproveRequest = ()=>{
         console.log("user",userId)
         try {
             
-            const json= await postReq(`Approve/${userId}`, {}, accessToken);
+            const json= await postReq(`api/v2/superAdmin/Approve/${userId}`, {}, accessToken);
             // console.log(json)
             return json;
         } catch (error) {
