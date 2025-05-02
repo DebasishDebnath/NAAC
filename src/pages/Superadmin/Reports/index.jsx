@@ -5,7 +5,7 @@ import {
   useReactTable,
   getSortedRowModel,
 } from "@tanstack/react-table";
-import { ArrowUpDown, Eye } from "lucide-react";
+import { ArrowUpDown, Eye, SquareArrowOutUpRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -34,10 +34,12 @@ export default function UserTable() {
   const navigate = useNavigate();
 
   // Function to view report details
-  const handleViewReport = (userId) => {
+  const handleViewReport = (userInfo, userId) => {
     if (!userId) return;
-    
+  // console.log(userInfo, userId);
+    sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
     // Use absolute path starting with / to ensure consistent navigation
+    // const userInfoString = JSON.parse(userInfo); 
     navigate(`/superadmin/reports/${userId}`);
   };
 
@@ -103,7 +105,7 @@ export default function UserTable() {
       accessorKey: "emailId",
       header: "Email address",
       cell: ({ row }) => (
-        <div className="text-blue-500 underline lowercase dark:text-blue-400 truncate max-w-xs">
+        <div className="text-[#005b88de] hover:text-[#002946] underline lowercase truncate max-w-xs">
           {row.original.user?.emailId || "N/A"}
         </div>
       ),
@@ -194,7 +196,7 @@ export default function UserTable() {
                   </TableHead>
                 ))}
                 <TableHead className="text-sm font-bold text-white dark:text-gray-300">
-                  Actions
+                  Reports
                 </TableHead>
               </TableRow>
             ))}
@@ -235,12 +237,11 @@ export default function UserTable() {
                   <TableCell className="text-sm py-4 px-4 whitespace-nowrap">
                     <div className="flex space-x-2">
                       <Button
-                        variant="outline"
-                        size="sm"
-                        className="text-blue-600 hover:text-blue-800 flex items-center gap-1"
-                        onClick={() => handleViewReport(row.original.user?._id)}
+                        size="md"
+                        className="text-[#005b88de] hover:text-[#002946] flex items-center gap-1 shadow-none"
+                        onClick={() => handleViewReport(row.original.user, row.original.user?._id)}
                       >
-                        <Eye size={16} />
+                        <SquareArrowOutUpRight size={18}/>
                         View
                       </Button>
                     </div>

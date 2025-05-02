@@ -45,7 +45,7 @@ const StatusBadge = ({ status }) => {
   };
 
   return (
-    <Badge className={`${statusColors[status] || "bg-gray-100 text-gray-800"}`}>
+    <Badge className={`${statusColors[status] || "bg-gray-100 text-gray-800"}`} variant={`${status}`}>
       {status}
     </Badge>
   );
@@ -59,13 +59,15 @@ export default function EachReportTable() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const user = JSON.parse(sessionStorage.getItem("userInfo")) || {};
+
   useEffect(() => {
     const fetchReportData = async () => {
       setLoading(true);
       try {
         const response = await getUserSpecificReport(userId);
         setData(response);
-        // console.log( "ssSC", response);
+        console.log( "ssSC", response.data);
       } catch (err) {
         setError(err.message || "Failed to fetch report details");
       } finally {
@@ -121,9 +123,12 @@ export default function EachReportTable() {
     );
   }
 
-  const report = data.data[0];
-  const user = report.user;
+  const report = data.data;
+  // const user = report.user;
   const reportData = report.data;
+
+  console.log("dggd",report)
+  console.log("ffsf",user)
 
   return (
     <div className="container mx-auto p-6">
@@ -133,19 +138,15 @@ export default function EachReportTable() {
           onClick={() => navigate(-1)}
           className="mb-4"
         >
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Reports
-        </Button>
-
-        <Button variant="outline" className="mb-4">
-          <Download className="mr-2 h-4 w-4" /> Export Report
+          <ArrowLeft className="mr-2 h-4 w-4" /> Back
         </Button>
       </div>
 
       {/* User Info Card */}
       <Card className="mb-8 shadow-lg">
-        <CardHeader className="bg-[#002946] text-white">
+        <CardHeader className="bg-[#002946] text-white ">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-xl font-bold">Report</CardTitle>
+            <CardTitle className="text-xl font-bold">Check Reports</CardTitle>
             <StatusBadge status={report.is_submitted} />
           </div>
         </CardHeader>
@@ -176,7 +177,7 @@ export default function EachReportTable() {
               </div>
               <div>
                 <p className="text-sm text-gray-500">Email</p>
-                <p className="font-medium text-blue-600">{user.emailId}</p>
+                <p className="font-medium text-[#005b88de]">{user.emailId}</p>
               </div>
               <div>
                 <p className="text-sm text-gray-500">Mobile</p>
@@ -189,7 +190,7 @@ export default function EachReportTable() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="bg-blue-50 p-4 rounded-lg">
                 <p className="text-sm text-gray-500">Total Score</p>
-                <p className="text-2xl font-bold text-blue-600">{report.obtainedScore.toFixed(1)}</p>
+                <p className="text-2xl font-bold text-[#005b88de]">{report.obtainedScore.toFixed(1)}</p>
               </div>
               <div className="bg-green-50 p-4 rounded-lg">
                 <p className="text-sm text-gray-500">Submission Date</p>
@@ -218,7 +219,7 @@ export default function EachReportTable() {
               className="px-4 py-2"
             >
               {formatModelName(category.model)}
-              <span className="ml-2 bg-blue-100 text-blue-800 text-xs font-medium rounded-full px-2.5 py-0.5">
+              <span className="ml-2 bg-blue-100 text-[#002946] text-xs font-medium rounded-full px-2.5 py-0.5">
                 {category.entry.length}
               </span>
             </TabsTrigger>
@@ -232,7 +233,7 @@ export default function EachReportTable() {
                 <div className="flex items-center justify-between">
                   <CardTitle>{formatModelName(category.model)}</CardTitle>
                   <div className="text-sm font-medium">
-                    Category Score: <span className="text-blue-600">{category.score}</span>
+                    Category Score: <span className="text-[#005b88de]">{category.score}</span>
                   </div>
                 </div>
               </CardHeader>
@@ -266,7 +267,7 @@ export default function EachReportTable() {
                               {key.includes('Date') ? formatDate(value) : value}
                             </TableCell>
                           ))}
-                          <TableCell className="font-medium text-blue-600">
+                          <TableCell className="font-medium text-[#005b88de]">
                             {Object.entries(item).find(([key]) => key.includes('score'))?.[1] || 'N/A'}
                           </TableCell>
                           <TableCell>
@@ -275,7 +276,7 @@ export default function EachReportTable() {
                                 href={item.drive_link} 
                                 target="_blank" 
                                 rel="noopener noreferrer"
-                                className="text-blue-600 hover:text-blue-800 flex items-center"
+                                className="text-[#005b88de] hover:text-[#002946] flex items-center"
                               >
                                 <ExternalLink className="h-4 w-4 mr-1" /> View
                               </a>
