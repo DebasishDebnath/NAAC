@@ -1,6 +1,18 @@
 import { FaCheck, FaTimes, FaEye } from 'react-icons/fa'
-
+import { ApproveRequest } from '@/Apis/Request/ApproveRequest';
 const RequestTable = ({ requests, onApprove, onReject, onView }) => {
+    const {approve} = ApproveRequest()
+    console.log(requests)
+    const ApproveRequestfunc = async (userId) => {
+      
+        try {
+            const response = await approve(userId)
+           
+            // console.log(response)
+        } catch (error) {
+            console.log("Error Approving Request!")
+        }
+    }
     return (
         <div className="overflow-x-auto">
             <table className="w-full min-w-[600px] table-auto bg-gray-50 rounded-lg shadow-md">
@@ -27,7 +39,7 @@ const RequestTable = ({ requests, onApprove, onReject, onView }) => {
                                 <td className="px-4 py-3 text-center">
                                     <div className="flex justify-center gap-3">
                                         <button
-                                            onClick={() => onApprove(request)}
+                                           onClick={() => ApproveRequestfunc(request.UserId)}
                                             className="text-green-600 hover:text-green-800 transition-transform hover:scale-110"
                                             title="Approve"
                                         >
