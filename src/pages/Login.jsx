@@ -7,6 +7,7 @@ import { Button } from "../components/ui/button";
 import { User, ChevronDown } from "lucide-react";
 import { useNavigate, useParams, Navigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
+import { useForgotPassword } from "@/Apis/Login/forgetPassword";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -14,12 +15,30 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedRole, setSelectedRole] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [showOtpForm, setShowOtpForm] = useState(false);
+  const [mobileNo, setMobileNo] = useState("");
+  const [otp, setOtp] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+
   const { signinSuperadmin } = useSuperadminApi();
   const { signinUser } = useUserApi();
   const { showError } = useNotification();
   const params = useParams();
   const navigate = useNavigate();
   const { user, loginUser } = useAuth();
+  const { sendOtp, verifyOtp, changePassword } = useForgotPassword();
+
+  const handleSendOtp = async () => {
+    await sendOtp(mobileNo);
+  };
+
+  const handleVerifyOtp = async () => {
+    await verifyOtp(mobileNo, otp);
+  };
+
+  const handleChangePassword = async () => {
+    await changePassword(mobileNo, newPassword);
+  };
 
   useEffect(() => {
     if (params.role) {
@@ -31,7 +50,7 @@ export default function LoginPage() {
   if (user && user.token) {
     return <Navigate to={`/${user.role}/dashboard`} replace />;
   }
-  
+
   const handleRoleSelect = (role) => {
     setSelectedRole(role);
     setDropdownOpen(false);
@@ -45,7 +64,7 @@ export default function LoginPage() {
 
     try {
       const currentRole = selectedRole || params.role;
-      
+
       if (currentRole === "superadmin")
         response = await signinSuperadmin(email, password);
       else if (currentRole === "user" || currentRole === "psudosuperadmin")
@@ -56,14 +75,14 @@ export default function LoginPage() {
         setIsLoading(false);
         return;
       }
-      
+
       // Use context to save user data
       loginUser({
         email,
         token: response?.data?.token,
-        role: response?.data?.role
+        role: response?.data?.role,
       });
-      
+
       navigate(`/${response?.data?.role}/dashboard`, { replace: true });
     } catch (error) {
       console.error("Login error:", error);
@@ -76,20 +95,24 @@ export default function LoginPage() {
   const roleDisplay = {
     superadmin: "Super Admin",
     user: "User",
-    psudosuperadmin: "Pseudo User"
+    psudosuperadmin: "Pseudo User",
   };
 
-  const currentRoleDisplay = roleDisplay[selectedRole || params.role] || "Select Role";
+  const currentRoleDisplay =
+    roleDisplay[selectedRole || params.role] || "Select Role";
 
   return (
     <div
       className="min-h-screen flex items-center justify-center p-4"
-      style={{ backgroundColor: "#f0f4ff" }} 
+      style={{ backgroundColor: "#f0f4ff" }}
     >
       <div className="w-full max-w-md">
         <div
           className="rounded-lg overflow-hidden"
-          style={{ backgroundColor: "var(--color-card)", boxShadow: "var(--shadow-xl)" }}
+          style={{
+            backgroundColor: "var(--color-card)",
+            boxShadow: "var(--shadow-xl)",
+          }}
         >
           <div
             className="p-8 text-center"
@@ -107,7 +130,7 @@ export default function LoginPage() {
                 {currentRoleDisplay}
                 <ChevronDown className="w-4 h-4 ml-2" />
               </button> */}
-              
+
               {dropdownOpen && (
                 <div className="absolute z-10 w-full mt-1 bg-white rounded-md shadow-lg">
                   <ul className="py-1">
@@ -146,8 +169,7 @@ export default function LoginPage() {
             >
               <User className="text-white" />
             </div>
-            
-            
+
             <h2 className="text-2xl font-bold text-white mb-1">
               {currentRoleDisplay} Login
             </h2>
@@ -159,7 +181,10 @@ export default function LoginPage() {
           <div className="p-8">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Email Address
                 </label>
                 <Input
@@ -174,12 +199,19 @@ export default function LoginPage() {
 
               <div>
                 <div className="flex justify-between">
-                  <label htmlFor="password" className="text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="password"
+                    className="text-sm font-medium text-gray-700"
+                  >
                     Password
                   </label>
-                  <a href="#" className="text-sm text-blue-600 hover:text-blue-800">
+                  <button
+                    type="button"
+                    className="text-sm text-blue-600 hover:text-blue-800"
+                    onClick={() => setShowOtpForm(true)}
+                  >
                     Forgot Password?
-                  </a>
+                  </button>
                 </div>
                 <Input
                   id="password"
@@ -197,7 +229,10 @@ export default function LoginPage() {
                   type="checkbox"
                   className="h-4 w-4 text-blue-600 border-gray-300 rounded"
                 />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
+                <label
+                  htmlFor="remember-me"
+                  className="ml-2 block text-sm text-gray-700"
+                >
                   Remember me
                 </label>
               </div>
@@ -207,7 +242,7 @@ export default function LoginPage() {
                 disabled={isLoading || !selectedRole}
                 className="w-full"
                 style={{
-                  backgroundColor: "#2563eb", 
+                  backgroundColor: "#2563eb",
                   color: "white",
                 }}
               >
@@ -244,17 +279,99 @@ export default function LoginPage() {
 
           <div
             className="text-center border-t text-sm px-8 py-4"
-            style={{ borderColor: "var(--color-border)", backgroundColor: "#f9fafb" }}
+            style={{
+              borderColor: "var(--color-border)",
+              backgroundColor: "#f9fafb",
+            }}
           >
             <p className="text-gray-600">
               Don't have an account?{" "}
-              <a href="#" className="text-blue-600 hover:text-blue-500 font-medium">
+              <a
+                href="#"
+                className="text-blue-600 hover:text-blue-500 font-medium"
+              >
                 Contact admin
               </a>
             </p>
           </div>
         </div>
       </div>
+      {showOtpForm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#ced2ebdd] backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md px-8 py-6 space-y-6 relative">
+         
+            <button
+              onClick={() => setShowOtpForm(false)}
+              className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-xl font-semibold"
+              aria-label="Close"
+            >
+              ×
+            </button>
+
+            <h3 className="text-xl font-bold text-center text-gray-800">
+              Reset Your Password
+            </h3>
+
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-gray-700">
+                Mobile Number
+              </label>
+              <Input
+                type="number"
+                placeholder="e.g. 9876543210"
+                value={mobileNo}
+                onChange={(e) => setMobileNo(e.target.value)}
+                className="focus:ring-2 focus:ring-blue-500"
+              />
+              <Button
+                type="button"
+                onClick={handleSendOtp}
+                className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200"
+              >
+                Send OTP
+              </Button>
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-gray-700">OTP</label>
+              <Input
+                type="number"
+                placeholder="Enter OTP"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                className="focus:ring-2 focus:ring-green-500"
+              />
+              <Button
+                type="button"
+                onClick={handleVerifyOtp}
+                className="w-full mt-2 bg-green-600 hover:bg-green-700 text-white transition-all duration-200"
+              >
+                Verify OTP
+              </Button>
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-gray-700">
+                New Password
+              </label>
+              <Input
+                type="password"
+                placeholder="Enter new password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="focus:ring-2 focus:ring-purple-500"
+              />
+              <Button
+                type="button"
+                onClick={handleChangePassword}
+                className="w-full mt-2 bg-purple-600 hover:bg-purple-700 text-white transition-all duration-200"
+              >
+                Change Password
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
