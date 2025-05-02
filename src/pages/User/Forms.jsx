@@ -414,7 +414,7 @@ function Forms() {
           <h2 className="text-lg font-medium">
             {editingReportId ? `Edit ${selectedForm.tableName || "Form"}` : selectedForm.tableName || "Untitled Form"}
           </h2>
-          {!editingReportId && <span className='text-gray-500'>Total Submissions: {3}</span>}
+          {/* {!editingReportId && <span className='text-gray-500'>Total Submissions: {3}</span>} */}
           {editingReportId && (
             <div className="flex items-center gap-2 mt-1">
               <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
