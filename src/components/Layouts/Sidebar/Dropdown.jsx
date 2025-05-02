@@ -9,7 +9,7 @@ const Dropdown = memo(() => {
   const role = sessionStorage.getItem("role") || "user";
   const token = sessionStorage.getItem("token") || null;
   const {logout}= useAuth()
-  const useDetails = sessionStorage.getItem("userDetails");
+  const useDetails = JSON.parse(sessionStorage.getItem("userDetails"));
 
 
   const getBasePath = () => {

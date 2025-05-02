@@ -32,7 +32,7 @@ const Notification = ({
 
   return (
     <div
-      className={`${bgcolor} rounded-xl p-4 w-full transition-all hover:shadow-md cursor-pointer border border-gray-200`}
+      className={`${bgcolor} rounded-xl p-4 w-full min-w-[600px] transition-all hover:shadow-md cursor-pointer border border-gray-200`}
     >
       <div className="flex justify-between items-start">
         <div className="flex flex-col w-full gap-2">
@@ -45,7 +45,7 @@ const Notification = ({
                   : "bg-red-100 text-red-600"
                   }`}
               >
-                {isAccepted ? (
+                {isAccepted ==="success"? (
                   <>
                     <FaCheckCircle className="text-green-600" />
                     Accepted
