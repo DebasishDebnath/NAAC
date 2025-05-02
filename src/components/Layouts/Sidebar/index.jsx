@@ -25,13 +25,13 @@ const Sidebar = ({
     <div className="h-full flex flex-col justify-between bg-sidebar">
       <div className="p-4">
         <div className="flex flex-col items-center gap-3 mb-6 pl-2">
-          <div className="bg-white rounded-lg h-auto w-full flex justify-center">
+          <a className="bg-white rounded-lg h-auto w-full flex justify-center" href="/">
             <img
               src={logo}
               alt="website-logo"
               className="object-contain"
             />
-          </div>
+          </a>
 
           <div className="w-full px-2">
             <div className="text-[1.5rem] text-center font-bold text-white w-full flex justify-center items-center">

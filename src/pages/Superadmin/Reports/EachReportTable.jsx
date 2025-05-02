@@ -14,26 +14,26 @@ import { ArrowLeft, Download, ExternalLink } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { UseUserSpecificReport } from "@/Apis/Superadmin/Reportss/EachReport";
+import ReportPDFGenerator from "@/components/Reports/ReportPDFGenerator";
 // import { UseUserSpecificReport } from "@/hooks/UseUserSpecificReport";
-
 
 // Helper function to format dates
 const formatDate = (dateString) => {
   if (!dateString) return "N/A";
-  return new Date(dateString).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
+  return new Date(dateString).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
   });
 };
 
 // Helper function to capitalize model names for display
 const formatModelName = (name) => {
   return name
-    .replace(/_/g, ' ')
-    .split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+    .replace(/_/g, " ")
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 };
 
 // Status badge component
@@ -45,7 +45,10 @@ const StatusBadge = ({ status }) => {
   };
 
   return (
-    <Badge className={`${statusColors[status] || "bg-gray-100 text-gray-800"}`} variant={`${status}`}>
+    <Badge
+      className={`${statusColors[status] || "bg-gray-100 text-gray-800"}`}
+      variant={`${status}`}
+    >
       {status}
     </Badge>
   );
@@ -67,7 +70,7 @@ export default function EachReportTable() {
       try {
         const response = await getUserSpecificReport(userId);
         setData(response);
-        console.log( "ssSC", response.data);
+        console.log("ssSC", response);
       } catch (err) {
         setError(err.message || "Failed to fetch report details");
       } finally {
@@ -94,8 +97,8 @@ export default function EachReportTable() {
       <div className="flex items-center justify-center min-h-[500px]">
         <div className="text-center text-red-600">
           <p>Error loading report: {error}</p>
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={() => navigate(-1)}
             className="mt-4"
           >
@@ -110,9 +113,11 @@ export default function EachReportTable() {
     return (
       <div className="flex items-center justify-center min-h-[500px]">
         <div className="text-center">
-          <p className="text-gray-600">No report data available for this user.</p>
-          <Button 
-            variant="outline" 
+          <p className="text-gray-600">
+            No report data available for this user.
+          </p>
+          <Button
+            variant="outline"
             onClick={() => navigate(-1)}
             className="mt-4"
           >
@@ -127,19 +132,21 @@ export default function EachReportTable() {
   // const user = report.user;
   const reportData = report.data;
 
-  console.log("dggd",report)
-  console.log("ffsf",user)
+  console.log("dggd", report);
+  console.log("ffsf", user);
 
   return (
     <div className="container mx-auto p-6">
       <div className="flex items-center justify-between mb-6">
-        <Button 
-          variant="outline" 
-          onClick={() => navigate(-1)}
-          className="mb-4"
-        >
+        <Button variant="outline" onClick={() => navigate(-1)} className="mb-4">
           <ArrowLeft className="mr-2 h-4 w-4" /> Back
         </Button>
+        <ReportPDFGenerator
+          report={data.data}
+          buttonText="Download Report"
+          buttonClass="flex items-center gap-2 bg-[#002946] text-white rounded-lg shadow-md hover:bg-[#003b61] transition duration-300 ease-in-out py-2 px-4"
+          iconClass="text-white"
+        />
       </div>
 
       {/* User Info Card */}
@@ -154,9 +161,12 @@ export default function EachReportTable() {
           <div className="grid md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <div className="flex items-center">
-                <img 
-                  src={user.profilePic || "https://cdn-icons-png.flaticon.com/512/9131/9131529.png"} 
-                  alt={user.name} 
+                <img
+                  src={
+                    user.profilePic ||
+                    "https://cdn-icons-png.flaticon.com/512/9131/9131529.png"
+                  }
+                  alt={user.name}
                   className="h-20 w-20 rounded-full mr-4 border-2 border-gray-200"
                 />
                 <div>
@@ -190,15 +200,21 @@ export default function EachReportTable() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="bg-blue-50 p-4 rounded-lg">
                 <p className="text-sm text-gray-500">Total Score</p>
-                <p className="text-2xl font-bold text-[#005b88de]">{report.obtainedScore.toFixed(1)}</p>
+                <p className="text-2xl font-bold text-[#005b88de]">
+                  {report.obtainedScore.toFixed(1)}
+                </p>
               </div>
               <div className="bg-green-50 p-4 rounded-lg">
                 <p className="text-sm text-gray-500">Submission Date</p>
-                <p className="text-lg font-medium">{formatDate(report.createdAt)}</p>
+                <p className="text-lg font-medium">
+                  {formatDate(report.createdAt)}
+                </p>
               </div>
               <div className="bg-purple-50 p-4 rounded-lg">
                 <p className="text-sm text-gray-500">Last Updated</p>
-                <p className="text-lg font-medium">{formatDate(report.updatedAt)}</p>
+                <p className="text-lg font-medium">
+                  {formatDate(report.updatedAt)}
+                </p>
               </div>
               <div className="bg-amber-50 p-4 rounded-lg">
                 <p className="text-sm text-gray-500">Categories</p>
@@ -213,8 +229,8 @@ export default function EachReportTable() {
       <Tabs defaultValue={reportData[0]?.model} className="w-full">
         <TabsList className="mb-4 flex overflow-x-auto">
           {reportData.map((category) => (
-            <TabsTrigger 
-              key={category.model} 
+            <TabsTrigger
+              key={category.model}
               value={category.model}
               className="px-4 py-2"
             >
@@ -233,7 +249,8 @@ export default function EachReportTable() {
                 <div className="flex items-center justify-between">
                   <CardTitle>{formatModelName(category.model)}</CardTitle>
                   <div className="text-sm font-medium">
-                    Category Score: <span className="text-[#005b88de]">{category.score}</span>
+                    Category Score:{" "}
+                    <span className="text-[#005b88de]">{category.score}</span>
                   </div>
                 </div>
               </CardHeader>
@@ -242,15 +259,22 @@ export default function EachReportTable() {
                   <Table>
                     <TableHeader className="bg-gray-100">
                       <TableRow>
-                        {category.entry[0] && Object.keys(category.entry[0]).filter(key => 
-                          !key.includes('_id') && 
-                          !key.includes('score') && 
-                          key !== 'drive_link'
-                        ).map((key) => (
-                          <TableHead key={key} className="whitespace-nowrap">
-                            {key.replace(/_/g, ' ')}
-                          </TableHead>
-                        ))}
+                        {category.entry[0] &&
+                          Object.keys(category.entry[0])
+                            .filter(
+                              (key) =>
+                                !key.includes("_id") &&
+                                !key.includes("score") &&
+                                key !== "drive_link"
+                            )
+                            .map((key) => (
+                              <TableHead
+                                key={key}
+                                className="whitespace-nowrap"
+                              >
+                                {key.replace(/_/g, " ")}
+                              </TableHead>
+                            ))}
                         <TableHead>Score</TableHead>
                         <TableHead>Document</TableHead>
                       </TableRow>
@@ -258,23 +282,33 @@ export default function EachReportTable() {
                     <TableBody>
                       {category.entry.map((item, index) => (
                         <TableRow key={item._id || index}>
-                          {Object.entries(item).filter(([key]) => 
-                            !key.includes('_id') && 
-                            !key.includes('score') && 
-                            key !== 'drive_link'
-                          ).map(([key, value]) => (
-                            <TableCell key={key} className="whitespace-nowrap">
-                              {key.includes('Date') ? formatDate(value) : value}
-                            </TableCell>
-                          ))}
+                          {Object.entries(item)
+                            .filter(
+                              ([key]) =>
+                                !key.includes("_id") &&
+                                !key.includes("score") &&
+                                key !== "drive_link"
+                            )
+                            .map(([key, value]) => (
+                              <TableCell
+                                key={key}
+                                className="whitespace-nowrap"
+                              >
+                                {key.includes("Date")
+                                  ? formatDate(value)
+                                  : value}
+                              </TableCell>
+                            ))}
                           <TableCell className="font-medium text-[#005b88de]">
-                            {Object.entries(item).find(([key]) => key.includes('score'))?.[1] || 'N/A'}
+                            {Object.entries(item).find(([key]) =>
+                              key.includes("score")
+                            )?.[1] || "N/A"}
                           </TableCell>
                           <TableCell>
                             {item.drive_link ? (
-                              <a 
-                                href={item.drive_link} 
-                                target="_blank" 
+                              <a
+                                href={item.drive_link}
+                                target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-[#005b88de] hover:text-[#002946] flex items-center"
                               >
