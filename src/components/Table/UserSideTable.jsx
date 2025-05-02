@@ -87,7 +87,9 @@ const UserSideTable = ({ reports = [], onDelete, onEdit }) => {
   };
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto flex flex-col">
+      <div className="flex w-[90%] mt-3.5 bg-[#002946] justify-self-center self-center mb-3 text-white py-2 text-center justify-center items-center rounded-md ">Total submissions {reports.length}</div>
+    
       <table className="w-full min-w-[600px] table-auto bg-gray-50 rounded-lg shadow-md">
         {/* Conditionally render the table header */}
         {columns.length > 0 && (

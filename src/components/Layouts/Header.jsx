@@ -9,6 +9,7 @@ const Header = memo(({ toggleSidebar, toggleDropdown, showDropdown }) => {
   const notificationRef = useRef(null);
   const notificationDropdownRef = useRef(null);
   const profileRef = useRef(null);
+  const role = sessionStorage.getItem("role");
   const profileDropdownRef = useRef(null);
   const role = sessionStorage.getItem("role");
   const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
@@ -60,13 +61,14 @@ const Header = memo(({ toggleSidebar, toggleDropdown, showDropdown }) => {
 
         <div className="relative flex gap-10 items-center">
           {/* Notification Icon */}
-          <div
+          {role==="user"&&(<div
             ref={notificationRef}
             className="cursor-pointer duration-150 hover:bg-gray-200 rounded-full p-2"
             onClick={toggleNotificationDropdown}
           >
             <IoMdNotifications size={26} />
-          </div>
+          </div>)}
+          
 
           {/* Profile Icon */}
           <div
