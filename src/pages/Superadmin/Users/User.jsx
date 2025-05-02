@@ -3,32 +3,33 @@ import { UserFetch } from "@/Apis/Superadmin/AllUserFetch/UserFetch";
 import { useEffect, useState } from "react";
 import { FaCopy } from "react-icons/fa";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
+import { fetchUserSearch } from "@/Apis/Superadmin/SearchUser/UserSearch";
 
 function PeopleList() {
+  const { fetchUserSearchsuperadmin } = fetchUserSearch();
   const { GetAllsuperadmin } = UserFetch();
-  const [allUsers, setAllUsers] = useState([]); // Store all fetched users
-  const [displayedUsers, setDisplayedUsers] = useState([]); // Users to display after filtering
+  const [allUsers, setAllUsers] = useState([]);
+  const [displayedUsers, setDisplayedUsers] = useState([]);
   const [page, setPage] = useState(1);
   const limit = 12;
+  const [searchResults, setSearchResults] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const [copiedText, setCopiedText] = useState("");
+  const [isSearchMode, setIsSearchMode] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [currentSearchPage, setCurrentSearchPage] = useState(1);
-  const [filteredTotalPages, setFilteredTotalPages] = useState(1);
-  const [hasFetchedOnce, setHasFetchedOnce] = useState(false);
+  const [searchPage, setSearchPage] = useState(1);
 
   // Fetch users from the backend
   const fetchAllUsers = async (currentPage) => {
     setIsLoading(true);
     try {
       const response = await GetAllsuperadmin("", currentPage, limit);
-      if (response?.success) {
+      if (response) {
         setAllUsers(response.data || []);
         setDisplayedUsers(response.data || []);
         const pages = response.pagination?.totalPages;
         setTotalPages(typeof pages === "number" ? pages : 1);
-        setFilteredTotalPages(typeof pages === "number" ? pages : 1);
       } else {
         console.error("Failed to fetch users");
       }
@@ -39,66 +40,58 @@ function PeopleList() {
     }
   };
 
-  const filterUsers = () => {
+  const handleSearch = async () => {
     if (!searchTerm.trim()) {
-      setDisplayedUsers(allUsers);
-      setFilteredTotalPages(totalPages);
-      setCurrentSearchPage(1);
+      // If search term is empty, return to normal pagination view
+      setIsSearchMode(false);
+      fetchAllUsers(page);
       return;
     }
-    const searchLower = searchTerm.toLowerCase();
-    const filtered = allUsers.filter(
-      (user) =>
-        user.name?.toLowerCase().includes(searchLower) ||
-        user.emailId?.toLowerCase().includes(searchLower)
-    );
 
-    // Implement client-side pagination for filtered results
-    const totalFilteredPages = Math.ceil(filtered.length / limit) || 1;
-    setFilteredTotalPages(totalFilteredPages);
-
-    // Ensure current page is valid
-    const validPage = Math.min(currentSearchPage, totalFilteredPages);
-    if (currentSearchPage !== validPage) {
-      setCurrentSearchPage(validPage);
+    setIsLoading(true);
+    try {
+      const response = await fetchUserSearchsuperadmin(searchTerm);
+      // Handle the response directly without checking success flag
+      // Based on console logs, response seems to be the array of users
+      if (response && Array.isArray(response)) {
+        setIsSearchMode(true);
+        setSearchResults(response);
+        setDisplayedUsers(response); // Directly set displayed users
+        setSearchPage(1); // Reset to first page of search results
+        console.log("Search results found:", response.length);
+      } else if (response?.data && Array.isArray(response.data)) {
+        // Alternative structure if response is wrapped in data property
+        setIsSearchMode(true);
+        setSearchResults(response.data);
+        setDisplayedUsers(response.data); // Directly set displayed users
+        setSearchPage(1);
+        console.log("Search results found:", response.data.length);
+      } else {
+        console.error("Invalid search response format:", response);
+        setIsSearchMode(true);
+        setSearchResults([]);
+        setDisplayedUsers([]);
+      }
+    } catch (error) {
+      console.error("Error searching users:", error);
+      setDisplayedUsers([]);
+    } finally {
+      setIsLoading(false);
     }
-
-    const startIndex = (validPage - 1) * limit;
-    const endIndex = startIndex + limit;
-    setDisplayedUsers(filtered.slice(startIndex, endIndex));
   };
 
-
   useEffect(() => {
-    if (!searchTerm.trim()) {
+    if (!isSearchMode) {
       fetchAllUsers(page);
-      setHasFetchedOnce(true);
     }
-  }, [page]);
+  }, [page, isSearchMode]);
 
-  useEffect(() => {
-    const debounceTimer = setTimeout(() => {
-      if (searchTerm.trim()) {
-        setCurrentSearchPage(1);
-        filterUsers();
-      } else {
-        if (hasFetchedOnce) {
-          fetchAllUsers(page);
-        }
-      }
-    }, 500);
-
-    return () => clearTimeout(debounceTimer);
-  }, [searchTerm]);
-
-  // useEffect(() => {
-  //   if (searchTerm.trim()) {
-  //     filterUsers();
-  //   }
-  // }, []);
-
-  const handleSearch = (e) => {
+  const handleSearchInputChange = (e) => {
     setSearchTerm(e.target.value);
+    // Clear search mode if field is emptied
+    if (!e.target.value.trim()) {
+      setIsSearchMode(false);
+    }
   };
 
   const handleCopy = (text) => {
@@ -108,9 +101,9 @@ function PeopleList() {
   };
 
   const handlePrevious = () => {
-    if (searchTerm.trim()) {
-      if (currentSearchPage > 1) {
-        setCurrentSearchPage(currentSearchPage - 1);
+    if (isSearchMode) {
+      if (searchPage > 1) {
+        setSearchPage(searchPage - 1);
       }
     } else {
       if (page > 1) {
@@ -120,9 +113,10 @@ function PeopleList() {
   };
 
   const handleNext = () => {
-    if (searchTerm.trim()) {
-      if (currentSearchPage < filteredTotalPages) {
-        setCurrentSearchPage(currentSearchPage + 1);
+    if (isSearchMode) {
+      const maxSearchPages = Math.ceil(searchResults.length / limit);
+      if (searchPage < maxSearchPages) {
+        setSearchPage(searchPage + 1);
       }
     } else {
       if (page < totalPages) {
@@ -131,18 +125,45 @@ function PeopleList() {
     }
   };
 
+  // Paginate search results on client side - only if we have more than one page of results
+  useEffect(() => {
+    if (isSearchMode && searchResults.length > limit) {
+      const startIndex = (searchPage - 1) * limit;
+      const endIndex = startIndex + limit;
+      setDisplayedUsers(searchResults.slice(startIndex, endIndex));
+    }
+  }, [searchResults, searchPage, isSearchMode, limit]);
+
+  const getCurrentPage = () => (isSearchMode ? searchPage : page);
+
+  const getMaxPages = () => {
+    if (isSearchMode) {
+      return Math.ceil(searchResults.length / limit) || 1;
+    }
+    return totalPages;
+  };
+
   return (
     <>
       <div className="flex items-center justify-between w-full">
         <div className="text-black font-medium text-xl ml-10">All Users</div>
         <div className="py-4 px-4 sm:px-8 flex w-[30%] items-end justify-end">
-          <input
-            type="text"
-            placeholder="Search by name or email"
-            value={searchTerm}
-            onChange={handleSearch}
-            className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          <div className="relative w-full">
+            <input
+              type="text"
+              placeholder="Search by name or email"
+              value={searchTerm}
+              onChange={handleSearchInputChange}
+              onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+              className="w-full border border-gray-300 rounded px-4 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <button
+              onClick={handleSearch}
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-blue-600"
+            >
+              🔍
+            </button>
+          </div>
         </div>
       </div>
 
@@ -218,17 +239,14 @@ function PeopleList() {
         <div className="mt-8 flex justify-center items-center gap-4">
           <button
             onClick={handlePrevious}
-            disabled={
-              (searchTerm ? currentSearchPage === 1 : page === 1) || isLoading
-            }
+            disabled={getCurrentPage() === 1 || isLoading}
             className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
           >
             <GrFormPrevious />
           </button>
           <span className="text-gray-700">
-            Page {searchTerm ? currentSearchPage : page} of{" "}
-            {searchTerm ? filteredTotalPages : totalPages}
-            {searchTerm && (
+            Page {getCurrentPage()} of {getMaxPages()}
+            {isSearchMode && (
               <span className="ml-2 text-sm text-blue-500">
                 (Search results)
               </span>
@@ -236,11 +254,7 @@ function PeopleList() {
           </span>
           <button
             onClick={handleNext}
-            disabled={
-              (searchTerm
-                ? currentSearchPage === filteredTotalPages
-                : page === totalPages) || isLoading
-            }
+            disabled={getCurrentPage() === getMaxPages() || isLoading}
             className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
           >
             <GrFormNext />
