@@ -4,7 +4,7 @@ import { MailIcon } from "lucide-react";
 import { FaCopy } from "react-icons/fa";
 import AddPseudoUser from "./AddPseudoUser";
 import { fetchPseudoUser } from "@/Apis/Superadmin/PsudoUser/GetPseudoUser";
-
+import { MdDelete } from "react-icons/md";
 function PseudoUser() {
   const [addPseudoUser, setAddPseudoUser] = useState(false);
   const [users, setUsers] = useState([]);
@@ -88,6 +88,9 @@ function PseudoUser() {
                       title="Copy email"
                     />
                   </div>
+                </div>
+                <div className="cursor-pointer rounded-full p-2 hover:bg-gray-200 transition-colors bg-gray-100">
+                  <MdDelete color="red" />
                 </div>
               </div>
             </div>
