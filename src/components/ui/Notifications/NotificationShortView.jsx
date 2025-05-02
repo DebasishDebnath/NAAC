@@ -1,7 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Notification from "./Notification";
+import { FetchNotifications } from "@/Apis/User/FetchNotifications";
 
 const NotificationShortView = ({ toggleNotificationDropdown }) => {
+ const { Notifications } = FetchNotifications();
+  const FetchNotificationsFunc = async () => {
+    try {
+      const response = await Notifications();
+
+      console.log(response)
+    } catch (error) {
+      console.log("Error Approving Request!");
+    }
+  };
+  useEffect(() => {
+    FetchNotificationsFunc()
+  }, [])
+  
   const notifications = [
     {
       _id: 1,
