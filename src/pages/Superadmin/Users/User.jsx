@@ -16,6 +16,7 @@ function PeopleList() {
   const [isLoading, setIsLoading] = useState(false);
   const [currentSearchPage, setCurrentSearchPage] = useState(1);
   const [filteredTotalPages, setFilteredTotalPages] = useState(1);
+  const [hasFetchedOnce, setHasFetchedOnce] = useState(false);
 
   // Fetch users from the backend
   const fetchAllUsers = async (currentPage) => {
@@ -38,17 +39,13 @@ function PeopleList() {
     }
   };
 
-  // Filter users based on search term
   const filterUsers = () => {
     if (!searchTerm.trim()) {
-      // If no search term, show original data and pagination
       setDisplayedUsers(allUsers);
       setFilteredTotalPages(totalPages);
       setCurrentSearchPage(1);
       return;
     }
-
-    // Filter all users based on name or email
     const searchLower = searchTerm.toLowerCase();
     const filtered = allUsers.filter(
       (user) =>
@@ -66,44 +63,39 @@ function PeopleList() {
       setCurrentSearchPage(validPage);
     }
 
-    // Calculate slice indices for pagination
     const startIndex = (validPage - 1) * limit;
     const endIndex = startIndex + limit;
-
-    // Set displayed users to the current page of filtered results
     setDisplayedUsers(filtered.slice(startIndex, endIndex));
   };
 
-  // Effect for fetching data when page changes (without search)
+
   useEffect(() => {
     if (!searchTerm.trim()) {
       fetchAllUsers(page);
+      setHasFetchedOnce(true);
     }
   }, [page]);
 
-  // Effect for handling search and filtering
   useEffect(() => {
     const debounceTimer = setTimeout(() => {
       if (searchTerm.trim()) {
-        // When searching, reset to page 1 of search results
         setCurrentSearchPage(1);
-        // Apply filters to the current data
         filterUsers();
       } else {
-        // If search cleared, revert to normal pagination
-        fetchAllUsers(page);
+        if (hasFetchedOnce) {
+          fetchAllUsers(page);
+        }
       }
     }, 500);
 
     return () => clearTimeout(debounceTimer);
   }, [searchTerm]);
 
-  // Effect to apply filtering when search page changes
-  useEffect(() => {
-    if (searchTerm.trim()) {
-      filterUsers();
-    }
-  }, [currentSearchPage]);
+  // useEffect(() => {
+  //   if (searchTerm.trim()) {
+  //     filterUsers();
+  //   }
+  // }, []);
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
@@ -117,12 +109,10 @@ function PeopleList() {
 
   const handlePrevious = () => {
     if (searchTerm.trim()) {
-      // For search results pagination
       if (currentSearchPage > 1) {
         setCurrentSearchPage(currentSearchPage - 1);
       }
     } else {
-      // For normal pagination
       if (page > 1) {
         setPage(page - 1);
       }
@@ -131,12 +121,10 @@ function PeopleList() {
 
   const handleNext = () => {
     if (searchTerm.trim()) {
-      // For search results pagination
       if (currentSearchPage < filteredTotalPages) {
         setCurrentSearchPage(currentSearchPage + 1);
       }
     } else {
-      // For normal pagination
       if (page < totalPages) {
         setPage(page + 1);
       }
@@ -219,7 +207,6 @@ function PeopleList() {
           </div>
         )}
 
-        {/* Copied feedback */}
         {copiedText && (
           <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-50">
             Copied: {copiedText}
@@ -227,7 +214,6 @@ function PeopleList() {
         )}
       </div>
 
-      {/* Pagination - different display for search vs normal mode */}
       {displayedUsers.length > 0 && (
         <div className="mt-8 flex justify-center items-center gap-4">
           <button
