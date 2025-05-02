@@ -4,12 +4,13 @@ import { MailIcon } from "lucide-react";
 import { FaCopy } from "react-icons/fa";
 import AddPseudoUser from "./AddPseudoUser";
 import { fetchPseudoUser } from "@/Apis/Superadmin/PsudoUser/GetPseudoUser";
-
+import { MdDelete } from "react-icons/md";
+import { deletePseudoUser } from "@/Apis/Superadmin/PsudoUser/DeletePseudoUser";
 function PseudoUser() {
   const [addPseudoUser, setAddPseudoUser] = useState(false);
   const [users, setUsers] = useState([]);
   const { fetchPseudoUserSuperadmin } = fetchPseudoUser();
-
+  const { deleteSuperadminPseudoUser } = deletePseudoUser();
   const handleAddUserOpen = () => {
     setAddPseudoUser(true);
   };
@@ -37,6 +38,10 @@ function PseudoUser() {
     getData();
   }, []);
 
+  // 68121e04e47d8a53fe0e221f
+  // 68121e04e47d8a53fe0e221f
+
+  console.log(users, "users");
   return (
     <>
       {addPseudoUser && (
@@ -88,6 +93,31 @@ function PseudoUser() {
                       title="Copy email"
                     />
                   </div>
+                </div>
+                <div className="cursor-pointer rounded-full p-2 hover:bg-gray-200 transition-colors bg-gray-100">
+                  <MdDelete
+                    color="red"
+                    className="cursor-pointer"
+                    onClick={async () => {
+                      try {
+                        const res = await deleteSuperadminPseudoUser(
+                          person._id
+                        );
+                        if (res.success !== false) {
+                          setUsers((prev) =>
+                            prev.filter((u) => u._id !== person._id)
+                          );
+                        } else {
+                          console.error(
+                            "Delete failed with message:",
+                            res.message
+                          );
+                        }
+                      } catch (error) {
+                        console.error("Failed to delete pseudo user:", error);
+                      }
+                    }}
+                  />
                 </div>
               </div>
             </div>
