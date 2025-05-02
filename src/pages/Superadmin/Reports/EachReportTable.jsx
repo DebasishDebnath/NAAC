@@ -150,8 +150,8 @@ export default function EachReportTable() {
       </div>
 
       {/* User Info Card */}
-      <Card className="mb-8 shadow-lg">
-        <CardHeader className="bg-[#002946] text-white ">
+      <Card className="mb-8 shadow-lg py-0 rounded-t-lg">
+        <CardHeader className="bg-[#002946] text-white rounded-t-lg py-2">
           <div className="flex items-center justify-between">
             <CardTitle className="text-xl font-bold">Check Reports</CardTitle>
             <StatusBadge status={report.is_submitted} />
@@ -196,7 +196,7 @@ export default function EachReportTable() {
             </div>
           </div>
 
-          <div className="mt-6 pt-6 border-t border-gray-200">
+          <div className="mt-6 pt-6 border-t border-gray-200 pb-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="bg-blue-50 p-4 rounded-lg">
                 <p className="text-sm text-gray-500">Total Score</p>

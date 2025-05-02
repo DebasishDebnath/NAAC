@@ -16,6 +16,7 @@ export const useSuperadminApi = () => {
     console.log("Signin response:", response);
 
     if(response){
+      sessionStorage.setItem("userDetails", JSON.stringify(response.data));
         sessionStorage.setItem('token', response.data.token);
     }
     
