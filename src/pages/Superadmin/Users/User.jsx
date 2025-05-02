@@ -20,7 +20,6 @@ function PeopleList() {
   const [isLoading, setIsLoading] = useState(false);
   const [searchPage, setSearchPage] = useState(1);
 
-  // Fetch users from the backend
   const fetchAllUsers = async (currentPage) => {
     setIsLoading(true);
     try {
@@ -56,14 +55,13 @@ function PeopleList() {
       if (response && Array.isArray(response)) {
         setIsSearchMode(true);
         setSearchResults(response);
-        setDisplayedUsers(response); // Directly set displayed users
-        setSearchPage(1); // Reset to first page of search results
+        setDisplayedUsers(response); 
+        setSearchPage(1); 
         console.log("Search results found:", response.length);
       } else if (response?.data && Array.isArray(response.data)) {
-        // Alternative structure if response is wrapped in data property
         setIsSearchMode(true);
         setSearchResults(response.data);
-        setDisplayedUsers(response.data); // Directly set displayed users
+        setDisplayedUsers(response.data); 
         setSearchPage(1);
         console.log("Search results found:", response.data.length);
       } else {
@@ -124,8 +122,6 @@ function PeopleList() {
       }
     }
   };
-
-  // Paginate search results on client side - only if we have more than one page of results
   useEffect(() => {
     if (isSearchMode && searchResults.length > limit) {
       const startIndex = (searchPage - 1) * limit;
