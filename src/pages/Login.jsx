@@ -317,7 +317,7 @@ export default function LoginPage() {
                 Mobile Number
               </label>
               <Input
-                type="text"
+                type="number"
                 placeholder="e.g. 9876543210"
                 value={mobileNo}
                 onChange={(e) => setMobileNo(e.target.value)}
@@ -335,7 +335,7 @@ export default function LoginPage() {
             <div className="space-y-1">
               <label className="text-sm font-medium text-gray-700">OTP</label>
               <Input
-                type="text"
+                type="number"
                 placeholder="Enter OTP"
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
