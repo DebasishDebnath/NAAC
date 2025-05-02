@@ -1,19 +1,19 @@
 import { useHttp } from "@/hooks/useHttp";
 
-export const ApproveRequest = ()=>{
+export const RejectRequest = ()=>{
     const {postReq} = useHttp();
     const accessToken = sessionStorage.getItem("token");
 
-    const approve = async(userId)=>{
+    const reject = async(userId)=>{
         console.log("user",userId)
         try {
             
-            const json= await postReq(`api/v2/superAdmin/Approve/${userId}`,accessToken, {} );
+            const json= await postReq(`api/v2/superAdmin/Reject/${userId}`,accessToken, {} );
             // console.log(json)
             return json;
         } catch (error) {
-            console.log("Error Approving Request!", error)
+            console.log("Error Rejecting Request!", error)
         }
     }
-    return {approve}
+    return {reject}
 }
