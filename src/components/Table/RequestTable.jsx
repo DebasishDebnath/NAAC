@@ -2,25 +2,47 @@ import { FaCheck, FaTimes, FaEye } from "react-icons/fa";
 import { ApproveRequest } from "@/Apis/Request/ApproveRequest";
 import { useNavigate } from "react-router-dom";
 import { RejectRequest } from "@/Apis/Request/RejectRequest";
-import { useState } from "react";
-import { Dialog } from "@headlessui/react";
-const RequestTable = ({ requests, onApprove, onReject, onView }) => {
-  const { approve } = ApproveRequest();
+import { useState, useEffect } from "react";
+
+const RequestTable = ({
+  requests: initialRequests,
+  onApprove,
+  onReject,
+  onView,
+}) => {
+  const [requests, setRequests] = useState(initialRequests || []);
   const [showReasonModal, setShowReasonModal] = useState(false);
   const [rejectingUserId, setRejectingUserId] = useState(null);
   const [reason, setReason] = useState("");
+
+  const { approve } = ApproveRequest();
   const { reject } = RejectRequest();
-  console.log(requests);
   const navigate = useNavigate();
+
+  // Update local state when prop changes
+  useEffect(() => {
+    if (initialRequests) {
+      setRequests(initialRequests);
+    }
+  }, [initialRequests]);
+
   const getBasePath = () => {
     const parts = location.pathname.split("/");
     return parts.length >= 2 ? `/${parts[1]}` : "/";
   };
+
   const ApproveRequestfunc = async (userId) => {
     try {
       const response = await approve(userId);
+      // Remove the approved request from the table
+      setRequests((prevRequests) =>
+        prevRequests.filter((request) => request.UserId !== userId)
+      );
 
-      // console.log(response)
+      // Call the onApprove callback if provided
+      if (onApprove) {
+        onApprove(userId);
+      }
     } catch (error) {
       console.log("Error Approving Request!");
     }
@@ -31,8 +53,20 @@ const RequestTable = ({ requests, onApprove, onReject, onView }) => {
 
     try {
       await reject(rejectingUserId, reason);
+
+      // Remove the rejected request from the table
+      setRequests((prevRequests) =>
+        prevRequests.filter((request) => request.UserId !== rejectingUserId)
+      );
+
+      // Call the onReject callback if provided
+      if (onReject) {
+        onReject(rejectingUserId, reason);
+      }
+
       setShowReasonModal(false);
       setReason("");
+      setRejectingUserId(null);
     } catch (error) {
       console.log("Error Rejecting Request!");
     }
@@ -101,6 +135,11 @@ const RequestTable = ({ requests, onApprove, onReject, onView }) => {
                               JSON.stringify(request.user)
                             );
                             navigate(`/superadmin/reports/${request.UserId}`);
+
+                            // Call the onView callback if provided
+                            if (onView) {
+                              onView(request.UserId);
+                            }
                           }}
                           className="text-blue-600 hover:text-blue-800 transition-transform hover:scale-110"
                           title="View"
@@ -140,7 +179,11 @@ const RequestTable = ({ requests, onApprove, onReject, onView }) => {
             />
             <div className="flex justify-end gap-3">
               <button
-                onClick={() => setShowReasonModal(false)}
+                onClick={() => {
+                  setShowReasonModal(false);
+                  setRejectingUserId(null);
+                  setReason("");
+                }}
                 className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
               >
                 Cancel
