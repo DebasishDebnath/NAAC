@@ -183,7 +183,7 @@ export default function SignUpPage() {
                   >
                     <InputOTPGroup>
                       {[...Array(6)].map((_, i) => (
-                        <InputOTPSlot key={i} index={i} className="border-blue-200 h-12 w-12 text-lg font-bold" />
+                        <InputOTPSlot key={i} index={i} className="border-blue-200 h-12 w-12 text-lg font-bold bg-white" />
                       ))}
                     </InputOTPGroup>
                   </InputOTP>
@@ -200,7 +200,7 @@ export default function SignUpPage() {
                       }
                       setIsVerifyingOtp(false);
                     }}
-                    className="w-full bg-green-600 hover:bg-green-700"
+                    className="w-full bg-green-600 hover:bg-green-700 text-[#fff]"
                     disabled={otp.length !== 6 || isVerifyingOtp}
                   >
                     {isVerifyingOtp ? "Verifying..." : "Verify OTP"}
@@ -292,7 +292,7 @@ export default function SignUpPage() {
               <Button
                 type="submit"
                 disabled={isLoading || !otpVerified}
-                className={`w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-lg font-medium transition-all duration-300 mt-2 ${
+                className={`w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-lg font-medium transition-all duration-300 mt-2 text-white ${
                   !otpVerified ? "opacity-50 cursor-not-allowed" : ""
                 }`}
               >
@@ -305,7 +305,7 @@ export default function SignUpPage() {
             <p className="text-gray-600">
               Already have an account?{" "}
               <a
-                href={`/login/${params.role}`}
+                href={`/login/user`}
                 className="font-semibold text-blue-600 hover:text-blue-500 transition-colors"
               >
                 Sign in instead
