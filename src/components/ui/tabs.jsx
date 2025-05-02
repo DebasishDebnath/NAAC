@@ -10,7 +10,7 @@ const tabsTriggerVariants = (variant) => {
 
   const variants = {
     default:
-      "data-[state=active]:bg-blue-600 data-[state=active]:text-white text-neutral-700 hover:text-blue-600",
+      "data-[state=active]:bg-[#002946] data-[state=active]:text-white text-neutral-700 hover:text-[#002946]",
     underline:
       "border-b-2 rounded-none data-[state=active]:border-blue-600 data-[state=active]:text-blue-600 text-neutral-600 hover:text-blue-600",
   };
