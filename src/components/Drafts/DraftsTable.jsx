@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Search, Filter } from 'lucide-react';
+import { Search, Filter, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import TableComp from '../Table/TableComp';
+import ReportPDFGenerator from '../Reports/ReportPDFGenerator';
 
 export default function DraftTable({ draftData }) {
     const [searchTerm, setSearchTerm] = useState('');
@@ -10,7 +11,6 @@ export default function DraftTable({ draftData }) {
     const [showFilters, setShowFilters] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectedSubReport, setSelectedSubReport] = useState('');
-
     useEffect(() => {
         if (draftData?.data) {
             setFilteredReports(draftData?.data);
@@ -73,6 +73,38 @@ export default function DraftTable({ draftData }) {
         filterReports();
     }, [searchTerm, selectedCategory, selectedSubReport]);
 
+    // Function to prepare report data for the PDF generator
+    // const prepareReportData = () => {
+    //     // Convert the filtered reports into a format expected by ReportPDFGenerator
+    //     // This is a simplified example, you may need to adjust based on your actual data structure
+    //     return {
+    //         _id: "draft-report",
+    //         UserId: {
+    //             name: "Draft Reports Summary",
+    //             emailId: "",
+    //             department: "",
+    //             designation: "",
+    //             campus: "",
+    //             mobileNo: ""
+    //         },
+    //         obtainedScore: filteredReports.length,
+    //         data: [
+    //             {
+    //                 model: "draftReports",
+    //                 score: filteredReports.length,
+    //                 entry: filteredReports.map(report => ({
+    //                     ...report,
+    //                     // Add any transformations needed for your specific data structure
+    //                     Title_of_the_project: report.title,
+    //                     Status: report.status,
+    //                     Description: report.description || "N/A",
+    //                     Date: report.date
+    //                 }))
+    //             }
+    //         ]
+    //     };
+    // };
+
     // Function to get badge color based on category
     const getBadgeColor = (category) => {
         switch (category) {
@@ -130,6 +162,8 @@ export default function DraftTable({ draftData }) {
         <div className="max-w-full mx-auto bg-white rounded-lg shadow-lg p-6">
             <h1 className='flex font-bold text-4xl pb-10 text-[#002946]'>Drafts</h1>
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-6">
+                {draftData &&
+                <>
                 <form onSubmit={handleSearch} className="relative w-full md:max-w-md">
                     <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                         <Search className="h-4 w-4 text-gray-400" />
@@ -149,6 +183,13 @@ export default function DraftTable({ draftData }) {
                 </form>
 
                 <div className="flex gap-4 items-start md:items-center">
+                    <ReportPDFGenerator 
+                        report={draftData}
+                        buttonText="Download Report"
+                        buttonClass="flex items-center gap-2 bg-[#002946] text-white rounded-lg shadow-md hover:bg-[#003b61] transition duration-300 ease-in-out py-2 px-4"
+                        iconClass="text-white"
+                    />
+
                     {/* Filter button could be enabled if you want to implement the filter functionality */}
                     {/* <Button
                         variant="outline"
@@ -159,6 +200,8 @@ export default function DraftTable({ draftData }) {
                         Filters
                     </Button> */}
                 </div>
+                </>
+                }
             </div>
 
             {/* Add the filter panel here if you want to implement it */}
