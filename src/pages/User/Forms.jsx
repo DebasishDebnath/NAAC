@@ -588,11 +588,11 @@ function Forms() {
                         </div>
 
                         {/* Right side: number */}
-                        {selectedSubcategory !== subIndex && (
+                        {/* {selectedSubcategory !== subIndex && (
                           <div className='text-white bg-slate-400 px-2 rounded-full min-w-[16px] h-[16px] flex justify-center items-center text-xs ml-4'>
                             3
                           </div>
-                        )}
+                        )} */}
                       </div>
                     </div>
                   ))}

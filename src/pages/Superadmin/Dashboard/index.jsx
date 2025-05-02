@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { fetchDashboard } from "@/Apis/Superadmin/Dashboard/fetchDashboard";
 import {
   Card,
   CardContent,
@@ -14,11 +15,40 @@ import {
 } from "../../../components/ui/tabs";
 import { Overview } from "./overview";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 function SuperadminDashboard() {
+  const { fetchDashboardsuperadmin } = fetchDashboard();
+  const navigate = useNavigate();
+  const [dashboardData, setDashboardData] = useState({
+    userCount: 0,
+    totalSubmission: 0,
+    approvedCount: 0,
+    reviewCount: 0,
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetchDashboardsuperadmin();
+        if (response) {
+          console.log(response, "dsfdsf");
+          setDashboardData(response);
+        } else {
+          console.error("Dashboard fetch failed:", response.message);
+        }
+      } catch (error) {
+        console.error("Dashboard fetch error:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {/* Total Users */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Users</CardTitle>
@@ -37,18 +67,20 @@ function SuperadminDashboard() {
             </svg>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$45,231.89</div>
+            <div className="text-2xl font-bold">{dashboardData.userCount}</div>
           </CardContent>
           <div className="flex items-end justify-end mr-5">
             <Button
               variant="destructive"
-              className={`hover:bg-slate-200 hover:text-black`}
+              className="hover:bg-slate-200 hover:text-black"
+              onClick={() => navigate("/superadmin/users/user")}
             >
               View
             </Button>
           </div>
         </Card>
 
+        {/* Total Submissions */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
@@ -67,18 +99,22 @@ function SuperadminDashboard() {
             </svg>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">+2350</div>
+            <div className="text-2xl font-bold">
+              {dashboardData.totalSubmission}
+            </div>
           </CardContent>
           <div className="flex items-end justify-end mr-5">
             <Button
               variant="destructive"
-              className={`hover:bg-slate-200 hover:text-black`}
+              className="hover:bg-slate-200 hover:text-black"
+              onClick={() => navigate("/superadmin/reports")}
             >
               View
             </Button>
           </div>
         </Card>
 
+        {/* Pending Approvals */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
@@ -97,18 +133,22 @@ function SuperadminDashboard() {
             </svg>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">+12,234</div>
+            <div className="text-2xl font-bold">
+              {dashboardData.reviewCount}
+            </div>
           </CardContent>
           <div className="flex items-end justify-end mr-5">
             <Button
               variant="destructive"
-              className={`hover:bg-slate-200 hover:text-black`}
+              className="hover:bg-slate-200 hover:text-black"
+              onClick={() => navigate("/superadmin/requests")}
             >
               View
             </Button>
           </div>
         </Card>
 
+        {/* Approved */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Approved</CardTitle>
@@ -125,12 +165,15 @@ function SuperadminDashboard() {
             </svg>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">+573</div>
+            <div className="text-2xl font-bold">
+              {dashboardData.approvedCount}
+            </div>
           </CardContent>
           <div className="flex items-end justify-end mr-5 ">
             <Button
               variant="destructive"
-              className={`hover:bg-slate-200 hover:text-black`}
+              className="hover:bg-slate-200 hover:text-black"
+              onClick={() => navigate("/superadmin/reports")}
             >
               View
             </Button>
@@ -158,10 +201,10 @@ function SuperadminDashboard() {
                 <CardHeader>
                   <CardTitle>Recent Submissions</CardTitle>
                   <CardDescription>
-                    You got 256 Submissions this month.
+                    You got {dashboardData.totalSubmission} Submissions this
+                    month.
                   </CardDescription>
                 </CardHeader>
-                <CardContent>{/* <RecentSales /> */}</CardContent>
               </Card>
             </div>
           </TabsContent>

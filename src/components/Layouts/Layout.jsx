@@ -161,7 +161,7 @@ function Layout({ menus = [], submenu = {} }) {
           "Pseudo Superadmin Add": `${basePath}/pseudosuperadminadd`,
           Forms: `${basePath}/forms`,
           Reports: `${basePath}/reports`,
-          Requests: `${basePath}/reports`,
+          // Requests: `${basePath}/reports`,
           Psudo: `${basePath}/psudo`,
           Manage: `${basePath}/manage`, 
           Settings: `${basePath}/settings`,

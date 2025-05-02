@@ -103,7 +103,7 @@ const {fetchData} = GetRequests()
                 onChange={(e) => setSearchTerm(e.target.value)}
             />
             <Button
-                className="absolute right-[2px] top-[2px]  bg-[#002946] text-white rounded-lg shadow-md hover:bg-[#003b61] transition duration-300 ease-in-out"
+                className="absolute right-[2px] top-[3px] py-1 px-4  bg-[#002946] text-white rounded-lg shadow-md hover:bg-[#003b61] transition duration-300 ease-in-out"
                 type="submit"
             >
                 Search
