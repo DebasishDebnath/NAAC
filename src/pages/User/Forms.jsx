@@ -35,6 +35,7 @@ function Forms() {
   const [popUpShow, setPopUpShow] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [endPointGet, setEndPointGet] = useState("CategoryI/teaching_duties");
+  const [checkCategoryI, setCheckCategoryI] = useState(false)
   const [reports, setReports] = useState([]);
   const { fetchDraft } = useUserDraft();
   const navigate = useNavigate();
@@ -48,33 +49,48 @@ function Forms() {
 
   const reportOptions = [
     { 'Category I': ["teaching duties"] },
-    { 'Category II': [
-      "Journal Publications",
-      "book publications",
-      "book chapter conference publications",
-      "Editor of Book",
-      "Translation Work",
-      "Consultancy",
-      "Patent Status",
-      "Research Project",
-      "Award/Fellowship",
-      "Event Organiser / Participation",
-      "Development of Innovative Pedagogy",
-      "Design of New Curriculam and Courses (ICT Based)",
-      "Development of Complete MOOC's in 4 Quadrant (4 Credit Course)",
-      "MOOCs (development in 4 quadrant) per module / lecture",
-      "Content Writer/Subject Matter Expert for each Module of MOOCs (At Least One Quadrant)",
-      "Course Coordinator for MOOCs",
-      "Development of E-Content in 4 quadrants for a Complete Course / E-Book",
-      "E-Content (developed in 4 quadrants) Per Module",
-      "Contribution to development of E-Content module in Complete Course / E-Book (at least one quadrant)",
-      "Editor of E-Content for Complete Course / E-Book",
-      "Status as Guide - Ph.D. Guidance (Degree Awarded)",
-      "Status as Guide - Ph.D. Guidance (for Pursuing Students)",
-      "M.Phil./P.G Dissertation Guidance",
-      "Online AI Courses"
-    ]}
+    {
+      'Category II': [
+        "journalPublications",
+        "book publications",
+        "book chapter conference publications",
+        "Editor of Book",
+        "Translation Work",
+        "Consultancy",
+        "Patent Status",
+        "Research Project",
+        "Award/Fellowship",
+        "Event Organiser / Participation",
+        "Development of Innovative Pedagogy",
+        "Design of New Curriculam and Courses (ICT Based)",
+        "Development of Complete MOOC's in 4 Quadrant (4 Credit Course)",
+        "MOOCs (development in 4 quadrant) per module / lecture",
+        "Content Writer/Subject Matter Expert for each Module of MOOCs (At Least One Quadrant)",
+        "Course Coordinator for MOOCs",
+        "Development of E-Content in 4 quadrants for a Complete Course / E-Book",
+        "E-Content (developed in 4 quadrants) Per Module",
+        "Contribution to development of E-Content module in Complete Course / E-Book (at least one quadrant)",
+        "Editor of E-Content for Complete Course / E-Book",
+        "Status as Guide - Ph.D. Guidance (Degree Awarded)",
+        "Status as Guide - Ph.D. Guidance (for Pursuing Students)",
+        "M.Phil./P.G Dissertation Guidance",
+        "Online AI Courses",
+        'PolicyDocument'
+      ]
+    }
   ];
+
+
+  const handleCategoryIFetchCheck = async () => {
+    const response = await fetchDraft('CategoryI/teaching_duties');
+    setCheckCategoryI(response.success)
+    console.log('response', response)
+  }
+
+  useEffect(() => {
+    handleCategoryIFetchCheck()
+  }, [reports])
+
 
   // Improved grabTableIndexFind function with better matching and logging
   const grabTableIndexFind = (input) => {
@@ -83,27 +99,27 @@ function Forms() {
       console.log('No table name provided in sessionStorage');
       return null;
     }
-    
+
     // Normalize the input by removing spaces and converting to lowercase
     const normalizedInput = input.replace(/\s+/g, '').toLowerCase();
     console.log('Looking for normalized table name:', normalizedInput);
-    
+
     // Loop through categories
     for (let outerIndex = 0; outerIndex < reportOptions.length; outerIndex++) {
       const categoryKey = Object.keys(reportOptions[outerIndex])[0];
       const items = reportOptions[outerIndex][categoryKey];
-      
+
       // Loop through items in category
       for (let innerIndex = 0; innerIndex < items.length; innerIndex++) {
         const normalizedItem = items[innerIndex].replace(/\s+/g, '').toLowerCase();
-        
+
         if (normalizedItem === normalizedInput || normalizedInput.includes(normalizedItem) || normalizedItem.includes(normalizedInput)) {
           console.log('Found match at:', outerIndex, innerIndex);
           return [outerIndex, innerIndex];
         }
       }
     }
-    
+
     console.log('No match found for table name:', input);
     return null; // return null if not found
   };
@@ -120,24 +136,24 @@ function Forms() {
       setReports([]);
       return;
     }
-    
+
     const categoryData = formData.form[selectedCategory];
     const selectedForm = categoryData?.forms[selectedSubcategory];
-    
+
     if (!selectedForm) {
       console.log('No selected form available');
       setReports([]);
       return;
     }
-    
+
     try {
       console.log(`Fetching data from endpoint "${endPointGet}" for table "${selectedForm.backend_table_name}"`);
       const response = await fetchDraft(endPointGet);
-      
+
       if (response?.data && selectedForm?.backend_table_name) {
         // Get the data from the specific table name
         const tableData = response.data[selectedForm.backend_table_name];
-        
+
         // Handle both array and object responses
         if (tableData) {
           const formattedData = Array.isArray(tableData) ? tableData : [tableData];
@@ -162,12 +178,12 @@ function Forms() {
     const input = sessionStorage.getItem('table_name')?.toLowerCase();
     const checks = grabTableIndexFind(input);
     console.log('Initial load from sessionStorage:', checks, input);
-    
+
     if (checks !== null) {
       // Set the category and subcategory
       setSelectedCategory(checks[0]);
       setSelectedSubcategory(checks[1]);
-      
+
       // // Get the endpoint immediately
       // const categoryData = formData.form[checks[0]];
       // const selectedForm = categoryData?.forms[checks[1]];
@@ -176,21 +192,21 @@ function Forms() {
       //   setEndPointGet(selectedForm.endpoint);
       // }
     }
-    
+
     // Mark initial load as complete
     setInitialLoadComplete(true);
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     // Get the endpoint immediately
-    console.log("Initial load from sessionStorage: 186",selectedCategory, selectedSubcategory)
+    console.log("Initial load from sessionStorage: 186", selectedCategory, selectedSubcategory)
     const categoryData = formData.form[selectedCategory];
     const selectedForm = categoryData?.forms[selectedSubcategory];
     if (selectedForm?.endpoint) {
       console.log('Setting initial endpoint:', selectedForm.endpoint);
       setEndPointGet(selectedForm.endpoint);
     }
-  },[selectedCategory, selectedSubcategory])
+  }, [selectedCategory, selectedSubcategory])
 
   // Log changes to selected category and subcategory
   useEffect(() => {
@@ -235,7 +251,7 @@ function Forms() {
   useEffect(() => {
     const categoryData = formData.form[selectedCategory];
     const selectedForm = categoryData?.forms[selectedSubcategory];
-    
+
     if (selectedForm?.endpoint) {
       console.log('Updating endpoint based on selection:', selectedForm.endpoint);
       setEndPointGet(selectedForm.endpoint);
@@ -562,9 +578,10 @@ function Forms() {
                       : isActiveCategory
                         ? 'bg-[#002946] text-[#fff]'
                         : 'hover:bg-[#676767a6] bg-[#676767] text-white'
-                      } rounded-md cursor-pointer mb-1 gap-3`}
-                    onClick={() => handleCategorySelect(catIndex)}
+                      } rounded-md cursor-pointer mb-1 gap-3 ${checkCategoryI ? '' : ''}`}
+                    onClick={checkCategoryI ? () => handleCategorySelect(catIndex) : ()=> enqueueSnackbar('Submit Category I First', { variant: 'error' })}
                   >
+
                     <img src={squareSvg} alt="" className='w-4 h-4' />
                     <span className="font-medium">{category.name}</span>
                   </div>
