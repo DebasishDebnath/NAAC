@@ -175,7 +175,7 @@ export default function ReportsAccordion({ reports }) {
           const tableNamesWithReports = getTableNamesForCategory(category);
           
           return (
-            <div key={category} className="overflow-hidden rounded-lg shadow">
+            <div key={category} className="overflow-y-scroll overflow-x-hidden rounded-lg shadow">
               {/* Category Level Accordion */}
               <div 
                 className="flex items-center justify-between p-4 cursor-pointer bg-[#002846] text-white transition-all duration-300 hover:bg-[#00396b]"
@@ -189,7 +189,7 @@ export default function ReportsAccordion({ reports }) {
               
               {/* Table Names Level */}
               <div 
-                className={`transition-all duration-500 ease-in-out overflow-hidden ${
+                className={`transition-all duration-500 ease-in-out overflow-y-scroll overflow-x-hidden ${
                   openCategory === category ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
                 }`}
               >
@@ -204,7 +204,7 @@ export default function ReportsAccordion({ reports }) {
                       const totalScore = tableReports.reduce((sum, report) => sum + (report.score || 0), 0);
                       
                       return (
-                        <div key={tableName} className="rounded-md overflow-hidden">
+                        <div key={tableName} className="rounded-md overflow-y-scroll overflow-x-hidden">
                           {/* Table Name Level Accordion */}
                           <div 
                             className="flex items-center justify-between p-3 cursor-pointer bg-[#0028467c] text-white transition-all duration-300 hover:bg-[#00284699]"

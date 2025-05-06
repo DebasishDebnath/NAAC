@@ -132,7 +132,7 @@ function PreviewSubmit() {
         </button>
       </div>
       
-      <div className="bg-white rounded-xl shadow-md overflow-hidden">
+      <div className="bg-white rounded-xl shadow-md overflow-y-scroll overflow-x-hidden">
         <ReportsAccordion reports={reports} />
       </div>
     </div>
