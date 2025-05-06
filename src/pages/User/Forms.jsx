@@ -70,7 +70,7 @@ function Forms() {
         "e content",
         "e content module",
         "status as guided phd",
-        "status as guided phd",
+        "status as guided phdStudent",
         "dissertation",
         "OnlineCourse",
         "PolicyDocument",
@@ -111,7 +111,7 @@ function Forms() {
       for (let innerIndex = 0; innerIndex < items.length; innerIndex++) {
         const normalizedItem = items[innerIndex].replace(/\s+/g, '').toLowerCase();
 
-        if (normalizedItem === normalizedInput || normalizedInput.includes(normalizedItem) || normalizedItem.includes(normalizedInput)) {
+        if (normalizedItem === normalizedInput && normalizedInput.includes(normalizedItem) && normalizedItem.includes(normalizedInput)) {
           console.log('Found match at:', outerIndex, innerIndex);
           return [outerIndex, innerIndex];
         }
@@ -174,8 +174,9 @@ function Forms() {
   // Initial load from sessionStorage - runs only once
   useEffect(() => {
     const input = sessionStorage.getItem('table_name')?.toLowerCase();
+    console.log('Initial load from sessionStorage:jhb', input)
     const checks = grabTableIndexFind(input);
-    console.log('Initial load from sessionStorage:', checks, input);
+    console.log('Initial load from sessionStorage:jhb', checks, input);
 
     if (checks !== null) {
       // Set the category and subcategory
