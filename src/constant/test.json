@@ -75,7 +75,17 @@
             {
               "fieldName": "Category of Journal",
               "backend_field_name": "Category_of_Journal",
-              "fieldType": "Text",
+              "fieldType": "Options",
+              "options": [ "Select Option",
+                "SCI",
+                "SCIE",
+                "ESCI",
+                "ABDC",
+                "SCOPUS",
+                "UGC Care 1",
+                "UGC Care 2",
+                "Others"
+              ],
               "required": true,
               "placeholder": "Enter Category of Journal",
               "value": ""
@@ -107,7 +117,22 @@
             {
               "fieldName": "Impact Factor",
               "backend_field_name": "Impact_Factor",
-              "fieldType": "Number",
+              "fieldType": "Options",
+              "options": [ "Select Option",
+                "less than 1",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "more than 10",
+                "no impact factor"
+              ],
               "required": true,
               "placeholder": "Enter Impact Factor",
               "value": ""
@@ -116,7 +141,7 @@
               "fieldName": "Quartile of Scopus Journal",
               "backend_field_name": "Scopus_Index",
               "fieldType": "Options",
-              "options": [ "Select Option","Q1", "Q2", "Q3", "Q4", "Non Applicable"],
+              "options": [ "Select Option","Q1", "Q2", "Q3", "Q4", "Non-Applicable"],
               "required": true,
               "value": ""
             },
@@ -175,7 +200,7 @@
             {
               "fieldName": "ISBN/Others",
               "backend_field_name": "ISBN",
-              "fieldType": "Text",
+              "fieldType": "Number",
               "required": true,
               "placeholder": "Enter ISBN or Other Info",
               "value": ""
@@ -422,7 +447,7 @@
             {
               "fieldName": "Application No",
               "backend_field_name": "Application_no",
-              "fieldType": "Text",
+              "fieldType": "Number",
               "required": true,
               "placeholder": "Enter Application No",
               "value": ""
@@ -539,7 +564,7 @@
             {
               "fieldName": "Fund in Rs.",
               "backend_field_name": "Fund_in_Rs",
-              "fieldType": "Text",
+              "fieldType": "Number",
               "required": true,
               "placeholder": "Enter Fund in Rs.",
               "value": ""
@@ -651,7 +676,7 @@
             {
               "fieldName": "Event Duration (Date Range) Eg: 01st Jan, 2024 - 05th Jan, 2024",
               "backend_field_name": "Event_duration",
-              "fieldType": "Text",
+              "fieldType": "Date",
               "required": true,
               "placeholder": "Enter Event Duration",
               "value": ""
@@ -867,7 +892,8 @@
             {
               "fieldName": "Quadrant",
               "backend_field_name": "Quadrant",
-              "fieldType": "Text",
+              "fieldType": "Options",
+              "options": [ "Select Option","1", "2", "3", "4"],
               "required": true,
               "placeholder": "Enter Quadrant",
               "value": ""
@@ -898,38 +924,8 @@
             {
               "fieldName": "Quadrant",
               "backend_field_name": "Quadrant",
-              "fieldType": "Text",
-              "required": true,
-              "placeholder": "Enter Quadrant",
-              "value": ""
-            },
-            {
-              "fieldName": "Drive Link to the Certificate",
-              "backend_field_name": "Drive_Link_to_Certificate",
-              "fieldType": "Text",
-              "required": true,
-              "placeholder": "Enter Link",
-              "value": ""
-            }
-          ]
-        },
-        {
-          "tableName": "Editor of E-Content for Complete Course / E-Book",
-          "endpoint": "CategoryII/e_content_items",
-          "backend_table_name": "e_content_items",
-          "tableData": [
-            {
-              "fieldName": "Description",
-              "backend_field_name": "Description",
-              "fieldType": "Text",
-              "required": true,
-              "placeholder": "Enter Description",
-              "value": ""
-            },
-            {
-              "fieldName": "Quadrant",
-              "backend_field_name": "Quadrant",
-              "fieldType": "Text",
+              "fieldType": "Options",
+              "options": [ "Select Option","1", "2", "3", "4"],
               "required": true,
               "placeholder": "Enter Quadrant",
               "value": ""
@@ -1056,7 +1052,12 @@
               "fieldName": "Status",
               "backend_field_name": "status",
               "fieldType": "Options",
-              "options": [ "Select Option","Select Option"],
+              "options": [ "Select Option",
+                "Thesis Submitted",
+                "Pre Thesis Submitted",
+                "Registered",
+                "Enrolled"
+              ],
               "required": true,
               "value": ""
             },
@@ -1145,7 +1146,7 @@
             {
               "fieldName": "Number of Hours",
               "backend_field_name": "Number_of_Hours",
-              "fieldType": "Text",
+              "fieldType": "Number",
               "required": true,
               "placeholder": "Enter Number of Hours",
               "value": ""
