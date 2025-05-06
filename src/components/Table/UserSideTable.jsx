@@ -116,7 +116,7 @@ const UserSideTable = ({ reports = [], onDelete, onEdit }) => {
                 {columns.map((col) => (
                   <td key={col} className="px-4 py-3 text-center">
                     {col.toLowerCase() === 'status'
-                      ? getStatusBadge(report[col])
+                      ? renderCellValue(report[col])
                       : renderCellValue(report[col])}
                   </td>
                 ))}
