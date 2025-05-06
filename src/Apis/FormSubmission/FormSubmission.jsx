@@ -11,6 +11,8 @@ export const useFormSubmission = () => {
     // showInfo("Attempting to sign in..."); 
     let response;
     if (!id) response = await postReq(`api/v2/${endpoint}`, token, formData);
+    else if(endpoint==="CategoryI/teaching_duties")
+      response = await patchReq(`api/v2/${endpoint}`, token, formData);
     else
       response = await patchReq(`api/v2/${endpoint}/${id}`, token, formData);
     console.log("Form Submit:", response);

@@ -276,7 +276,7 @@
             {
               "fieldName": "Year",
               "backend_field_name": "Year",
-              "fieldType": "Text",
+              "fieldType": "Date",
               "required": true,
               "placeholder": "Enter Year",
               "value": ""
@@ -445,6 +445,14 @@
           "backend_table_name": "statuses",
           "tableData": [
             {
+              "fieldName": "Applicant",
+              "backend_field_name": "Applicant",
+              "fieldType": "Options",
+              "options": [ "Select Option","Self", "IEM"],
+              "required": true,
+              "value": ""
+            },
+            {
               "fieldName": "Application No",
               "backend_field_name": "Application_no",
               "fieldType": "Number",
@@ -498,14 +506,6 @@
               "fieldType": "Text",
               "required": true,
               "placeholder": "Enter Link",
-              "value": ""
-            },
-            {
-              "fieldName": "Applicant",
-              "backend_field_name": "Applicant",
-              "fieldType": "Options",
-              "options": [ "Select Option","Self", "IEM"],
-              "required": true,
               "value": ""
             }
           ]
@@ -598,7 +598,7 @@
         {
           "tableName": "Award/Fellowship",
           "endpoint": "CategoryII/fellowship",
-          "backend_table_name": "",
+          "backend_table_name": "fellowship",
           "tableData": [
             {
               "fieldName": "Name of Award/Fellowship",
@@ -1002,7 +1002,7 @@
         {
           "tableName": "Status as Guide - Ph.D. Guidance (for Pursuing Students)",
           "endpoint": "CategoryII/phd_guidance_student",
-          "backend_table_name": "phd_guidance_student",
+          "backend_table_name": "Phd_guidence_student",
           "tableData": [
             {
               "fieldName": "Name of Student",
