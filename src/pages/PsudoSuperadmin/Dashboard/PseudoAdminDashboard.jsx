@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import usePreviewDataPseudo from '../../../Apis/PseudoAdmin/PseudoAdminGetAllFiles'; // Import the correct hook
 
 function PseudoAdminDashboard() {
-    const { previewDataPseudo } = usePreviewDataPseudo(); // Use the imported hook
+    const { previewDataPseudo } = usePreviewDataPseudo();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -15,7 +15,7 @@ function PseudoAdminDashboard() {
         };
 
         fetchData();
-    }, []); // Add previewDataPseudo to the dependency array
+    }, []); 
 
     return (
         <div>PseudoAdminDashboard</div>
