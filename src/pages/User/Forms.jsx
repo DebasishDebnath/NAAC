@@ -9,23 +9,10 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/ResizablePanels";
 import squareSvg from "../../Assets/square.svg";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/DataTable";
-
-import facultyData from "../../constant/invoices.json";
 import { useFormSubmission } from "../../Apis/FormSubmission/FormSubmission";
 import UserSideTable from "@/components/Table/UserSideTable";
 import { Eye, PanelRightOpen } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import ReportsAccordion from "@/components/ui/ReportsAccordion";
 import { useUserDraft } from "@/Apis/Drafts/UserDrafts";
 
 function Forms() {
@@ -83,18 +70,11 @@ function Forms() {
     },
   ];
 
-  const handleCategoryIFetchCheck = async () => {
-    const response = await fetchDraft("CategoryI/teaching_duties");
-    setCheckCategoryI(response.success);
-    console.log("response", response);
-  };
-
   useEffect(() => {
     if (selectedCategory===0 && reports.length===0) 
       setCheckCategoryI(false)
     else
       setCheckCategoryI(true)
-      // handleCategoryIFetchCheck();
   }, [reports, endPointGet]);
 
   // Improved grabTableIndexFind function with better matching and logging

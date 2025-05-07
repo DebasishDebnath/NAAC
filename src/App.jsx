@@ -35,6 +35,7 @@ import PreviewSubmit from "./pages/User/PreviewSubmit.jsx";
 import Requests from "./pages/Superadmin/Requests/Requests.jsx";
 import EachReportTable from "./pages/Superadmin/Reports/EachReportTable.jsx";
 import PseudoAdminDashboard from "./pages/PsudoSuperadmin/Dashboard/PseudoAdminDashboard.jsx";
+import PsudoUserEdit from "./pages/PsudoSuperadmin/Manage/PsudoUserEdit.jsx";
 
 // Flag to control route protection
 // When set to true: Protected routes are enforced (normal security behavior)
@@ -248,6 +249,14 @@ function App() {
                     element={
                       <div>
                         <Manage />
+                      </div>
+                    }
+                  />
+                  <Route
+                    path="manage/edit/:id"
+                    element={
+                      <div>
+                        <PsudoUserEdit />
                       </div>
                     }
                   />

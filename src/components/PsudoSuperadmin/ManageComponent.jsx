@@ -18,6 +18,7 @@ import {
 import { ChevronDown } from "lucide-react";
 import { MdEditSquare } from "react-icons/md";
 import { useHttp } from "@/hooks/useHttp";
+import { useNavigate } from "react-router-dom";
 
 // const mockData = [
 //   {
@@ -53,13 +54,14 @@ export default function ManageComponent() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("");
   const [mockData, setMockData] = useState([]);
+  const navigate = useNavigate();
   const { getReq } = useHttp();
   const token = sessionStorage.getItem("token");
 
   const filteredData = mockData.filter(
     (item) =>
       item.name.toLowerCase().includes(search.toLowerCase()) &&
-      (filter ? item.category === filter : true)
+      (filter ? item.campus === filter : true)
   );
 
   useEffect(() => {
@@ -84,21 +86,21 @@ export default function ManageComponent() {
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <Input
-          placeholder="Search by name..."
+          placeholder="Search by anything..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="max-w-sm border-blue-300 focus-visible:ring-blue-500"
+          className="max-w-sm border-[#686868] border-1 focus-visible:ring-black-500 bg-[#fff] shadow-none outline-none"
         />
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="flex items-center gap-2">
-              {filter || "Filter Category"}
+            <Button variant="outline" className="flex items-center gap-2 shadow-none bg-[#fff] outline-none">
+              {filter || "Filter: Campus"}
               <ChevronDown className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className={`bg-white z-50`}>
-            {["IEMS", "IEMN", "UEM"].map((cat) => (
+            {["IEM Saltlake", "IEM Newtown", "UEM Jaipur"].map((cat) => (
               <DropdownMenuItem key={cat} onClick={() => setFilter(cat)}>
                 {cat}
               </DropdownMenuItem>
@@ -116,42 +118,52 @@ export default function ManageComponent() {
             <TableRow>
               <TableHead className="text-white">Name</TableHead>
               <TableHead className="text-white">Email</TableHead>
-              <TableHead className="text-white">Category</TableHead>
+              <TableHead className="text-white">Campus</TableHead>
               {/* <TableHead className="text-white">Table Name</TableHead> */}
               <TableHead className="text-white">Status</TableHead>
               <TableHead className="text-white">Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredData.map((item, idx) => (
-              <TableRow
-                key={idx}
-                className="hover:bg-blue-50 transition-colors"
-              >
-                <TableCell className="font-medium">{item.name}</TableCell>
-                <TableCell>{item.emailId}</TableCell>
-                <TableCell>{item.campus}</TableCell>
-                {/* <TableCell>{item.tableName}</TableCell> */}
-                <TableCell>
-                  <span
-                    className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      statusColor[item.is_submitted]
-                    }`}
+            {filteredData?.length !== 0 ? (
+              <>
+                {filteredData?.map((item, idx) => (
+                  <TableRow
+                    key={idx}
+                    className="hover:bg-blue-50 transition-colors"
                   >
-                    {item.is_submitted}
-                  </span>
-                </TableCell>
-                <TableCell className="text-right">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="flex items-center gap-1 text-blue-600 border-blue-200 hover:bg-blue-100"
-                  >
-                    <MdEditSquare className="w-4 h-4" /> Edit
-                  </Button>
+                    <TableCell className="font-medium">{item.name}</TableCell>
+                    <TableCell>{item.emailId}</TableCell>
+                    <TableCell>{item.campus}</TableCell>
+                    {/* <TableCell>{item.tableName}</TableCell> */}
+                    <TableCell>
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          statusColor[item.is_submitted]
+                        }`}
+                      >
+                        {item.is_submitted}
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-right" onClick={()=>{ navigate(`/psudosuperadmin/manage/edit/${item._id}`) }}>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="flex items-center gap-1 text-blue-600 border-blue-200 hover:bg-blue-100"
+                      >
+                        <MdEditSquare className="w-4 h-4" /> Edit
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </>
+            ) : (
+              <TableRow className="hover:bg-blue-50 transition-colors">
+                <TableCell colSpan={5} className="text-center py-4">
+                  No data found
                 </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </div>
