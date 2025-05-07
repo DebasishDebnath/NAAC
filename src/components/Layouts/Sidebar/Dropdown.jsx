@@ -10,6 +10,9 @@ const Dropdown = memo(() => {
   const token = sessionStorage.getItem("token") || null;
   const { logout } = useAuth();
   const useDetails = JSON.parse(sessionStorage.getItem("userDetails"));
+  const PseudoDetails = JSON.parse(sessionStorage.getItem("PseudoDetails"));
+
+  console.log(PseudoDetails, "PseudoDetails");
 
   const getBasePath = () => {
     const parts = location.pathname.split("/");
