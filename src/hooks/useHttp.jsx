@@ -14,9 +14,9 @@ export const useHttp = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const baseURL = "https://dev2025naacbackend.iemamerica.com";
+  // const baseURL = "https://dev2025naacbackend.iemamerica.com";
   // const baseURL = "http://192.168.1.167:8000";
-  // const baseURL = "http://192.168.90.24:8000";
+  const baseURL = "http://192.168.90.24:8000";
 
   const handleResponse = async (response) => {
     let message =

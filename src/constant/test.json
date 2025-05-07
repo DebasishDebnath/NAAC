@@ -39,6 +39,63 @@
       "max": 15,
       "forms": [
         {
+          "tableName": "Co-Curricular, Extension and Professional Development Activities",
+          "endpoint": "CategoryII/co_ex_pda",
+          "backend_table_name": "co_ex_pda",
+          "tableData": [
+            {
+              "syntax":"Student related co-curricular, extension and field-based activities",
+              "fieldName": "Discipline related co-curricular activities (e.g. remedial classes, career counselling, study visit, student seminar and other events.)",
+              "backend_field_name": "co_curricular_activities",
+              "fieldType": "Number",
+              "required": true,
+              "placeholder": "Enter Hours",
+              "value": ""
+            },
+            {
+              "fieldName": "Other co-curricular activities (Cultural, Sports, NSS, NCC etc.)",
+              "backend_field_name": "extra_curricular_activities",
+              "fieldType": "Number",
+              "required": true,
+              "placeholder": "Enter Hours",
+              "value": ""
+            },
+            {
+              "fieldName": "Extension and dissemination activities (public/popular lectures/talks/seminars etc.)",
+              "backend_field_name": "extension_activities",
+              "fieldType": "Number",
+              "required": true,
+              "placeholder": "Enter Hours",
+              "value": ""
+            },
+            {
+              "syntax":"Contribution to corporate life and management of the department and institution through participation in academic and administrative committees and responsibilities.",
+              "fieldName": "Administrative responsibility (including as Dean / Principal / Chairperson / Convener / Teacher-in-charge/similar other duties that require regular office hours for its discharge)",
+              "backend_field_name": "administration_responsibility",
+              "fieldType": "Number",
+              "required": true,
+              "placeholder": "Enter Hours",
+              "value": ""
+            },
+            {
+              "fieldName": "Participation in Board of Studies, Academic and Administrative Committees",
+              "backend_field_name": "participation_in_commitees",
+              "fieldType": "Number",
+              "required": true,
+              "value": "",
+              "placeholder":"Enter Hours"
+            },
+            {
+              "fieldName": "Professional Development activities (such as participation in seminars, conferences, short-term training courses, industrial experience, talks, lectures in refresher/faculty development courses, dissemination and general articles, and any other contribution)",
+              "backend_field_name": "professional_development",
+              "fieldType": "Number",
+              "required": true,
+              "placeholder": "Enter Hours",
+              "value": ""
+            }
+          ]
+        },
+        {
           "tableName": "Journal Publications",
           "endpoint": "CategoryII/journal_publications",
           "backend_table_name": "journal_publications",

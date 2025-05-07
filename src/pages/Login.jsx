@@ -8,6 +8,7 @@ import { User, ChevronDown } from "lucide-react";
 import { useNavigate, useParams, Navigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { useForgotPassword } from "@/Apis/Login/forgetPassword";
+import { usePseudoApi } from "@/Apis/Authentication/SignInPseudo";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -22,6 +23,7 @@ export default function LoginPage() {
 
   const { signinSuperadmin } = useSuperadminApi();
   const { signinUser } = useUserApi();
+  const { signinPseudo } = usePseudoApi();
   const { showError } = useNotification();
   const params = useParams();
   const navigate = useNavigate();
@@ -67,8 +69,10 @@ export default function LoginPage() {
 
       if (currentRole === "superadmin")
         response = await signinSuperadmin(email, password);
-      else if (currentRole === "user" || currentRole === "psudosuperadmin")
+      else if (currentRole === "user")
         response = await signinUser(email, password);
+      else if(currentRole === "psudosuperadmin")
+        response = await signinPseudo(email, password);
 
       if (!response?.success) {
         showError("Login failed. Please check your credentials.");
@@ -80,7 +84,7 @@ export default function LoginPage() {
       loginUser({
         email,
         token: response?.data?.token,
-        role: response?.data?.role,
+        role: response?.data?.role || "psudosuperadmin",
       });
 
       navigate(`/${response?.data?.role}/dashboard`, { replace: true });
