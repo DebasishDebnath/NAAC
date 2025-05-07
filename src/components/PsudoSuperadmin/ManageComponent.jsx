@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,46 +17,66 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
 import { MdEditSquare } from "react-icons/md";
+import { useHttp } from "@/hooks/useHttp";
 
-const mockData = [
-  {
-    name: "Alice Smith",
-    email: "alice@example.com",
-    category: "IEMS",
-    tableName: "Online AI Courses",
-    status: "Pending",
-  },
-  {
-    name: "Bob Johnson",
-    email: "bob@example.com",
-    category: "UEM",
-    tableName: "Contribution to development of E-Content module in Complete Course / E-Book (at least one quadrant)",
-    status: "Pending",
-  },
-  {
-    name: "Charlie Lee",
-    email: "charlie@example.com",
-    category: "IEMN",
-    tableName: "Course Coordinator for MOOCs",
-    status: "Pending",
-  },
-];
+// const mockData = [
+//   {
+//     name: "Alice Smith",
+//     email: "alice@example.com",
+//     category: "IEMS",
+//     tableName: "Online AI Courses",
+//     status: "Pending",
+//   },
+//   {
+//     name: "Bob Johnson",
+//     email: "bob@example.com",
+//     category: "UEM",
+//     tableName: "Contribution to development of E-Content module in Complete Course / E-Book (at least one quadrant)",
+//     status: "Pending",
+//   },
+//   {
+//     name: "Charlie Lee",
+//     email: "charlie@example.com",
+//     category: "IEMN",
+//     tableName: "Course Coordinator for MOOCs",
+//     status: "Pending",
+//   },
+// ];
 
 const statusColor = {
-  Pending: "bg-yellow-100 text-yellow-800",
-  // Pending: "bg-green-100 text-green-800",
-  // Pending: "bg-red-100 text-red-800",
+  Review: "bg-yellow-100 text-yellow-800",
+  Approved: "bg-green-100 text-green-800",
+  Rejected: "bg-red-100 text-red-800",
 };
 
 export default function ManageComponent() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("");
+  const [mockData, setMockData] = useState([]);
+  const { getReq } = useHttp();
+  const token = sessionStorage.getItem("token");
 
   const filteredData = mockData.filter(
     (item) =>
       item.name.toLowerCase().includes(search.toLowerCase()) &&
       (filter ? item.category === filter : true)
   );
+
+  useEffect(() => {
+    const fetchSubmissions = async () => {
+      try {
+        const response = await getReq("api/v2/pseudoUser/getAllUser", token);
+        console.log("jhvjfvn", response);
+        if (response.success) {
+          setMockData(response.data);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchSubmissions();
+  }, []);
 
   return (
     <div className="p-6 space-y-6">
@@ -97,7 +117,7 @@ export default function ManageComponent() {
               <TableHead className="text-white">Name</TableHead>
               <TableHead className="text-white">Email</TableHead>
               <TableHead className="text-white">Category</TableHead>
-              <TableHead className="text-white">Table Name</TableHead>
+              {/* <TableHead className="text-white">Table Name</TableHead> */}
               <TableHead className="text-white">Status</TableHead>
               <TableHead className="text-white">Action</TableHead>
             </TableRow>
@@ -109,16 +129,16 @@ export default function ManageComponent() {
                 className="hover:bg-blue-50 transition-colors"
               >
                 <TableCell className="font-medium">{item.name}</TableCell>
-                <TableCell>{item.email}</TableCell>
-                <TableCell>{item.category}</TableCell>
-                <TableCell>{item.tableName}</TableCell>
+                <TableCell>{item.emailId}</TableCell>
+                <TableCell>{item.campus}</TableCell>
+                {/* <TableCell>{item.tableName}</TableCell> */}
                 <TableCell>
                   <span
                     className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      statusColor[item.status]
+                      statusColor[item.is_submitted]
                     }`}
                   >
-                    {item.status}
+                    {item.is_submitted}
                   </span>
                 </TableCell>
                 <TableCell className="text-right">
