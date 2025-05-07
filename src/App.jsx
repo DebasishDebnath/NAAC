@@ -34,6 +34,7 @@ import Manage from "./pages/PsudoSuperadmin/Manage/Manage.jsx";
 import PreviewSubmit from "./pages/User/PreviewSubmit.jsx";
 import Requests from "./pages/Superadmin/Requests/Requests.jsx";
 import EachReportTable from "./pages/Superadmin/Reports/EachReportTable.jsx";
+import PseudoAdminDashboard from "./pages/PsudoSuperadmin/Dashboard/PseudoAdminDashboard.jsx";
 
 // Flag to control route protection
 // When set to true: Protected routes are enforced (normal security behavior)
@@ -240,7 +241,7 @@ function App() {
                 >
                   <Route
                     path="dashboard"
-                    element={<div>Psudo Superadmin Dashboard</div>}
+                    element={<PseudoAdminDashboard/>}
                   />
                   <Route
                     path="manage"
