@@ -58,6 +58,10 @@ function PsudoUserEdit() {
     } catch (error) {}
   };
 
+
+  useEffect(()=>{
+    fetchDraft()
+  },[selectedCategory, selectedSubcategory])
   const handleToggleSidebar = () => {
     setIsCollapsed((prev) => !prev);
   };
