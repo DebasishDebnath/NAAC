@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useHttp } from '@/hooks/useHttp';
 import ReportPDFGenerator from '../Reports/ReportPDFGenerator';
+import SubmittedReports from '@/Apis/User/SubmittedReports';
 
 const SubmittedReportsTable = () => {
   const [report, setReport] = useState(null);
   const { getReq } = useHttp();
-  const token = sessionStorage.getItem("token");
+  const {submittedReportData} = SubmittedReports();
+  // const token = sessionStorage.getItem("token");
 
   useEffect(() => {
     const handleReportData = async () => {
-      try {
-        const response = await getReq('api/v2/user/Contribution', token);
-        console.log("report table:", response.data);
+        const response = await submittedReportData();
+        // console.log("Submitted Report Data:", response);
 
         if (response.success)
           setReport(response.data);
-      } catch (error) {
-        console.error('Failed to fetch reports:', error);
-      }
     };
   
     handleReportData();
@@ -85,11 +83,11 @@ const SubmittedReportsTable = () => {
         <table className="w-full min-w-[600px] table-auto bg-gray-50 rounded-lg shadow-md">
           <thead className="text-white" style={{ backgroundColor: '#002946' }}>
             <tr>
-              <th className="px-4 py-3 text-center first:rounded-tl-xl first:rounded-bl-xl">Report ID</th>
+              <th className="px-4 py-3 text-center first:rounded-tl-xl">Report ID</th>
               <th className="px-4 py-3 text-center">Status</th>
               <th className="px-4 py-3 text-center">Date</th>
               <th className="px-4 py-3 text-center">Score</th>
-              <th className="px-4 py-3 text-center last:rounded-tr-xl last:rounded-br-xl">Action</th>
+              <th className="px-4 py-3 text-center last:rounded-tr-xl">Action</th>
             </tr>
           </thead>
           <tbody>
