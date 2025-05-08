@@ -209,13 +209,6 @@ export default function LoginPage() {
                   >
                     Password
                   </label>
-                  <button
-                    type="button"
-                    className="text-sm text-blue-600 hover:text-blue-800"
-                    onClick={() => setShowOtpForm(true)}
-                  >
-                    Forgot Password?
-                  </button>
                 </div>
                 <Input
                   id="password"
@@ -225,9 +218,18 @@ export default function LoginPage() {
                   required
                   placeholder="Enter your password"
                 />
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    className="text-sm text-blue-600 hover:text-blue-800"
+                    onClick={() => setShowOtpForm(true)}
+                  >
+                    Forgot Password?
+                  </button>
+                </div>
               </div>
 
-              <div className="flex items-center">
+              {/* <div className="flex items-center">
                 <input
                   id="remember-me"
                   type="checkbox"
@@ -239,7 +241,7 @@ export default function LoginPage() {
                 >
                   Remember me
                 </label>
-              </div>
+              </div> */}
 
               <Button
                 type="submit"
@@ -290,12 +292,12 @@ export default function LoginPage() {
           >
             <p className="text-gray-600">
               Don't have an account?{" "}
-              <a
+              {/* <a
                 href="#"
                 className="text-blue-600 hover:text-blue-500 font-medium"
-              >
+              > */}
                 Contact admin
-              </a>
+              {/* </a> */}
             </p>
           </div>
         </div>

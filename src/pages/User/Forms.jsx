@@ -14,6 +14,7 @@ import UserSideTable from "@/components/Table/UserSideTable";
 import { Eye, PanelRightOpen } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useUserDraft } from "@/Apis/Drafts/UserDrafts";
+import SubmittedReports from "@/Apis/User/SubmittedReports";
 
 function Forms() {
   const formData = data;
@@ -29,6 +30,7 @@ function Forms() {
   const [checkCategoryI, setCheckCategoryI] = useState(true);
   const [reports, setReports] = useState([]);
   const { fetchDraft } = useUserDraft();
+  const { submittedReportData } = SubmittedReports();
   const navigate = useNavigate();
 
   // Add new state for storing the report being edited
@@ -37,6 +39,18 @@ function Forms() {
   const [isEditing, setIsEditing] = useState(false);
   // Add a flag to track if initial loading is complete
   const [initialLoadComplete, setInitialLoadComplete] = useState(false);
+  const [submitBtnCheck, setSubmitBtnCheck] = useState(false);
+
+  useEffect(() => {
+    const handleReportData = async () => {
+      const response = await submittedReportData();
+      console.log("Submitted btn check:", response);
+
+      if (response.success) setSubmitBtnCheck(response.data.is_submitted);
+    };
+
+    handleReportData();
+  }, []);
 
   const reportOptions = [
     { "Category I": ["teaching duties"] },
@@ -70,12 +84,12 @@ function Forms() {
     },
   ];
 
-  useEffect(() => {
-    if (selectedCategory===0 && reports.length===0) 
-      setCheckCategoryI(false)
-    else
-      setCheckCategoryI(true)
-  }, [reports, endPointGet]);
+  // useEffect(() => {
+  //   if (selectedCategory===0 && reports.length===0)
+  //     setCheckCategoryI(false)
+  //   else
+  //     setCheckCategoryI(true)
+  // }, [reports, endPointGet]);
 
   // Improved grabTableIndexFind function with better matching and logging
   const grabTableIndexFind = (input) => {
@@ -579,16 +593,24 @@ function Forms() {
         })}
 
         <div className="pt-2 pb-6">
-          <button
-            className={`px-4 py-2 ${
-              editingReportId
-                ? "bg-green-600 hover:bg-green-700"
-                : "bg-blue-600 hover:bg-blue-700"
-            } text-white font-medium rounded-md transition`}
-            onClick={handleSubmit}
-          >
-            {editingReportId ? "Update" : "Submit"}
-          </button>
+          {submitBtnCheck === "Review" || submitBtnCheck === "Approved" ? (
+            <button
+              className={`px-4 py-2 bg-gray-400 text-white font-medium rounded-md transition cursor-not-allowed`}
+            >
+              Submit
+            </button>
+          ) : (
+            <button
+              className={`px-4 py-2 ${
+                editingReportId
+                  ? "bg-green-600 hover:bg-green-700"
+                  : "bg-blue-600 hover:bg-blue-700"
+              } text-white font-medium rounded-md transition`}
+              onClick={handleSubmit}
+            >
+              {editingReportId ? "Update" : "Submit"}
+            </button>
+          )}
 
           {editingReportId && (
             <button
