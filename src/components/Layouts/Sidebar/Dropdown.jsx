@@ -9,8 +9,8 @@ const Dropdown = memo(() => {
   const role = sessionStorage.getItem("role");
   const token = sessionStorage.getItem("token") || null;
   const { logout } = useAuth();
-  const useDetails = JSON.parse(sessionStorage.getItem("userDetails"));
-  const PseudoDetails = JSON.parse(sessionStorage.getItem("PseudoDetails"));
+  const useDetails = JSON.parse(sessionStorage.getItem("userDetails")) || null;
+  const PseudoDetails = JSON.parse(sessionStorage.getItem("PseudoDetails")) || null;
 
   console.log(PseudoDetails, "PseudoDetails");
 
@@ -34,16 +34,20 @@ const Dropdown = memo(() => {
     <div className="absolute right-0 top-[70px] mt-2 w-64 bg-white shadow-lg rounded-lg border border-slate-200 py-2 overflow-hidden z-50">
       <div className="px-4 py-2 border-b border-slate-100">
         <div className="font-medium">
-          {useDetails?.name
-            ? useDetails.name
-            : role === "superadmin"
+          {
+          // useDetails?.name
+          //   ? useDetails.name
+            // :
+             role === "superadmin"
             ? "Super Admin"
             : role === "user"
-            ? "User"
-            : "Pseudo Admin"}
+            ? useDetails?.name
+            : role === "psudosuperadmin"
+            ? PseudoDetails?.name
+            : ""}
         </div>
 
-        <div className="text-xs text-slate-500">{useDetails?.emailId}</div>
+        <div className="text-xs text-slate-500">{useDetails?.emailId || PseudoDetails?.email}</div>
       </div>
 
       <div className="py-1">
@@ -56,6 +60,7 @@ const Dropdown = memo(() => {
             <span>Your Profile</span>
           </button>
         )}
+        {role === "superadmin" || role === "user" && (
         <button
           className="flex items-center gap-3 w-full px-4 py-2 text-sm text-left hover:bg-blue-50 transition-colors"
           onClick={() => {
@@ -65,6 +70,7 @@ const Dropdown = memo(() => {
           <Bell size={16} className="text-slate-500" />
           <span>Notifications</span>
         </button>
+        )}
         {role === "user" && (
           <button className="flex items-center gap-3 w-full px-4 py-2 text-sm text-left hover:bg-blue-50 transition-colors">
             <Mail size={16} className="text-slate-500" />

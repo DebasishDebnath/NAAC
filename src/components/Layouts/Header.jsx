@@ -12,7 +12,9 @@ const Header = memo(({ toggleSidebar, toggleDropdown, showDropdown }) => {
   const profileDropdownRef = useRef(null);
   const role = sessionStorage.getItem("role");
   const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
+  const PseudoDetails = JSON.parse(sessionStorage.getItem("PseudoDetails"));
 
+  // console.log(PseudoDetails.name, "PseudoDetails");
   const toggleNotificationDropdown = useCallback(() => {
     setNotificationDropdown((prev) => !prev);
   }, []);
@@ -77,20 +79,39 @@ const Header = memo(({ toggleSidebar, toggleDropdown, showDropdown }) => {
             onClick={toggleDropdown}
           >
             <div className="bg-[#004E77] text-white w-11 h-11 rounded-full flex items-center justify-center font-medium text-[18px] shadow-sm group-hover:shadow transition-shadow">
-              {userDetails?.name
-                ? userDetails.name
-                    .trim()
-                    .split(" ")
-                    .map((n, i, arr) =>
-                      i === 0 || i === arr.length - 1 ? n[0] : ""
-                    )
-                    .join("")
-                    .toUpperCase()
-                : role === "superadmin"
-                ? "SA"
-                : role === "user"
-                ? "U"
-                : "PA"}
+              {
+                // userDetails?.name
+                //   ? userDetails.name
+                //       .trim()
+                //       .split(" ")
+                //       .map((n, i, arr) =>
+                //         i === 0 || i === arr.length - 1 ? n[0] : ""
+                //       )
+                //       .join("")
+                //       .toUpperCase()
+                //   :
+                role === "superadmin"
+                  ? "SA"
+                  : role === "user"
+                  ? userDetails?.name
+                      .trim()
+                      .split(" ")
+                      .map((n, i, arr) =>
+                        i === 0 || i === arr.length - 1 ? n[0] : ""
+                      )
+                      .join("")
+                      .toUpperCase()
+                  : role === "psudosuperadmin"
+                  ? PseudoDetails?.name
+                      .trim()
+                      .split(" ")
+                      .map((n, i, arr) =>
+                        i === 0 || i === arr.length - 1 ? n[0] : ""
+                      )
+                      .join("")
+                      .toUpperCase()
+                  : ""
+              }
             </div>
             <ChevronDown
               size={16}
