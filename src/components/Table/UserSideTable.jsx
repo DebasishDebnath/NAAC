@@ -5,7 +5,7 @@ const UserSideTable = ({ reports = [], onDelete, onEdit }) => {
   // Early return if there are no reports
   if (!reports || reports.length === 0) {
     return (
-      <div className="text-center py-4 text-gray-600">
+      <div className="h-full flex justify-center items-center text-gray-600">
         No reports found
       </div>
     );
